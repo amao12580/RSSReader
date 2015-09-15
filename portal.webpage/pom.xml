@@ -9,12 +9,18 @@
 	<url>http://maven.apache.org</url>
 	<properties>
 		<rss.version>0.0.1-SNAPSHOT</rss.version>
-		<logback.version>1.1.3</logback.version>
-		<slf4j.version>1.7.12</slf4j.version>
-		<junit.version>4.12</junit.version>
 		<spring.version>4.1.7.RELEASE</spring.version>
 	</properties>
+
 	<dependencies>
+
+		<!-- 公共组件 begin -->
+		<dependency>
+			<groupId>per.rss</groupId>
+			<artifactId>core.base</artifactId>
+			<version>${rss.version}</version>
+		</dependency>
+		<!-- 公共组件 end -->
 
 		<!-- spring begin -->
 		<dependency>
@@ -70,25 +76,27 @@
 			<artifactId>spring-data-mongodb</artifactId>
 			<version>1.7.1.RELEASE</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.logback-extensions</groupId>
+			<artifactId>logback-ext-spring</artifactId>
+			<version>0.1.2</version>
+		</dependency>
 		<!-- spring end -->
 
-		<!-- 日志组件 begin -->
+		<!-- jackson begin -->
 		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>${logback.version}</version>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.5.3</version>
 		</dependency>
 		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-core</artifactId>
-			<version>${logback.version}</version>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.5.3</version>
 		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency>
-		<!-- 日志组件 end -->
+		<!-- jackson begin -->
+
 
 		<dependency>
 			<groupId>junit</groupId>
@@ -98,6 +106,17 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>portal.webpage</finalName>
+		<finalName>rss-webpage</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
+
 </project>
