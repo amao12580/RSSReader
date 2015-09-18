@@ -2,37 +2,29 @@ package per.rss.core.base.util;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Date;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.ParseException;
+import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import per.rss.core.base.constant.CommonConstant;
+import per.rss.core.base.model.internet.Proxy;
+import per.rss.core.base.model.log.LogFeedRequest;
+
 public class HttpClientUtils {
 	private static final Logger logger = LoggerFactory.getLogger(HttpClientUtils.class);
 	private static final RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(2000)
 			.setConnectTimeout(5000).build();// 设置请求和传输超时时间
-
-	/**
-	 * @param urlStr
-	 * @param proxy_ip
-	 * @param proxy_port
-	 * @param proxy_username
-	 * @param proxy_password
-	 * @return
-	 */
-	public static String doHttpGetRequest(String urlStr, String proxy_ip, Integer proxy_port, String proxy_username,
-			String proxy_password) {
-		return doHttpGetRequest(urlStr, proxy_ip, proxy_port, proxy_username, proxy_password, "");
-	}
 
 	/**
 	 * 还没有实现使用代理访问
@@ -46,15 +38,17 @@ public class HttpClientUtils {
 	 *            设定响应内容的字符集：gbk、utf-8，默认是gbk.
 	 * @return
 	 */
-	public static String doHttpGetRequest(String urlStr, String proxy_ip, Integer proxy_port, String proxy_username,
-			String proxy_password, String response_charsets) {
+	public static LogFeedRequest doHttpGetRequest(String urlStr, Proxy proxy, String response_charsets) {
+		LogFeedRequest logFeedRequest = new LogFeedRequest();
+		logFeedRequest.setRequestStartDate(new Date());
 		String html = null;
 		CloseableHttpClient httpclient = null;
+		HttpGet httpget = null;
 		CloseableHttpResponse response = null;
 		try {
 			httpclient = HttpClients.createDefault();
 			// 创建httpget.
-			HttpGet httpget = new HttpGet(urlStr);
+			httpget = new HttpGet(urlStr);
 			// 设置httpget超时信息
 			httpget.setConfig(requestConfig);
 			// 設置httpGet的头部參數信息
@@ -75,48 +69,48 @@ public class HttpClientUtils {
 			response = httpclient.execute(httpget);
 			if (response == null) {
 				logger.error("doHttpGetRequest is error,response is null.");
-				return null;
-			}
-			// 获取响应实体
-			HttpEntity entity = response.getEntity();
-			// 响应状态
-			logger.debug("StatusLine:" + response.getStatusLine());
-			// 获取响应内容的字符集
-			ContentType contentType = ContentType.getOrDefault(entity);
-			Charset charset = contentType.getCharset();
-			if (charset != null) {
-				logger.debug("respose charset:" + charset.displayName() + "," + charset.toString());
+				logFeedRequest.setRequestStatus(CommonConstant.status_failed);
 			} else {
-				logger.warn("respose charset is null.");
-			}
-			if (entity != null) {
-				// 响应内容
-				if (StringUtils.isEmpty(response_charsets)) {
-					response_charsets = "gbk";
+				logFeedRequest.setRequestStatus(CommonConstant.status_success);
+				// 响应状态
+				StatusLine sl = response.getStatusLine();
+				if (sl == null) {
+					logFeedRequest.setResponseStatus(CommonConstant.status_failed);
+				} else {
+					int code = sl.getStatusCode();
+					logFeedRequest.setResponseCode(code);
+					if (code != 200) {
+						logFeedRequest.setResponseStatus(CommonConstant.status_failed);
+					} else {
+						logFeedRequest.setResponseStatus(CommonConstant.status_success);
+					}
+					// 获取响应实体
+					HttpEntity entity = response.getEntity();
+					if (entity != null) {
+						// 响应内容
+						if (StringUtils.isEmpty(response_charsets)) {
+							response_charsets = "gbk";
+						}
+						html = EntityUtils.toString(entity, Charset.forName(response_charsets));
+						if (!StringUtils.isEmpty(html)) {
+							logFeedRequest.setHtmlLength(html.length());
+							logFeedRequest.setResponseHtml(html);
+						}
+					}
 				}
-				html = EntityUtils.toString(entity, Charset.forName(response_charsets));
-
-				// html = EntityUtils.toString(entity,
-				// Charset.forName("utf-8"));
-				// html = EntityUtils.toString(entity, StandardCharsets.UTF_8);
-				// 响应内容长度
-				// logger.debug("Response content length: " +
-				// entity.getContentLength());
-				logger.debug("Response content length: " + html.length());
-				// logger.debug("Response content :" + html);
 			}
-			httpget = null;
 		} catch (ClientProtocolException e) {
 			logger.error("doHttpGetRequest is error,ClientProtocolException.", e);
-			return null;
+			logFeedRequest = logFeedRequest.doException(logFeedRequest, e);
 		} catch (ParseException e) {
 			logger.error("doHttpGetRequest is error,ParseException.", e);
-			return null;
+			logFeedRequest = logFeedRequest.doException(logFeedRequest, e);
 		} catch (IOException e) {
 			logger.error("doHttpGetRequest is error,IOException.", e);
-			return null;
+			logFeedRequest = logFeedRequest.doException(logFeedRequest, e);
 		} finally {
 			// 关闭连接,释放资源
+			httpget = null;
 			try {
 				if (httpclient != null) {
 					httpclient.close();
@@ -130,7 +124,10 @@ public class HttpClientUtils {
 				response = null;
 			}
 		}
-		return html;
-
+		logFeedRequest.setRequestEndDate(new Date());
+		long takeTime = logFeedRequest.getRequestEndDate().getTime() - logFeedRequest.getRequestStartDate().getTime();
+		logFeedRequest.setTakeTime(takeTime);
+		logger.debug("internet time is:"+takeTime+"ms");
+		return logFeedRequest;
 	}
 }

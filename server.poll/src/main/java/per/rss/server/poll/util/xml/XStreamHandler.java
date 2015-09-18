@@ -1,4 +1,4 @@
-package per.rss.server.poll.util;
+package per.rss.server.poll.util.xml;
 
 import java.util.Date;
 
@@ -7,7 +7,14 @@ import org.junit.Test;
 
 import com.thoughtworks.xstream.XStream;  
    
-public class XMLHander2 {  
+/**
+ * 
+ * 代码还需要完善
+ * 
+ * @author cifpay
+ *
+ */
+public class XStreamHandler {  
    
     private XStream xstream = null;  
     private Student bean = null;  
@@ -24,7 +31,7 @@ public class XMLHander2 {
     }  
    
     public static void main(String[] args) {  
-    	XMLHander test = new XMLHander();  
+//    	XMLHander test = new XMLHander();  
 //        test.init();  
 //        test.testWriteBean2XML_01();  
     }  

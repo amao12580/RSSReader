@@ -32,15 +32,14 @@
     <!-- 日志最大的历史 30天 -->  
     <property name="maxHistory" value="30"/>  
     <property name="characterEncoding" value="utf-8"/>  
-  
-  
+    <property name="formatPattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger:%msg%n"/>  
   
   
     <!-- ConsoleAppender 控制台输出日志 -->  
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">  
         <!-- 对日志进行格式化 -->  
         <encoder>  
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger -%msg%n</pattern>  
+            <pattern>${formatPattern}</pattern>  
             <charset>${characterEncoding}</charset>
         </encoder>  
     </appender>  
@@ -76,7 +75,7 @@
         </triggeringPolicy>   -->  
           
         <encoder>  
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>  
+            <pattern>${formatPattern}</pattern>  
             <charset>${characterEncoding}</charset>
         </encoder>  
     </appender>  
@@ -99,7 +98,7 @@
             <maxHistory>${maxHistory}</maxHistory>  
         </rollingPolicy>  
         <encoder>  
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>  
+            <pattern>${formatPattern}</pattern>  
             <charset>${characterEncoding}</charset>
         </encoder>  
     </appender>  
@@ -123,7 +122,7 @@
             <maxHistory>${maxHistory}</maxHistory>  
         </rollingPolicy>  
         <encoder>  
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>  
+            <pattern>${formatPattern}</pattern>  
             <charset>${characterEncoding}</charset>
         </encoder>  
     </appender>  
@@ -147,7 +146,7 @@
             <maxHistory>${maxHistory}</maxHistory>  
         </rollingPolicy>  
         <encoder>  
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>  
+            <pattern>${formatPattern}</pattern>  
             <charset>${characterEncoding}</charset>
         </encoder>  
     </appender>  
@@ -171,10 +170,16 @@
             <maxHistory>${maxHistory}</maxHistory>  
         </rollingPolicy>  
         <encoder>  
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>  
+            <pattern>${formatPattern}</pattern>  
             <charset>${characterEncoding}</charset>
         </encoder>  
     </appender>  
+    
+    
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+	<!-- http://xiaonanforever.iteye.com/blog/1979367 -->
+		<appender-ref ref = "DEBUG" />
+	</appender>
   
     <logger name="java.sql.PreparedStatement" value="DEBUG" />    
     <logger name="java.sql.Connection" value="DEBUG" />    
@@ -196,20 +201,13 @@
     <!-- root级别   DEBUG -->  
     <root level="debug">  
         <!-- 控制台输出 -->  
-        
-        
-        
-        
-<!--         开发时打开注释，提交时加上注释 -->
         <appender-ref ref="STDOUT" />  
-
-
-
         <!-- 文件输出 -->  
         <appender-ref ref="ERROR" />  
         <appender-ref ref="INFO" />  
         <appender-ref ref="WARN" />  
         <appender-ref ref="DEBUG" />  
         <appender-ref ref="TRACE" />  
+		<appender-ref ref="ASYNC" />
     </root>  
 </configuration>
