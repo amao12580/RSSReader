@@ -1,5 +1,7 @@
 package per.rss.server.poll.init;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import per.rss.server.poll.dao.nosql.job.ScheduleJobDao;
+import per.rss.server.poll.model.job.ScheduleJob;
 
 @Service
 public class JobInit {
@@ -20,7 +23,8 @@ public class JobInit {
 	@PostConstruct
 	public void init() throws Exception {
 		logger.debug("Began to initialize job.");
-		scheduleJobDao.findByJobInit();
+		List<ScheduleJob> jobList=scheduleJobDao.findByJobInit();
+		
 		logger.debug("Job initialization is complete.");
 	}
 
