@@ -7,18 +7,18 @@ import org.dom4j.DocumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import per.rss.core.base.model.internet.Proxy;
-import per.rss.core.base.model.log.LogFeedRequest;
+import per.rss.core.base.bo.internet.ProxyBo;
+import per.rss.core.base.bo.log.LogFeedFetcherBo;
 import per.rss.core.base.util.HttpClientUtils;
 import per.rss.core.base.util.StringUtils;
 import per.rss.core.base.util.UUIDUtils;
-import per.rss.server.poll.model.log.LogFeedFetcher;
 import per.rss.server.poll.model.log.LogFeedParser;
-import per.rss.server.poll.util.xml.JsoupXMLHandler;
+import per.rss.server.poll.model.log.LogFeedSync;
 import per.rss.server.poll.util.xml.XMLHandler;
 
 public class RSSFetcherUtils {
 	private static final Logger logger = LoggerFactory.getLogger(RSSFetcherUtils.class);
+	private static final XMLHandler defaultHandler = XMLHandler.getInstance();
 
 	public static void main(String[] args) throws IOException, DocumentException {
 		String spec = "http://news.baidu.com/n?cmd=1&class=civilnews&tn=rss&sub=0]http://news.baidu.com/n?cmd=1&class=civilnews&tn=rss&sub=0";
@@ -38,7 +38,7 @@ public class RSSFetcherUtils {
 	 *            rss网络地址
 	 * @throws IOException
 	 */
-	protected static LogFeedFetcher doFetch(String urlStr) throws IOException {
+	protected static LogFeedSync doFetch(String urlStr) throws IOException {
 		return doFetch(urlStr, null,null);
 	}
 
@@ -51,30 +51,29 @@ public class RSSFetcherUtils {
 	 *             当reader变量没有正确关闭时，抛出该异常
 	 */
 	@SuppressWarnings("static-access")
-	private static LogFeedFetcher doFetch(String urlStr, Proxy proxy,String response_charsets){
-		LogFeedFetcher logFeedFetcher = new LogFeedFetcher();
-		logFeedFetcher.setId(UUIDUtils.randomUUID());
-		logFeedFetcher.setFetchStartDate(new Date());
-		LogFeedRequest logFeedRequest = HttpClientUtils.doHttpGetRequest(urlStr,proxy,response_charsets);
-		if (logFeedRequest != null) {
-			logFeedFetcher.setLogFeedRequest(logFeedRequest);
-			String responseXml = logFeedRequest.getResponseHtml();
+	private static LogFeedSync doFetch(String urlStr, ProxyBo proxy,String response_charsets){
+		LogFeedSync logFeedSync = new LogFeedSync();
+		logFeedSync.setId(UUIDUtils.randomUUID());
+		logFeedSync.setFetchStartDate(new Date());
+		LogFeedFetcherBo logFeedFetcher = HttpClientUtils.doHttpGetRequest(urlStr,proxy,response_charsets);
+		if (logFeedFetcher != null) {
+			logFeedSync.setLogFeedFetcher(logFeedFetcher);
+			String responseXml = logFeedFetcher.getResponseHtml();
 			boolean verify = false;
-			XMLHandler handler = new JsoupXMLHandler();
-			verify = handler.validator(responseXml);
+			verify = defaultHandler.validator(responseXml);
 			if (!verify) {
 				logger.error("responseXml verify is error.");
 				return null;
 			}
-			LogFeedParser logFeedParser = handler.parse(responseXml);
+			LogFeedParser logFeedParser = defaultHandler.parse(responseXml);
 			if(logFeedParser!=null){
-				logFeedFetcher.setLogFeedParser(logFeedParser);
+				logFeedSync.setLogFeedParser(logFeedParser);
 			}
 		}
-		logFeedFetcher.setFetchEndDate(new Date());
-		long takeTime=logFeedFetcher.getFetchEndDate().getTime()-logFeedFetcher.getFetchStartDate().getTime();
+		logFeedSync.setFetchEndDate(new Date());
+		long takeTime=logFeedSync.getFetchEndDate().getTime()-logFeedSync.getFetchStartDate().getTime();
 		logFeedFetcher.setTakeTime(takeTime);
 		logger.debug("all time is:"+takeTime);
-		return logFeedFetcher;
+		return logFeedSync;
 	}
 }

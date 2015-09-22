@@ -2,7 +2,7 @@ package per.rss.server.poll.model.log;
 
 import java.util.Date;
 
-import per.rss.core.base.model.log.LogFeedRequest;
+import per.rss.core.base.bo.log.LogFeedFetcherBo;
 
 /**
  * @author cifpay
@@ -10,11 +10,11 @@ import per.rss.core.base.model.log.LogFeedRequest;
  *         抓取是指：获取网络rss信息+解析xml
  *
  */
-public class LogFeedFetcher {
+public class LogFeedSync {
 	private String id = null;
 	private Date fetchStartDate = null;// 系统开始抓取的时间
 	private Date fetchEndDate = null;// 系统完成抓取的时间
-	private LogFeedRequest logFeedRequest;// 网络请求的详细信息
+	private LogFeedFetcherBo logFeedFetcher;// 网络请求的详细信息
 	private Long takeTime = null;// 尝试解析花费总的时间
 	private LogFeedParser logFeedParser = null;// 解析详情
 	private String charsets = null;// 字符集
@@ -43,12 +43,13 @@ public class LogFeedFetcher {
 		this.fetchEndDate = fetchEndDate;
 	}
 
-	public LogFeedRequest getLogFeedRequest() {
-		return logFeedRequest;
+
+	public LogFeedFetcherBo getLogFeedFetcher() {
+		return logFeedFetcher;
 	}
 
-	public void setLogFeedRequest(LogFeedRequest logFeedRequest) {
-		this.logFeedRequest = logFeedRequest;
+	public void setLogFeedFetcher(LogFeedFetcherBo logFeedFetcher) {
+		this.logFeedFetcher = logFeedFetcher;
 	}
 
 	public Long getTakeTime() {

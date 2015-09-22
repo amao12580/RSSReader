@@ -25,6 +25,10 @@ import per.rss.server.poll.model.feed.Feed;
 public class Dom4jXMLHandler extends XMLHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(RomeXMLHandler.class);
+	
+	protected Dom4jXMLHandler() {
+		super();
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override

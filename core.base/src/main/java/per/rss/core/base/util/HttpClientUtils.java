@@ -17,9 +17,9 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import per.rss.core.base.bo.internet.ProxyBo;
+import per.rss.core.base.bo.log.LogFeedFetcherBo;
 import per.rss.core.base.constant.CommonConstant;
-import per.rss.core.base.model.internet.Proxy;
-import per.rss.core.base.model.log.LogFeedRequest;
 
 public class HttpClientUtils {
 	private static final Logger logger = LoggerFactory.getLogger(HttpClientUtils.class);
@@ -38,8 +38,8 @@ public class HttpClientUtils {
 	 *            设定响应内容的字符集：gbk、utf-8，默认是gbk.
 	 * @return
 	 */
-	public static LogFeedRequest doHttpGetRequest(String urlStr, Proxy proxy, String response_charsets) {
-		LogFeedRequest logFeedRequest = new LogFeedRequest();
+	public static LogFeedFetcherBo doHttpGetRequest(String urlStr, ProxyBo proxy, String response_charsets) {
+		LogFeedFetcherBo logFeedRequest = new LogFeedFetcherBo();
 		logFeedRequest.setRequestStartDate(new Date());
 		String html = null;
 		CloseableHttpClient httpclient = null;

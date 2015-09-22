@@ -1,6 +1,6 @@
-package per.rss.core.base.model.internet;
+package per.rss.core.base.bo.internet;
 
-public class Proxy {
+public class ProxyBo {
 	private String proxy_ip = null;
 	private Integer proxy_port = null;
 	private String proxy_username = null;

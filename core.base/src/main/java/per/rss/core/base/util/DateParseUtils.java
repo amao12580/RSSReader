@@ -1,15 +1,16 @@
-package com.rometools.rome.io.impl;
+package per.rss.core.base.util;
 
 import java.text.DateFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 import java.util.TimeZone;
 
-public class DateParser {
-	private static final String[] RFC822_MASKS = { "EEE, dd MMM yy HH:mm:ss z", "EEE, dd MMM yy HH:mm z",
-			"dd MMM yy HH:mm:ss z", "dd MMM yy HH:mm z" };
+import com.rometools.rome.io.impl.PropertiesLoader;
+
+public class DateParseUtils {
+	private static final String[] RFC822_MASKS = { "EEE, dd MMM yyyy HH:mm:ss z", "EEE, dd MMM yyyy HH:mm:ss Z",
+			"EEE, dd MMM yy HH:mm:ss z", "EEE, dd MMM yy HH:mm z", "dd MMM yy HH:mm:ss z", "dd MMM yy HH:mm z" };
 	private static final String[] W3CDATETIME_MASKS = { "yyyy-MM-dd'T'HH:mm:ss.SSSz", "yyyy-MM-dd't'HH:mm:ss.SSSz",
 			"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd't'HH:mm:ss.SSS'z'", "yyyy-MM-dd'T'HH:mm:ssz",
 			"yyyy-MM-dd't'HH:mm:ssz", "yyyy-MM-dd'T'HH:mm:ssZ", "yyyy-MM-dd't'HH:mm:ssZ", "yyyy-MM-dd'T'HH:mm:ss'Z'",
@@ -22,9 +23,7 @@ public class DateParser {
 	private static String[] ADDITIONAL_MASKS = PropertiesLoader.getPropertiesLoader()
 			.getTokenizedProperty("datetime.extra.masks", "|");
 
-	private static Date parseUsingMask(String[] masks, String sDate, Locale locale) {
-		// System.out.println("masks:" + masks.toString() + ",sDate=" + sDate +
-		// ",locale=" + locale.toString());
+	private static Date parseUsingMask(String[] masks, String sDate) {
 		if (sDate.indexOf("+") < 0 && sDate.indexOf("-") < 0 && !sDate.endsWith("GMT")) {
 			sDate = sDate + " GMT";
 		}
@@ -34,8 +33,7 @@ public class DateParser {
 		ParsePosition pp = null;
 		Date d = null;
 		for (int i = 0; (d == null) && (i < masks.length); i++) {
-			DateFormat df = new SimpleDateFormat(masks[i], locale);
-
+			DateFormat df = new SimpleDateFormat(masks[i]);
 			df.setLenient(true);
 			try {
 				pp = new ParsePosition(0);
@@ -46,25 +44,20 @@ public class DateParser {
 			} catch (Exception localException) {
 			}
 		}
-		// if(d!=null){
-		// System.out.println("Result:"+d.toString());
-		// }else{
-		// System.out.println("Result:null");
-		// }
 		return d;
 	}
 
-	public static Date parseRFC822(String sDate, Locale locale) {
+	public static Date parseRFC822(String sDate) {
 		int utIndex = sDate.indexOf(" UT");
 		if (utIndex > -1) {
 			String pre = sDate.substring(0, utIndex);
 			String post = sDate.substring(utIndex + 3);
 			sDate = pre + " GMT" + post;
 		}
-		return parseUsingMask(RFC822_MASKS, sDate, locale);
+		return parseUsingMask(RFC822_MASKS, sDate);
 	}
 
-	public static Date parseW3CDateTime(String sDate, Locale locale) {
+	public static Date parseW3CDateTime(String sDate) {
 		int tIndex = sDate.indexOf("T");
 		if (tIndex > -1) {
 			if (sDate.endsWith("Z")) {
@@ -86,28 +79,28 @@ public class DateParser {
 		} else {
 			sDate = sDate + "T00:00GMT";
 		}
-		return parseUsingMask(W3CDATETIME_MASKS, sDate, locale);
+		return parseUsingMask(W3CDATETIME_MASKS, sDate);
 	}
 
-	public static Date parseDate(String sDate, Locale locale) {
-		Date date = parseW3CDateTime(sDate, locale);
+	public static Date parseDate(String sDate) {
+		Date date = parseW3CDateTime(sDate);
 		if (date == null) {
-			date = parseRFC822(sDate, locale);
+			date = parseRFC822(sDate);
 			if ((date == null) && (ADDITIONAL_MASKS.length > 0)) {
-				date = parseUsingMask(ADDITIONAL_MASKS, sDate, locale);
+				date = parseUsingMask(ADDITIONAL_MASKS, sDate);
 			}
 		}
 		return date;
 	}
 
-	public static String formatRFC822(Date date, Locale locale) {
-		SimpleDateFormat dateFormater = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss 'GMT'", locale);
+	public static String formatRFC822(Date date) {
+		SimpleDateFormat dateFormater = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss 'GMT'");
 		dateFormater.setTimeZone(TimeZone.getTimeZone("GMT"));
 		return dateFormater.format(date);
 	}
 
-	public static String formatW3CDateTime(Date date, Locale locale) {
-		SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", locale);
+	public static String formatW3CDateTime(Date date) {
+		SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 		dateFormater.setTimeZone(TimeZone.getTimeZone("GMT"));
 		return dateFormater.format(date);
 	}

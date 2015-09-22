@@ -1,10 +1,10 @@
-package per.rss.core.base.model.log;
+package per.rss.core.base.bo.log;
 
 import java.util.Date;
 
 import per.rss.core.base.constant.CommonConstant;
 
-public class LogFeedRequest {
+public class LogFeedFetcherBo {
 	private Date requestStartDate = null;// 开始获取网络rss信息的时间
 	private Date requestEndDate = null;// 完成获取网络rss信息的时间
 	private Long takeTime = null;// 网络请求花费的时间
@@ -22,7 +22,7 @@ public class LogFeedRequest {
 	private String responseHtml = null;// 网络响应的结果，html
 	private Integer htmlLength = null;// 网络响应的结果，数据长度
 
-	public LogFeedRequest doException(LogFeedRequest logFeedRequest, Exception e) {
+	public LogFeedFetcherBo doException(LogFeedFetcherBo logFeedRequest, Exception e) {
 		logFeedRequest.setRequestStatus(CommonConstant.status_failed);
 		logFeedRequest.setRequestErrorMessage(e.getMessage());
 		return logFeedRequest;

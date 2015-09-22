@@ -1,14 +1,7 @@
 package per.rss.server.poll.model.feed;
 
 import java.util.Date;
-import java.util.Locale;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.rometools.rome.io.impl.DateParser;
-
-import per.rss.core.base.util.DateUtils;
 import per.rss.core.base.util.StringUtils;
 
 /**
@@ -18,9 +11,8 @@ import per.rss.core.base.util.StringUtils;
  *
  */
 public class Article {
-	private static final Logger logger = LoggerFactory.getLogger(Article.class);
-	
 	private String id = null;
+	private String feedId = null;
 
 	// 固有属性 开始
 	private String title = null;
@@ -39,6 +31,14 @@ public class Article {
 
 	
 	
+	public String getFeedId() {
+		return feedId;
+	}
+
+	public void setFeedId(String feedId) {
+		this.feedId = feedId;
+	}
+
 	public String getCategory() {
 		return category;
 	}
@@ -121,27 +121,5 @@ public class Article {
 	@Override
 	public String toString() {
 		return StringUtils.toJSONString(this);
-	}
-
-	public void setPubDate(String dateStr) {
-		Date formatDate=null;
-		try{
-			formatDate=DateParser.parseDate(dateStr, Locale.US);
-//			formatDate=DateParser.parseDate(dateStr, null);
-		}catch(Exception e){
-			logger.error("parseDate is error.",e);
-//			formatDate=new Date();
-		}
-		if(formatDate==null){
-//			formatDate=new Date();
-		}else{
-			logger.debug("formatDate is:"+DateUtils.datetoString(formatDate));
-		}
-//		this.pubDate = formatDate;
-	}
-	public static void main(String[] args) {
-		Article a=new Article();
-		a.setPubDate("Sat, 19 Sep 2015 05:41:51 GMT");
-				
 	}
 }

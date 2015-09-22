@@ -31,7 +31,11 @@ import per.rss.server.poll.model.feed.Image;
 public class JsoupXMLHandler extends XMLHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(JsoupXMLHandler.class);
-
+	
+	protected JsoupXMLHandler() {
+		super();
+	}
+	
 	@Override
 	protected Feed doParseXML(String xml) {
 		Feed feed = null;
@@ -232,10 +236,14 @@ public class JsoupXMLHandler extends XMLHandler {
 			} else {
 				// logger.debug("articlepubDate size is:" +
 				// articlepubDate.size());
-				String articlepubDateFirst = articlepubDate.first().text();
+				String articlepubDateFirstString = articlepubDate.first().text();
 				// logger.debug("articlepubDate first is:" +
 				// articlepubDateFirst);
-				article.setPubDate(articlepubDateFirst);
+				Date pubDate=parsePubDateString(articlepubDateFirstString);
+				if(pubDate==null){
+					continue;
+				}
+				article.setPubDate(pubDate);
 			}
 
 			Elements articlesource = ele.select("source");// 非必需节点

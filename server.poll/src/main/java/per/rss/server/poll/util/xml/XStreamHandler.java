@@ -5,7 +5,9 @@ import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.thoughtworks.xstream.XStream;  
+import com.thoughtworks.xstream.XStream;
+
+import per.rss.server.poll.model.feed.Feed;  
    
 /**
  * 
@@ -14,10 +16,14 @@ import com.thoughtworks.xstream.XStream;
  * @author cifpay
  *
  */
-public class XStreamHandler {  
+public class XStreamHandler extends XMLHandler{  
    
     private XStream xstream = null;  
     private Student bean = null;  
+    
+    protected XStreamHandler() {
+		super();
+	}
    
     @Before  
     public void init() {  
@@ -176,4 +182,8 @@ public class XStreamHandler {
 		}
     	
     }
+	@Override
+	protected Feed doParseXML(String xml) throws Exception {
+		return null;
+	}
 }
