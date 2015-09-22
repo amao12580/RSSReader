@@ -24,7 +24,6 @@ public class JobInit {
 	public void init() throws Exception {
 		logger.debug("Began to initialize job.");
 		List<ScheduleJob> jobList=scheduleJobDao.findByJobInit();
-		
 		logger.debug("Job initialization is complete.");
 	}
 
