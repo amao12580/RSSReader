@@ -1,4 +1,4 @@
-package per.rss.server.poll.util.xml;
+package per.rss.server.poll.util.xml.impl;
 
 import java.io.StringReader;
 import java.util.List;
@@ -17,6 +17,7 @@ import com.rometools.rome.io.SyndFeedInput;
 import per.rss.core.base.util.FileUtils;
 import per.rss.core.base.util.StringUtils;
 import per.rss.server.poll.model.feed.Feed;
+import per.rss.server.poll.util.xml.XMLHandler;
 
 /**
  * http://wiki.xby1993.net/doku.php?id=opensourcelearn:rss%E8%A7%A3%E6%9E%90%E5%
@@ -39,8 +40,8 @@ public class RomeXMLHandler extends XMLHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(RomeXMLHandler.class);
 
-	protected RomeXMLHandler() {
-		super();
+	private RomeXMLHandler() {
+
 	}
 
 	@Override

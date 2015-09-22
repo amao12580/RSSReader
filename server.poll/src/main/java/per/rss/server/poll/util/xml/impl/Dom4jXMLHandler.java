@@ -1,4 +1,4 @@
-package per.rss.server.poll.util.xml;
+package per.rss.server.poll.util.xml.impl;
 
 import java.util.List;
 
@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import per.rss.core.base.util.FileUtils;
 import per.rss.server.poll.model.feed.Feed;
+import per.rss.server.poll.util.xml.XMLHandler;
 
 /**
  * 传统方案，作用备用
@@ -25,16 +26,16 @@ import per.rss.server.poll.model.feed.Feed;
 public class Dom4jXMLHandler extends XMLHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(RomeXMLHandler.class);
-	
-	protected Dom4jXMLHandler() {
-		super();
+
+	private Dom4jXMLHandler() {
+
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	protected Feed doParseXML(String xml) throws Exception {
-		Feed feed=null;
-		try{
+		Feed feed = null;
+		try {
 			Document document = DocumentHelper.parseText(xml);
 			if (document == null) {
 				logger.error("document 创建失败.");
@@ -60,7 +61,7 @@ public class Dom4jXMLHandler extends XMLHandler {
 				return null;
 			}
 			logger.debug("item 节点的数量：" + itemSum);
-			
+
 			for (Element node : item2) {
 				String title = node.elementText("title");
 				String description = node.elementText("description");
@@ -73,18 +74,17 @@ public class Dom4jXMLHandler extends XMLHandler {
 				logger.debug("guid：" + guid);
 				logger.debug("link：" + link);
 			}
-		}catch(DocumentException e){
-			logger.error("RSSParser.doParseByDom4j is error. xml 格式不正确："+xml, e);
+		} catch (DocumentException e) {
+			logger.error("RSSParser.doParseByDom4j is error. xml 格式不正确：" + xml, e);
 			return null;
 		}
 		return feed;
 	}
 
 	public static void main(String[] args) {
-		XMLHandler h=new Dom4jXMLHandler();
+		XMLHandler h = new Dom4jXMLHandler();
 		h.parse(FileUtils.readByChars("E:xml3.txt"));
 		h.parse(FileUtils.readByChars("E:xml2.txt"));
 		h.parse(FileUtils.readByChars("E:xml.txt"));
 	}
 }
-

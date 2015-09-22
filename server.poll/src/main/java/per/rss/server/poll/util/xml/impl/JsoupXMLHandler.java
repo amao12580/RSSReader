@@ -1,4 +1,4 @@
-package per.rss.server.poll.util.xml;
+package per.rss.server.poll.util.xml.impl;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -19,11 +19,12 @@ import per.rss.core.base.util.UUIDUtils;
 import per.rss.server.poll.model.feed.Article;
 import per.rss.server.poll.model.feed.Feed;
 import per.rss.server.poll.model.feed.Image;
+import per.rss.server.poll.util.xml.XMLHandler;
 
 /**
  * @author cifpay
  * 
- * 新方案，极强的兼容性
+ *         新方案，极强的兼容性
  * 
  *         http://whmwg.iteye.com/blog/1750509
  *
@@ -31,11 +32,11 @@ import per.rss.server.poll.model.feed.Image;
 public class JsoupXMLHandler extends XMLHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(JsoupXMLHandler.class);
-	
-	protected JsoupXMLHandler() {
-		super();
+
+	public JsoupXMLHandler() {
+
 	}
-	
+
 	@Override
 	protected Feed doParseXML(String xml) {
 		Feed feed = null;
@@ -239,8 +240,8 @@ public class JsoupXMLHandler extends XMLHandler {
 				String articlepubDateFirstString = articlepubDate.first().text();
 				// logger.debug("articlepubDate first is:" +
 				// articlepubDateFirst);
-				Date pubDate=parsePubDateString(articlepubDateFirstString);
-				if(pubDate==null){
+				Date pubDate = parsePubDateString(articlepubDateFirstString);
+				if (pubDate == null) {
 					continue;
 				}
 				article.setPubDate(pubDate);

@@ -14,12 +14,6 @@
 
 	<description>server.poll工程的配置入口 </description>
 
+	<import resource="/conf/spring/quartz.xml" />
 
-	<!-- 配置定时任务 开始 -->
-	<context:component-scan base-package="per.rss.server.poll.task" />
-	<task:executor id="executor" pool-size="50" />
-	<task:scheduler id="scheduler" pool-size="100" />
-	<task:annotation-driven executor="executor"
-		scheduler="scheduler" />
-	<!-- 配置定时任务 结束 -->
 </beans>

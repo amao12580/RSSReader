@@ -1,4 +1,4 @@
-package per.rss.server.poll.util.xml;
+package per.rss.server.poll.util.xml.impl;
 
 import java.util.Date;
 
@@ -7,7 +7,8 @@ import org.junit.Test;
 
 import com.thoughtworks.xstream.XStream;
 
-import per.rss.server.poll.model.feed.Feed;  
+import per.rss.server.poll.model.feed.Feed;
+import per.rss.server.poll.util.xml.XMLHandler;  
    
 /**
  * 
@@ -21,8 +22,8 @@ public class XStreamHandler extends XMLHandler{
     private XStream xstream = null;  
     private Student bean = null;  
     
-    protected XStreamHandler() {
-		super();
+    private XStreamHandler() {
+
 	}
    
     @Before  
