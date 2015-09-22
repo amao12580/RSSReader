@@ -184,17 +184,13 @@
     <logger name="java.sql.PreparedStatement" value="DEBUG" />    
     <logger name="java.sql.Connection" value="DEBUG" />    
     <logger name="java.sql.Statement" value="DEBUG" />    
-    <logger name="com.ibatis" value="DEBUG" />    
-    <logger name="com.ibatis.common.jdbc.SimpleDataSource" value="DEBUG" />    
-    <logger name="com.ibatis.common.jdbc.ScriptRunner" level="DEBUG"/>    
-    <logger name="com.ibatis.sqlmap.engine.impl.SqlMapClientDelegate" value="DEBUG" />    
     <logger name="com.mongodb.DBCollectionImpl"  level="TRACE" />    
     <logger name="org.springframework"  level="ERROR" />    
     <logger name="org.apache.commons"  level="ERROR" />    
     <logger name="org.apache.ibatis"  level="ERROR" />    
     <logger name="org.mybatis"  level="ERROR" />    
     <logger name="org.apache.http"  level="ERROR" />
-    <logger name="org.apache.activemq"  level="ERROR" />    
+    <logger name="org.quartz"  level="ERROR" />    
       
       
       

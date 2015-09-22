@@ -13,7 +13,13 @@
             http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
 	<description>server.poll工程的配置入口 </description>
+	
+	<context:component-scan base-package="per.rss.server.poll"></context:component-scan>
+	
+	<context:property-placeholder location="conf/mongodb.properties" />
 
-	<import resource="/conf/spring/quartz.xml" />
+	<import resource="/spring/mongodb.xml" />
+	
+	<import resource="/spring/quartz.xml" />
 
 </beans>

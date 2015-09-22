@@ -130,7 +130,7 @@ public class ScheduleJobBizImpl implements ScheduleJobBiz {
 
 		// List<ScheduleJob> scheduleJobs = jdbcDao.queryList(scheduleJobBo
 		// .getTargetObject(ScheduleJob.class));
-		List<ScheduleJob> scheduleJobs = new ArrayList<ScheduleJob>();
+		// List<ScheduleJob> scheduleJobs = new ArrayList<ScheduleJob>();
 
 		// List<scheduleJobBo> scheduleJobBoList =
 		// BeanConverter.convert(scheduleJobBo.class,scheduleJobs);

@@ -1,13 +1,19 @@
 package per.rss.server.poll.model.job;
 
+import java.io.Serializable;
 import java.util.Date;
+
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * 计划任务信息
  * 
  * User: liyd Date: 14-1-3 Time: 上午10:24
  */
-public class ScheduleJob{
+@Document(collection = "scheduleJob") 
+public class ScheduleJob implements Serializable{
+
+	private static final long serialVersionUID = 4103005449292220543L;
 
 	/** 任务id */
 	private Long scheduleJobId;
