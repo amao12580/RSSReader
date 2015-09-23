@@ -5,6 +5,8 @@ import java.util.Date;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import per.rss.core.base.util.StringUtils;
+
 /**
  * 计划任务信息
  * 
@@ -47,6 +49,11 @@ public class ScheduleJob implements Serializable{
 
 	/** 修改时间 */
 	private Date gmtModify;
+	
+	@Override
+	public String toString() {
+		return StringUtils.toJSONString(this);
+	}
 
 	public Long getScheduleJobId() {
 		return scheduleJobId;

@@ -16,7 +16,7 @@ public abstract class JobFactory implements Job {
 	private static final Class<? extends Job> syncClass = JobSyncFactory.class;
 
 	protected JobFactory() {
-		
+
 	}
 
 	public final static Class<? extends Job> getInstance(boolean isSync) {
@@ -28,9 +28,9 @@ public abstract class JobFactory implements Job {
 	}
 
 	public final void execute(JobExecutionContext context) throws JobExecutionException {
-		logger.debug("JobFactory is start.");
+		// logger.info("JobFactory is start.");
 		doExecute(context);
-		logger.debug("JobFactory is end.");
+		// logger.info("JobFactory is end.");
 	}
 
 	protected abstract void doExecute(JobExecutionContext context) throws JobExecutionException;
