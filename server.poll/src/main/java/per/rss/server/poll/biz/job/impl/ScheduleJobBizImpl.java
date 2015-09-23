@@ -36,11 +36,7 @@ public class ScheduleJobBizImpl implements ScheduleJobBiz {
 	// @Autowired
 	// private JdbcDao jdbcDao;
 
-	public void initScheduleJob() {
-		// List<ScheduleJob> scheduleJobList =
-		// jdbcDao.queryList(Criteria.create(ScheduleJob.class));
-		List<ScheduleJob> scheduleJobList = new ArrayList<ScheduleJob>();
-
+	public void initScheduleJob(List<ScheduleJob> scheduleJobList) {
 		if (CollectionUtils.isEmpty(scheduleJobList)) {
 			return;
 		}
@@ -48,7 +44,6 @@ public class ScheduleJobBizImpl implements ScheduleJobBiz {
 
 			CronTrigger cronTrigger = ScheduleJobUtils.getCronTrigger(scheduler, scheduleJob.getJobName(),
 					scheduleJob.getJobGroup());
-
 			// 不存在，创建一个
 			if (cronTrigger == null) {
 				ScheduleJobUtils.createScheduleJob(scheduler, scheduleJob);

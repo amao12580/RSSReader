@@ -3,6 +3,7 @@ package per.rss.server.poll.biz.job;
 import java.util.List;
 
 import per.rss.server.poll.bo.job.ScheduleJobBo;
+import per.rss.server.poll.model.job.ScheduleJob;
 
 /**
  * 定时任务service
@@ -14,7 +15,7 @@ public interface ScheduleJobBiz {
     /**
      * 初始化定时任务
      */
-    public void initScheduleJob();
+    public void initScheduleJob(List<ScheduleJob> scheduleJobList);
 
     /**
      * 新增
