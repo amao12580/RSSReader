@@ -23,8 +23,16 @@ import per.rss.core.base.constant.CommonConstant;
 
 public class HttpClientUtils {
 	private static final Logger logger = LoggerFactory.getLogger(HttpClientUtils.class);
-	private static final RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(2000)
-			.setConnectTimeout(5000).build();// 设置请求和传输超时时间
+	private static RequestConfig requestConfig = null;
+
+	// 需要注意的是3种超时：
+	// 1，连接超时：connectionTimeout 指的是连接一个url的连接等待时间。
+	// 2，读取数据超时：soTimeout 指的是连接上一个url，获取response的返回等待时间
+	// 3，SocketTimeout ：定义了Socket读数据的超时时间，即从服务器获取响应数据需要等待的时间
+	static {
+		requestConfig = RequestConfig.custom().setSocketTimeout(2 * 1000).setConnectionRequestTimeout(2 * 1000)
+				.setConnectTimeout(5 * 1000).build();// 设置请求和传输超时时间
+	}
 
 	/**
 	 * 还没有实现使用代理访问
@@ -127,7 +135,7 @@ public class HttpClientUtils {
 		logFeedRequest.setRequestEndDate(new Date());
 		long takeTime = logFeedRequest.getRequestEndDate().getTime() - logFeedRequest.getRequestStartDate().getTime();
 		logFeedRequest.setTakeTime(takeTime);
-		logger.debug("internet time is:"+takeTime+"ms");
+		logger.debug("internet time is:" + takeTime + "ms");
 		return logFeedRequest;
 	}
 }
