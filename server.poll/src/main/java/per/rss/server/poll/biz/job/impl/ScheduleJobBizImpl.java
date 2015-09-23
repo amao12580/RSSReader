@@ -23,7 +23,6 @@ import per.rss.server.poll.util.job.ScheduleJobUtils;
 /**
  * 定时任务
  *
- * Created by liyd on 12/19/14.
  */
 @Service("scheduleJobBiz")
 public class ScheduleJobBizImpl implements ScheduleJobBiz {
@@ -36,21 +35,18 @@ public class ScheduleJobBizImpl implements ScheduleJobBiz {
 	// @Autowired
 	// private JdbcDao jdbcDao;
 
-	public void initScheduleJob(List<ScheduleJob> scheduleJobList) {
-		if (CollectionUtils.isEmpty(scheduleJobList)) {
-			return;
+	public boolean initScheduleJob(ScheduleJob scheduleJob) {
+		if (scheduleJob == null) {
+			return false;
 		}
-		for (ScheduleJob scheduleJob : scheduleJobList) {
-
-			CronTrigger cronTrigger = ScheduleJobUtils.getCronTrigger(scheduler, scheduleJob.getJobName(),
-					scheduleJob.getJobGroup());
-			// 不存在，创建一个
-			if (cronTrigger == null) {
-				ScheduleJobUtils.createScheduleJob(scheduler, scheduleJob);
-			} else {
-				// 已存在，那么更新相应的定时设置
-				ScheduleJobUtils.updateScheduleJob(scheduler, scheduleJob);
-			}
+		CronTrigger cronTrigger = ScheduleJobUtils.getCronTrigger(scheduler, scheduleJob.getJobName(),
+				scheduleJob.getJobGroup());
+		// 不存在，创建一个
+		if (cronTrigger == null) {
+			return ScheduleJobUtils.createScheduleJob(scheduler, scheduleJob);
+		} else {
+			// 已存在，那么更新相应的定时设置
+			return ScheduleJobUtils.updateScheduleJob(scheduler, scheduleJob);
 		}
 	}
 
@@ -61,18 +57,25 @@ public class ScheduleJobBizImpl implements ScheduleJobBiz {
 		return 0l;
 	}
 
-	public void update(ScheduleJobBo scheduleJobBo) {
+	public boolean update(ScheduleJobBo scheduleJobBo) {
 		ScheduleJob scheduleJob = ObjectUtil.copyProperties(scheduleJobBo, ScheduleJob.class);
-		ScheduleJobUtils.updateScheduleJob(scheduler, scheduleJob);
+		return ScheduleJobUtils.updateScheduleJob(scheduler, scheduleJob);
 		// jdbcDao.update(scheduleJob);
 	}
 
-	public void delUpdate(ScheduleJobBo scheduleJobBo) {
+	public boolean delUpdate(ScheduleJobBo scheduleJobBo) {
 		ScheduleJob scheduleJob = ObjectUtil.copyProperties(scheduleJobBo, ScheduleJob.class);
 		// 先删除
-		ScheduleJobUtils.deleteScheduleJob(scheduler, scheduleJob.getJobName(), scheduleJob.getJobGroup());
+		boolean delResult=ScheduleJobUtils.deleteScheduleJob(scheduler, scheduleJob.getJobName(), scheduleJob.getJobGroup());
+		if(!delResult){
+			return delResult;
+		}
 		// 再创建
-		ScheduleJobUtils.createScheduleJob(scheduler, scheduleJob);
+		boolean creResult=ScheduleJobUtils.createScheduleJob(scheduler, scheduleJob);
+		if(!creResult){
+			return creResult;
+		}
+		return true;
 		// 数据库直接更新即可
 		// jdbcDao.update(scheduleJob);
 	}

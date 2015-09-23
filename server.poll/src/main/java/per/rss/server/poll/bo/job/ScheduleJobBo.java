@@ -3,7 +3,6 @@ package per.rss.server.poll.bo.job;
 import java.util.Date;
 
 /**
- * Created by liyd on 12/19/14.
  */
 public class ScheduleJobBo{
 	/** 任务调度的参数key */

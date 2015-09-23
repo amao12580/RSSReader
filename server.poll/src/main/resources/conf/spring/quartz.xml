@@ -4,5 +4,31 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 	<bean id="schedulerFactoryBean"
-		class="org.springframework.scheduling.quartz.SchedulerFactoryBean" />
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+		lazy-init="false" autowire="no">
+		<property name="quartzProperties">
+			<props>
+				<!-- 关闭Quartz启动时的检查更新版本 -->
+				<prop key="org.quartz.scheduler.skipUpdateCheck">true</prop>
+				<!-- 集群的配置 -->
+				<prop key="org.quartz.scheduler.instanceName">RSSReaderQuartzScheduler</prop>
+				<prop key="org.quartz.scheduler.rmi.export">false</prop>
+				<prop key="org.quartz.scheduler.rmi.proxy">false</prop>
+				<prop key="org.quartz.scheduler.wrapJobExecutionInUserTransaction">false</prop>
+				<!-- 配置调度器的线程池 -->
+				<!-- 线程池类 -->
+				<prop key="org.quartz.threadPool.class">org.quartz.simpl.SimpleThreadPool</prop>
+				<!-- 线程个数，这里配置框架的线程池中线程的数量,要多配置几个,否则@DisallowConcurrentExecution不起作用 -->
+				<prop key="org.quartz.threadPool.threadCount">100</prop>
+				<!-- 线程优先级 -->
+				<prop key="org.quartz.threadPool.threadPriority">5</prop>
+				<prop
+					key="org.quartz.threadPool.threadsInheritContextClassLoaderOfInitializingThread">true</prop>
+				<!-- 最大能忍受的触发超时时间，如果超过则认为“失误” -->
+				<prop key="org.quartz.jobStore.misfireThreshold">5000</prop>
+				<!-- 配置任务调度现场数据保存机制，默认保存在内存 -->
+				<prop key="org.quartz.jobStore.class">org.quartz.simpl.RAMJobStore</prop>
+			</props>
+		</property>
+	</bean>
 </beans>

@@ -1,5 +1,7 @@
 package per.rss.server.poll.util.job;
 
+import java.util.Date;
+
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
 import org.quartz.Job;
@@ -20,7 +22,6 @@ import per.rss.server.poll.util.job.quartz.JobFactory;
 /**
  * 定时任务辅助类
  * 
- * Created by liyd on 12/19/14.
  */
 public class ScheduleJobUtils {
 
@@ -35,7 +36,6 @@ public class ScheduleJobUtils {
 	 * @return
 	 */
 	public static TriggerKey getTriggerKey(String jobName, String jobGroup) {
-
 		return TriggerKey.triggerKey(jobName, jobGroup);
 	}
 
@@ -51,13 +51,12 @@ public class ScheduleJobUtils {
 	 * @return cron trigger
 	 */
 	public static CronTrigger getCronTrigger(Scheduler scheduler, String jobName, String jobGroup) {
-
 		try {
 			TriggerKey triggerKey = TriggerKey.triggerKey(jobName, jobGroup);
 			return (CronTrigger) scheduler.getTrigger(triggerKey);
 		} catch (SchedulerException e) {
 			LOG.error("获取定时任务CronTrigger出现异常", e);
-			throw new RuntimeException("获取定时任务CronTrigger出现异常");
+			return null;
 		}
 	}
 
@@ -69,8 +68,8 @@ public class ScheduleJobUtils {
 	 * @param scheduleJob
 	 *            the schedule job
 	 */
-	public static void createScheduleJob(Scheduler scheduler, ScheduleJob scheduleJob) {
-		createScheduleJob(scheduler, scheduleJob.getJobName(), scheduleJob.getJobGroup(),
+	public static boolean createScheduleJob(Scheduler scheduler, ScheduleJob scheduleJob) {
+		return createScheduleJob(scheduler, scheduleJob.getJobName(), scheduleJob.getJobGroup(),
 				scheduleJob.getCronExpression(), scheduleJob.getIsSync(), scheduleJob);
 	}
 
@@ -90,13 +89,14 @@ public class ScheduleJobUtils {
 	 * @param param
 	 *            the param
 	 */
-	public static void createScheduleJob(Scheduler scheduler, String jobName, String jobGroup, String cronExpression,
+	public static boolean createScheduleJob(Scheduler scheduler, String jobName, String jobGroup, String cronExpression,
 			boolean isSync, Object param) {
+		boolean result = false;
 		// 同步或异步
 		Class<? extends Job> jobClass = JobFactory.getInstance(isSync);
 		// 构建job信息
 		JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(jobName, jobGroup).build();
-		// 放入参数，运行时的方法可以获取
+		// 放入参数，运行时的方法可以获取，资料：http://www.cnblogs.com/wyqtomorrow/archive/2007/04/28/730963.html
 		jobDetail.getJobDataMap().put(ScheduleJobBo.JOB_PARAM_KEY, param);
 		// 表达式调度构建器
 		CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
@@ -104,11 +104,15 @@ public class ScheduleJobUtils {
 		CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(jobName, jobGroup).withSchedule(scheduleBuilder)
 				.build();
 		try {
-			scheduler.scheduleJob(jobDetail, trigger);
+			Date nextExexuteDate = scheduler.scheduleJob(jobDetail, trigger);// 任务创建成功，会返回下一次执行的时间
+			if (nextExexuteDate != null) {
+				result = true;
+			}
 		} catch (SchedulerException e) {
 			LOG.error("创建定时任务失败", e);
-			throw new RuntimeException("创建定时任务失败");
+			return false;
 		}
+		return result;
 	}
 
 	/**
@@ -124,7 +128,6 @@ public class ScheduleJobUtils {
 			scheduler.triggerJob(jobKey);
 		} catch (SchedulerException e) {
 			LOG.error("运行一次定时任务失败", e);
-			throw new RuntimeException("运行一次定时任务失败");
 		}
 	}
 
@@ -136,13 +139,11 @@ public class ScheduleJobUtils {
 	 * @param jobGroup
 	 */
 	public static void pauseJob(Scheduler scheduler, String jobName, String jobGroup) {
-
 		JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
 		try {
 			scheduler.pauseJob(jobKey);
 		} catch (SchedulerException e) {
 			LOG.error("暂停定时任务失败", e);
-			throw new RuntimeException("暂停定时任务失败");
 		}
 	}
 
@@ -154,13 +155,11 @@ public class ScheduleJobUtils {
 	 * @param jobGroup
 	 */
 	public static void resumeJob(Scheduler scheduler, String jobName, String jobGroup) {
-
 		JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
 		try {
 			scheduler.resumeJob(jobKey);
 		} catch (SchedulerException e) {
 			LOG.error("暂停定时任务失败", e);
-			throw new RuntimeException("恢复定时任务失败");
 		}
 	}
 
@@ -174,7 +173,6 @@ public class ScheduleJobUtils {
 	 * @return the job key
 	 */
 	public static JobKey getJobKey(String jobName, String jobGroup) {
-
 		return JobKey.jobKey(jobName, jobGroup);
 	}
 
@@ -186,8 +184,8 @@ public class ScheduleJobUtils {
 	 * @param scheduleJob
 	 *            the schedule job
 	 */
-	public static void updateScheduleJob(Scheduler scheduler, ScheduleJob scheduleJob) {
-		updateScheduleJob(scheduler, scheduleJob.getJobName(), scheduleJob.getJobGroup(),
+	public static boolean updateScheduleJob(Scheduler scheduler, ScheduleJob scheduleJob) {
+		return updateScheduleJob(scheduler, scheduleJob.getJobName(), scheduleJob.getJobGroup(),
 				scheduleJob.getCronExpression(), scheduleJob.getIsSync(), scheduleJob);
 	}
 
@@ -207,8 +205,9 @@ public class ScheduleJobUtils {
 	 * @param param
 	 *            the param
 	 */
-	public static void updateScheduleJob(Scheduler scheduler, String jobName, String jobGroup, String cronExpression,
+	public static boolean updateScheduleJob(Scheduler scheduler, String jobName, String jobGroup, String cronExpression,
 			boolean isSync, Object param) {
+		boolean result = false;
 		try {
 			TriggerKey triggerKey = ScheduleJobUtils.getTriggerKey(jobName, jobGroup);
 			// 表达式调度构建器
@@ -217,11 +216,15 @@ public class ScheduleJobUtils {
 			// 按新的cronExpression表达式重新构建trigger
 			trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
 			// 按新的trigger重新设置job执行
-			scheduler.rescheduleJob(triggerKey, trigger);
+			Date nextExcuteDate = scheduler.rescheduleJob(triggerKey, trigger);// 任务的下一次执行时间，更新成功会返回
+			if (nextExcuteDate != null) {
+				result = true;
+			}
 		} catch (SchedulerException e) {
 			LOG.error("更新定时任务失败", e);
-			throw new RuntimeException("更新定时任务失败");
+			return false;
 		}
+		return result;
 	}
 
 	/**
@@ -231,12 +234,12 @@ public class ScheduleJobUtils {
 	 * @param jobName
 	 * @param jobGroup
 	 */
-	public static void deleteScheduleJob(Scheduler scheduler, String jobName, String jobGroup) {
+	public static boolean deleteScheduleJob(Scheduler scheduler, String jobName, String jobGroup) {
 		try {
-			scheduler.deleteJob(getJobKey(jobName, jobGroup));
+			return scheduler.deleteJob(getJobKey(jobName, jobGroup));
 		} catch (SchedulerException e) {
 			LOG.error("删除定时任务失败", e);
-			throw new RuntimeException("删除定时任务失败");
+			return false;
 		}
 	}
 }

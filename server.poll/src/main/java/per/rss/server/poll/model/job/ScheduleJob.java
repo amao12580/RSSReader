@@ -10,10 +10,9 @@ import per.rss.core.base.util.StringUtils;
 /**
  * 计划任务信息
  * 
- * User: liyd Date: 14-1-3 Time: 上午10:24
  */
-@Document(collection = "scheduleJob") 
-public class ScheduleJob implements Serializable{
+@Document(collection = "scheduleJob")
+public class ScheduleJob implements Serializable {
 
 	private static final long serialVersionUID = 4103005449292220543L;
 
@@ -49,7 +48,7 @@ public class ScheduleJob implements Serializable{
 
 	/** 修改时间 */
 	private Date gmtModify;
-	
+
 	@Override
 	public String toString() {
 		return StringUtils.toJSONString(this);
