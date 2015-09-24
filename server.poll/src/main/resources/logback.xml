@@ -190,7 +190,7 @@
     <logger name="org.apache.ibatis"  level="ERROR" />    
     <logger name="org.mybatis"  level="ERROR" />    
     <logger name="org.apache.http"  level="ERROR" />
-<!--     <logger name="org.quartz"  level="ERROR" />     -->
+    <logger name="org.quartz"  level="ERROR" />    
       
       
       

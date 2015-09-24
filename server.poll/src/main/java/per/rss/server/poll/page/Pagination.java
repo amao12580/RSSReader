@@ -3,7 +3,7 @@ package per.rss.server.poll.page;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.alibaba.fastjson.JSONObject;
+import per.rss.core.base.util.StringUtils;
 
 /**
  * 分页基础类
@@ -105,6 +105,6 @@ public class Pagination<T> {
 	}
 	@Override
 	public String toString() {
-		return JSONObject.toJSONString(this);
+		return StringUtils.toJSONString(this);
 	}
 }
