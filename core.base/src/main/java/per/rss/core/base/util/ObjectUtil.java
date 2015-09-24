@@ -15,8 +15,6 @@ import org.apache.commons.beanutils.converters.DateConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alibaba.fastjson.JSON;
-
 public class ObjectUtil {
 	
 	private static Logger logger=LoggerFactory.getLogger(ObjectUtil.class);
@@ -55,7 +53,7 @@ public class ObjectUtil {
 					int i = 0;
 					for (Object o : vs) {
 						i++;
-						map.put(f.getName() + "|@#|" + i, JSON.toJSON(o));
+						map.put(f.getName() + "|@#|" + i, StringUtils.toJSONString(o));
 					}
 				}
 			}

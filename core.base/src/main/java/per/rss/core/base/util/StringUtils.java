@@ -1,8 +1,9 @@
 package per.rss.core.base.util;
 
-import com.alibaba.fastjson.JSONObject;
+import com.google.gson.Gson;
 
 public class StringUtils {
+	private static Gson gson=new Gson();
 	/**
 	 * 如果这个字符串是null值或空字符串，则返回true
 	 * @param val
@@ -19,6 +20,6 @@ public class StringUtils {
 	 * @return
 	 */
 	public static String toJSONString(Object obj){
-		return JSONObject.toJSONString(obj);
+		return gson.toJson(obj);
 	}
 }

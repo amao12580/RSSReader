@@ -27,10 +27,12 @@
 			<version>2.8.2</version>
 		</dependency>
 
+		<!-- fastJson,jackJson,Gson性能比较 -->
+		<!-- http://chenyanxi.blog.51cto.com/4599355/1543445 -->
 		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>fastjson</artifactId>
-			<version>1.2.6</version>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.3.1</version>
 		</dependency>
 
 		<dependency>
@@ -56,7 +58,6 @@
 			<artifactId>commons-beanutils</artifactId>
 			<version>1.9.2</version>
 		</dependency>
-
 
 	</dependencies>
 
