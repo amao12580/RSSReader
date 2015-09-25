@@ -22,4 +22,19 @@ public class StringUtils {
 	public static String toJSONString(Object obj){
 		return gson.toJson(obj);
 	}
+	
+	/**
+	 * 验证字符串是否为数字格式
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public static boolean isNumeric(String str) {
+		try {
+			Double.parseDouble(str);
+		} catch (NumberFormatException nfe) {
+			return false;
+		}
+		return true;
+	}
 }
