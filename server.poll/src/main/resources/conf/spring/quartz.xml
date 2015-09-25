@@ -4,26 +4,27 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 	<!-- 配置注解扫描 -->
-	<context:annotation-config />
+	<!-- <context:annotation-config /> -->
 	<!-- 自动扫描的包名 -->
-	<context:component-scan base-package="per.rss.server.poll.util.job.quartz" />
+	<!-- <context:component-scan base-package="per.rss.server.poll.util.job.quartz" 
+		/> -->
 	<!-- 分布式任务管理器 -->
-	<bean id="zkScheduleManager" class="cn.uncode.schedule.ZKScheduleManager"
-		init-method="init">
-		<property name="zkConfig">
-			<map>
-				<entry key="zkConnectString" value="192.168.4.114:2181" />
-				<entry key="rootPath" value="/uncode/schedule" />
-				<entry key="zkSessionTimeout" value="60000" />
-				<entry key="userName" value="ScheduleAdmin" />
-				<entry key="password" value="password" />
-				<entry key="isCheckParentPath" value="true" />
-				<entry key="ipBlacklist" value="127.0.0.2,127.0.0.3" />
-			</map>
-		</property>
-	</bean>
+	<!-- <bean id="zkScheduleManager" class="cn.uncode.schedule.ZKScheduleManager" -->
+	<!-- init-method="init"> -->
+	<!-- <property name="zkConfig"> -->
+	<!-- <map> -->
+	<!-- <entry key="zkConnectString" value="192.168.4.114:2181" /> -->
+	<!-- <entry key="rootPath" value="/uncode/schedule" /> -->
+	<!-- <entry key="zkSessionTimeout" value="60000" /> -->
+	<!-- <entry key="userName" value="ScheduleAdmin" /> -->
+	<!-- <entry key="password" value="password" /> -->
+	<!-- <entry key="isCheckParentPath" value="true" /> -->
+	<!-- <entry key="ipBlacklist" value="127.0.0.2,127.0.0.3" /> -->
+	<!-- </map> -->
+	<!-- </property> -->
+	<!-- </bean> -->
 	<!-- Spring定时器注解开关 -->
-	<task:annotation-driven scheduler="zkScheduleManager" />
+	<!-- <task:annotation-driven scheduler="zkScheduleManager" /> -->
 
 
 
@@ -54,11 +55,11 @@
 				<!-- 最大能忍受的触发超时时间，如果超过则认为“失误” -->
 				<prop key="org.quartz.jobStore.misfireThreshold">5000</prop>
 				<!-- 配置任务调度现场数据保存机制，默认保存在内存 -->
-				<!-- <prop key="org.quartz.jobStore.class">org.quartz.simpl.RAMJobStore</prop> -->
+				<prop key="org.quartz.jobStore.class">org.quartz.simpl.RAMJobStore</prop>
 
 				<!-- 配置持久化方式为Terracotta -->
-				<prop key="org.quartz.jobStore.class">org.terracotta.quartz.TerracottaJobStore</prop>
-				<prop key="org.quartz.jobStore.tcConfigUrl">192.168.4.114:9510</prop>
+				<!-- <prop key="org.quartz.jobStore.class">org.terracotta.quartz.TerracottaJobStore</prop> -->
+				<!-- <prop key="org.quartz.jobStore.tcConfigUrl">192.168.4.114:9510</prop> -->
 
 			</props>
 		</property>

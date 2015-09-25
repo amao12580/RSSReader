@@ -12,6 +12,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<maven.test.skip>true</maven.test.skip>
 		<rss.version>0.0.1-SNAPSHOT</rss.version>
 		<logback.version>1.1.3</logback.version>
 		<slf4j.version>1.7.12</slf4j.version>
@@ -72,10 +74,9 @@
 			<artifactId>spring-data-mongodb</artifactId>
 			<version>1.8.0.RELEASE</version>
 		</dependency>
-
-
 		<!-- spring与mongodb集成 end -->
 
+		<!-- 集成rss专业解析组件：rome begin -->
 		<dependency>
 			<groupId>com.rometools</groupId>
 			<artifactId>rome-utils</artifactId>
@@ -88,49 +89,41 @@
 			<version>2.0.2</version>
 		</dependency>
 
+		<!-- 集成rss专业解析组件：rome end -->
 
-		<dependency>
-			<groupId>com.thoughtworks.xstream</groupId>
-			<artifactId>xstream</artifactId>
-			<version>1.4.8</version>
-		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>com.thoughtworks.xstream</groupId> -->
+		<!-- <artifactId>xstream</artifactId> -->
+		<!-- <version>1.4.8</version> -->
+		<!-- </dependency> -->
 
+		<!-- 该组件可以解析html、xml begin -->
 		<dependency>
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
 			<version>1.8.3</version>
 		</dependency>
+		<!-- 该组件可以解析html、xml end -->
 
-		<!-- 与quartz集群版集成 begin -->
+		
+
+		<!-- 引入elastic-job begin http://my.oschina.net/u/719192/blog/506062 -->
+
+		<!-- 引入elastic-job核心模块 -->
 		<dependency>
-			<groupId>org.quartz-scheduler</groupId>
-			<artifactId>quartz</artifactId>
-			<version>2.2.1</version>
+			<groupId>com.dangdang</groupId>
+			<artifactId>elastic-job-core</artifactId>
+			<version>1.0.1</version>
 		</dependency>
 
+		<!-- 使用springframework自定义命名空间时引入 -->
 		<!-- <dependency> -->
-		<!-- <groupId>org.terracotta.quartz</groupId> -->
-		<!-- <artifactId>quartz-terracotta</artifactId> -->
-		<!-- <version>2.3.9</version> -->
+		<!-- <groupId>com.dangdang</groupId> -->
+		<!-- <artifactId>elastic-job-spring</artifactId> -->
+		<!-- <version>1.0.1</version> -->
 		<!-- </dependency> -->
 
-		<!-- <dependency> -->
-		<!-- <groupId>org.terracotta</groupId> -->
-		<!-- <artifactId>terracotta-toolkit-1.6-runtime</artifactId> -->
-		<!-- <version>5.10.0</version> -->
-		<!-- </dependency> -->
-
-		<dependency>
-			<groupId>org.apache.zookeeper</groupId>
-			<artifactId>zookeeper</artifactId>
-			<version>3.4.5</version>
-		</dependency>
-
-
-		<!-- 与quartz集群版集成 end -->
-
-
-
+		<!-- 引入elastic-job end -->
 
 		<!-- 日志组件 begin -->
 		<dependency>

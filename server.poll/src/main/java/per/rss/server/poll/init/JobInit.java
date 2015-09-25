@@ -1,7 +1,5 @@
 package per.rss.server.poll.init;
 
-import java.util.List;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
@@ -10,47 +8,40 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import per.rss.server.poll.biz.job.ScheduleJobBiz;
-import per.rss.server.poll.dao.nosql.job.ScheduleJobDao;
-import per.rss.server.poll.model.job.ScheduleJob;
+import per.rss.core.base.util.UUIDUtils;
+import per.rss.server.poll.model.feed.Feed;
+import per.rss.server.poll.util.job.elastic.JobConfig;
+import per.rss.server.poll.util.job.elastic.JobUtils;
 
 @Component
 public class JobInit {
 	private static final Logger logger = LoggerFactory.getLogger(JobInit.class);
-	
-	@Autowired
-	private ScheduleJobDao scheduleJobDao;
-	
-	@Autowired
-	private ScheduleJobBiz scheduleJobBiz;
-	
-	@PostConstruct
-	public void init() throws Exception {
-		logger.debug("Began to initialize job.");
-		List<ScheduleJob> jobList=scheduleJobDao.findByJobInit();
-		
-		ScheduleJob scheduleJob1=new ScheduleJob();
-		scheduleJob1.setJobName("MyJobName1");
-		scheduleJob1.setJobGroup("MyJobGroup1");
-		scheduleJob1.setCronExpression("*/5 * * * * ?");
-		scheduleJob1.setIsSync(true);
-		
-		ScheduleJob scheduleJob2=new ScheduleJob();
-		scheduleJob2.setJobName("MyJobName2");
-		scheduleJob2.setJobGroup("MyJobGroup2");
-		scheduleJob2.setCronExpression("*/6 * * * * ?");
-		scheduleJob2.setIsSync(true);
-		
-		boolean r1=scheduleJobBiz.initScheduleJob(scheduleJob1);
-		boolean r2=scheduleJobBiz.initScheduleJob(scheduleJob2);
-		
-		logger.debug("r1="+r1+",r2="+r2);
-		
-		logger.debug("Job initialization is complete.");
-	}
 
-	@PreDestroy
+//	@Autowired
+//	private ScheduleJobDao scheduleJobDao;
+	
+	@Autowired
+	private JobUtils jobUtils;
+
+	 @PostConstruct
+	 public void init() {
+		 try{
+			 JobConfig<Feed> j1=new JobConfig<Feed>();
+			 j1.setId(UUIDUtils.randomUUID());
+			 j1.setName("oneOffElasticDemoJobTest");
+			 j1.setCronExpression("0/10 * * * * ?");
+			 Feed feed=new Feed();
+			 feed.setId(UUIDUtils.randomUUID());
+			 feed.setLink("http://hanhanone.sinaapp.com/feed/dajia");
+			 j1.setParam(feed);
+			 jobUtils.initJobOne(j1);
+		 }catch(Throwable e){
+			 logger.error("JobInit is error.",e);
+			 System.exit(-1);
+		 }
+	 }
+	 @PreDestroy
 	public void destory() {
-		logger.debug("Systeam user information destory is complete.");
+		logger.debug("Systeam job information destory is complete.");
 	}
 }
