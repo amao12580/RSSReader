@@ -92,10 +92,10 @@
 		<!-- 集成rss专业解析组件：rome end -->
 
 		<!-- <dependency> -->
-		<!-- <groupId>com.thoughtworks.xstream</groupId> -->
-		<!-- <artifactId>xstream</artifactId> -->
-		<!-- <version>1.4.8</version> -->
-		<!-- </dependency> -->
+	<!-- <groupId>com.thoughtworks.xstream</groupId> -->
+	<!-- <artifactId>xstream</artifactId> -->
+	<!-- <version>1.4.8</version> -->
+	<!-- </dependency> -->
 
 		<!-- 该组件可以解析html、xml begin -->
 		<dependency>
@@ -105,9 +105,12 @@
 		</dependency>
 		<!-- 该组件可以解析html、xml end -->
 
-		
-
-		<!-- 引入elastic-job begin http://my.oschina.net/u/719192/blog/506062 -->
+		<!-- 引入elastic-job begin -->
+		<!-- 资料1：http://my.oschina.net/u/719192/blog/506062 -->
+		<!-- 资料2：http://my.oschina.net/u/719192/blog/506062 -->
+		<!-- 资料3：https://github.com/dangdangdotcom/elastic-job/blob/master/elastic-job-example/src/main/java/com/dangdang/example/elasticjob/core/main/JobMain.java -->
+		<!-- 资料4：http://static.oschina.net/uploads/space/2015/0915/181703_2fxp_719192.jpg -->
+		<!-- 资料5：https://github.com/dangdangdotcom/elastic-job -->
 
 		<!-- 引入elastic-job核心模块 -->
 		<dependency>
@@ -115,14 +118,6 @@
 			<artifactId>elastic-job-core</artifactId>
 			<version>1.0.1</version>
 		</dependency>
-
-		<!-- 使用springframework自定义命名空间时引入 -->
-		<!-- <dependency> -->
-		<!-- <groupId>com.dangdang</groupId> -->
-		<!-- <artifactId>elastic-job-spring</artifactId> -->
-		<!-- <version>1.0.1</version> -->
-		<!-- </dependency> -->
-
 		<!-- 引入elastic-job end -->
 
 		<!-- 日志组件 begin -->
