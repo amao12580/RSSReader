@@ -77,20 +77,20 @@ public class HttpClientUtils {
 			response = httpclient.execute(httpget);
 			if (response == null) {
 				logger.error("doHttpGetRequest is error,response is null.");
-				logFeedRequest.setRequestStatus(CommonConstant.status_failed);
+				logFeedRequest.setRequestStatus(CommonConstant.status.failed.getCode());
 			} else {
-				logFeedRequest.setRequestStatus(CommonConstant.status_success);
+				logFeedRequest.setRequestStatus(CommonConstant.status.failed.getCode());
 				// 响应状态
 				StatusLine sl = response.getStatusLine();
 				if (sl == null) {
-					logFeedRequest.setResponseStatus(CommonConstant.status_failed);
+					logFeedRequest.setResponseStatus(CommonConstant.status.failed.getCode());
 				} else {
 					int code = sl.getStatusCode();
 					logFeedRequest.setResponseCode(code);
 					if (code != 200) {
-						logFeedRequest.setResponseStatus(CommonConstant.status_failed);
+						logFeedRequest.setResponseStatus(CommonConstant.status.failed.getCode());
 					} else {
-						logFeedRequest.setResponseStatus(CommonConstant.status_success);
+						logFeedRequest.setResponseStatus(CommonConstant.status.success.getCode());
 					}
 					// 获取响应实体
 					HttpEntity entity = response.getEntity();

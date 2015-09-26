@@ -23,7 +23,7 @@ public class LogFeedFetcherBo {
 	private Integer htmlLength = null;// 网络响应的结果，数据长度
 
 	public LogFeedFetcherBo doException(LogFeedFetcherBo logFeedRequest, Exception e) {
-		logFeedRequest.setRequestStatus(CommonConstant.status_failed);
+		logFeedRequest.setRequestStatus(CommonConstant.status.failed.getCode());
 		logFeedRequest.setRequestErrorMessage(e.getMessage());
 		return logFeedRequest;
 	}
