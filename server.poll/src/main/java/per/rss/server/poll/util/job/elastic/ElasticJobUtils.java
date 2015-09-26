@@ -1,7 +1,5 @@
 package per.rss.server.poll.util.job.elastic;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,16 +16,16 @@ import per.rss.core.base.util.StringUtils;
  *
  */
 @Component
-public final class JobUtils {
+public final class ElasticJobUtils {
 	@Autowired
 	private CoordinatorRegistryCenter RSSReaderRegCenter;
 
-	@SuppressWarnings("rawtypes")
-	public void initJobOne(JobConfig jobConfig) {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void initJobOne(ElasticJobConfig jobConfig) {
 		if (jobConfig == null) {
 			return;
 		}
-		JobConfiguration jobConfiguration = new JobConfiguration(jobConfig.getName(), MyOneOffElasticJob.class, 10,
+		JobConfiguration jobConfiguration = new JobConfiguration(jobConfig.getName(), jobConfig.getTargetClass(), 10,
 				jobConfig.getCronExpression());
 		Object param = jobConfig.getParam();
 		if (param != null) {

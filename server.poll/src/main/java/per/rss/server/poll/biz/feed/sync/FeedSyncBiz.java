@@ -1,7 +1,7 @@
 package per.rss.server.poll.biz.feed.sync;
 
-import java.util.Date;
+import per.rss.server.poll.bo.feed.FeedSyncBo;
 
 public interface FeedSyncBiz {
-	public void doTimingSync(String feedId,String URL,Date lastedSyncDate);
+	public FeedSyncBo doFeedSync(FeedSyncBo feedSyncBo);
 }

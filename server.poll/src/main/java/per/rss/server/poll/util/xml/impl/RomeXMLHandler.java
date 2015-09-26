@@ -80,7 +80,8 @@ public class RomeXMLHandler extends XMLHandler {
 				List<SyndCategory> categoryList = entry.getCategories();
 				if (categoryList != null) {
 					for (int m = 0; m < categoryList.size(); m++) {
-						SyndCategory category = (SyndCategory) categoryList.get(m);
+						// SyndCategory category = (SyndCategory)
+						// categoryList.get(m);
 						// logger.debug("此标题所属的范畴：" + category.getName());
 					}
 				}
@@ -88,7 +89,8 @@ public class RomeXMLHandler extends XMLHandler {
 				List<SyndEnclosure> enclosureList = entry.getEnclosures();
 				if (enclosureList != null) {
 					for (int n = 0; n < enclosureList.size(); n++) {
-						SyndEnclosure enclosure = (SyndEnclosure) enclosureList.get(n);
+						// SyndEnclosure enclosure = (SyndEnclosure)
+						// enclosureList.get(n);
 						// logger.debug("流媒体播放文件：" + entry.getEnclosures());
 						// logger.debug("流媒体播放文件2：" + enclosure.getUrl());
 					}

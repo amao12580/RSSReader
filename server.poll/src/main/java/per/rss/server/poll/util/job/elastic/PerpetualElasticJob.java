@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 import com.dangdang.ddframe.job.api.AbstractPerpetualElasticJob;
 import com.dangdang.ddframe.job.api.JobExecutionMultipleShardingContext;
 
-public class MyPerpetualElasticJob extends AbstractPerpetualElasticJob<Object> {
-	protected static transient Logger log = LoggerFactory.getLogger(MyPerpetualElasticJob.class);
+public class PerpetualElasticJob extends AbstractPerpetualElasticJob<Object> {
+	protected static transient Logger log = LoggerFactory.getLogger(PerpetualElasticJob.class);
 
 	@Override
     protected List<Object> fetchData(JobExecutionMultipleShardingContext context) {

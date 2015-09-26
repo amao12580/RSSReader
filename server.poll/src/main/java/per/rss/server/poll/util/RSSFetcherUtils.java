@@ -21,15 +21,16 @@ public class RSSFetcherUtils {
 	private static final XMLHandler defaultHandler = XMLHandler.getInstance();
 
 	public static void main(String[] args) throws IOException, DocumentException {
-		String spec = "http://news.baidu.com/n?cmd=1&class=civilnews&tn=rss&sub=0]http://news.baidu.com/n?cmd=1&class=civilnews&tn=rss&sub=0";
-		String spec1 = "http://rss.sina.com.cn/ent/hot_roll.xml";
-		String spec2 = "http://hanhanone.sinaapp.com/feed/dajia";
+		// String spec =
+		// "http://news.baidu.com/n?cmd=1&class=civilnews&tn=rss&sub=0]http://news.baidu.com/n?cmd=1&class=civilnews&tn=rss&sub=0";
+		// String spec1 = "http://rss.sina.com.cn/ent/hot_roll.xml";
+		// String spec2 = "http://hanhanone.sinaapp.com/feed/dajia";
 		String spec3 = "http://feeds2.feedburner.com/cnbeta-full";
-		String spec4 = "http://sinacn.weibodangan.com/user/1850988623/rss/";
+		// String spec4 = "http://sinacn.weibodangan.com/user/1850988623/rss/";
 		// doFetch(spec);
 		// doFetch(spec1);
 		// doFetch(spec2);
-		logger.debug("result:"+StringUtils.toJSONString(doFetch(spec3)));
+		logger.debug("result:" + StringUtils.toJSONString(doFetch(spec3)));
 		// doFetch(spec4);
 	}
 
@@ -38,8 +39,8 @@ public class RSSFetcherUtils {
 	 *            rss网络地址
 	 * @throws IOException
 	 */
-	protected static LogFeedSync doFetch(String urlStr) throws IOException {
-		return doFetch(urlStr, null,null);
+	public final static LogFeedSync doFetch(String urlStr) {
+		return doFetch(urlStr, null, null);
 	}
 
 	/**
@@ -51,11 +52,11 @@ public class RSSFetcherUtils {
 	 *             当reader变量没有正确关闭时，抛出该异常
 	 */
 	@SuppressWarnings("static-access")
-	private static LogFeedSync doFetch(String urlStr, ProxyBo proxy,String response_charsets){
+	private static LogFeedSync doFetch(String urlStr, ProxyBo proxy, String response_charsets) {
 		LogFeedSync logFeedSync = new LogFeedSync();
 		logFeedSync.setId(UUIDUtils.randomUUID());
 		logFeedSync.setFetchStartDate(new Date());
-		LogFeedFetcherBo logFeedFetcher = HttpClientUtils.doHttpGetRequest(urlStr,proxy,response_charsets);
+		LogFeedFetcherBo logFeedFetcher = HttpClientUtils.doHttpGetRequest(urlStr, proxy, response_charsets);
 		if (logFeedFetcher != null) {
 			logFeedSync.setLogFeedFetcher(logFeedFetcher);
 			String responseXml = logFeedFetcher.getResponseHtml();
@@ -66,14 +67,14 @@ public class RSSFetcherUtils {
 				return null;
 			}
 			LogFeedParser logFeedParser = defaultHandler.parse(responseXml);
-			if(logFeedParser!=null){
+			if (logFeedParser != null) {
 				logFeedSync.setLogFeedParser(logFeedParser);
 			}
 		}
 		logFeedSync.setFetchEndDate(new Date());
-		long takeTime=logFeedSync.getFetchEndDate().getTime()-logFeedSync.getFetchStartDate().getTime();
+		long takeTime = logFeedSync.getFetchEndDate().getTime() - logFeedSync.getFetchStartDate().getTime();
 		logFeedFetcher.setTakeTime(takeTime);
-		logger.debug("all time is:"+takeTime);
+		logger.debug("all time is:" + takeTime);
 		return logFeedSync;
 	}
 }

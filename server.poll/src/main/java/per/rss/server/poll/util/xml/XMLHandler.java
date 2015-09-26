@@ -58,11 +58,11 @@ public abstract class XMLHandler {
 			} else {
 				feed = doParseXML(xml);
 			}
-			logFeedParser.setStatus(CommonConstant.status_success);
+			logFeedParser.setStatus(CommonConstant.status.success.getCode());
 		} catch (Exception e) {
 			logger.error("parse is error.", e);
 			feed = null;
-			logFeedParser.setStatus(CommonConstant.status_failed);
+			logFeedParser.setStatus(CommonConstant.status.failed.getCode());
 			logFeedParser.setErrorMessage(e.getMessage());
 		}
 		logFeedParser.setFeed(feed);

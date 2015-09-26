@@ -92,10 +92,10 @@
 		<!-- 集成rss专业解析组件：rome end -->
 
 		<!-- <dependency> -->
-	<!-- <groupId>com.thoughtworks.xstream</groupId> -->
-	<!-- <artifactId>xstream</artifactId> -->
-	<!-- <version>1.4.8</version> -->
-	<!-- </dependency> -->
+		<!-- <groupId>com.thoughtworks.xstream</groupId> -->
+		<!-- <artifactId>xstream</artifactId> -->
+		<!-- <version>1.4.8</version> -->
+		<!-- </dependency> -->
 
 		<!-- 该组件可以解析html、xml begin -->
 		<dependency>
@@ -116,7 +116,8 @@
 		<dependency>
 			<groupId>com.dangdang</groupId>
 			<artifactId>elastic-job-core</artifactId>
-			<version>1.0.1</version>
+			<!-- <version>1.0.1</version> -->
+			<version>1.0.2-SNAPSHOT</version>
 		</dependency>
 		<!-- 引入elastic-job end -->
 
