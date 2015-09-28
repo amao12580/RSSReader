@@ -32,8 +32,10 @@ public class JobInit {
 	 @PostConstruct
 	 public void initFeedSyncJobs() {
 		 try{
+			 //从数据库load所有任务
 			 List<ScheduleJob> jobList=scheduleJobDao.findByJobInit();
 			 
+			 //将任务加入到分布式任务队列
 			 ElasticJobConfig<FeedSyncBo> j1=new ElasticJobConfig<FeedSyncBo>();
 			 j1.setId(UUIDUtils.randomUUID());
 			 j1.setName("FeedSyncJobs");
