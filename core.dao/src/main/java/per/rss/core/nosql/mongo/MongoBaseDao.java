@@ -1,5 +1,6 @@
 package per.rss.core.nosql.mongo;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -50,6 +51,11 @@ public interface MongoBaseDao<T> {
 	 * 
 	 */
 	public void insert(T obj);
+	/**
+	 * this.mongoTemplate.insertAll
+	 * 
+	 */
+	public void insertAll(Collection<T> objs);
 
 	/**
 	 * this.mongoTemplate.remove

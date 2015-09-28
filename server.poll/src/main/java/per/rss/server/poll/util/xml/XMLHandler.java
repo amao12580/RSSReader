@@ -50,8 +50,9 @@ public abstract class XMLHandler {
 		return result;
 	}
 
-	public final LogFeedParser parse(String feedId,Date lastedSyncDate, String xml) {
+	public final LogFeedParser parse(String parseId,String feedId, Date lastedSyncDate, String xml) {
 		LogFeedParser logFeedParser = new LogFeedParser();
+		logFeedParser.setId(parseId);
 		logFeedParser.setParseStartDate(new Date());
 		// logFeedParser.setParseType(RSSParseConstant.xml_parse_type_jsoup);
 		Feed feed = null;

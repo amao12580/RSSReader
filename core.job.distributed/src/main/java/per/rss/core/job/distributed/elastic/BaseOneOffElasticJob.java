@@ -8,8 +8,8 @@ import com.dangdang.ddframe.job.api.JobExecutionMultipleShardingContext;
 
 import per.rss.core.base.util.StringUtils;
 
-public abstract class BaseElasticJob extends AbstractOneOffElasticJob {
-	protected static transient Logger log = LoggerFactory.getLogger(BaseElasticJob.class);
+public abstract class BaseOneOffElasticJob<T> extends AbstractOneOffElasticJob {
+	protected static transient Logger log = LoggerFactory.getLogger(BaseOneOffElasticJob.class);
 
 	/**
 	 * 执行任务
@@ -17,7 +17,7 @@ public abstract class BaseElasticJob extends AbstractOneOffElasticJob {
 	 * @param jobParam
 	 * @return
 	 */
-	abstract public Object excuteingJob(String jobParam);
+	abstract public T excuteingJob(String jobParam);
 
 	/**
 	 * 处理任务执行的结果
@@ -25,7 +25,7 @@ public abstract class BaseElasticJob extends AbstractOneOffElasticJob {
 	 * @param result
 	 * @return
 	 */
-	abstract public boolean excuteingResult(Object result);
+	abstract public boolean excuteingResult(T result);
 
 	/*
 	 * 任务处理的入口 (non-Javadoc)
@@ -42,7 +42,7 @@ public abstract class BaseElasticJob extends AbstractOneOffElasticJob {
 		if (StringUtils.isEmpty(paramStr)) {
 			return;
 		}
-		Object obj = excuteingJob(paramStr);
+		T obj = excuteingJob(paramStr);
 		boolean result = excuteingResult(obj);
 		if (result) {
 			log.debug("任务执行成功：" + context.getJobName());

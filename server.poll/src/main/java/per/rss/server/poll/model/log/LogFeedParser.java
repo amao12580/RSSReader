@@ -5,6 +5,7 @@ import java.util.Date;
 import per.rss.server.poll.model.feed.Feed;
 
 public class LogFeedParser {
+	private String id = null;
 	private Date parseStartDate = null;// 系统开始解析的时间
 	private Date parseEndDate = null;// 系统完成解析的时间
 	private Long takeTime = null;// 解析花费的时间
@@ -14,6 +15,14 @@ public class LogFeedParser {
 	private Integer status = null;// 解析的结果,状态
 	private Feed feed = null;// 解析的结果,具体的数据
 	private String errorMessage = null;// 解析出现错误，大致的问题
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public Date getParseStartDate() {
 		return parseStartDate;

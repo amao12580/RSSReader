@@ -54,8 +54,9 @@ public class RSSFetcherUtils {
 	private static LogFeedSync doFetch(String feedId, String feedLink, Date lastedSyncDate, ProxyBo proxy, String response_charsets) {
 		LogFeedSync logFeedSync = new LogFeedSync();
 		logFeedSync.setId(UUIDUtils.randomUUID());
+		logFeedSync.setFeedId(feedId);
 		logFeedSync.setFetchStartDate(new Date());
-		LogFeedFetcherBo logFeedFetcher = HttpClientUtils.doHttpGetRequest(feedLink, proxy,
+		LogFeedFetcherBo logFeedFetcher = HttpClientUtils.doHttpGetRequest(logFeedSync.getId(),feedLink, proxy,
 				response_charsets);
 		if (logFeedFetcher != null) {
 			logFeedSync.setLogFeedFetcher(logFeedFetcher);
@@ -66,7 +67,7 @@ public class RSSFetcherUtils {
 				logger.error("responseXml verify is error.");
 				return null;
 			}
-			LogFeedParser logFeedParser = defaultHandler.parse(feedId,lastedSyncDate,responseXml);
+			LogFeedParser logFeedParser = defaultHandler.parse(logFeedSync.getId(),feedId,lastedSyncDate,responseXml);
 			if (logFeedParser != null) {
 				logFeedSync.setLogFeedParser(logFeedParser);
 			}

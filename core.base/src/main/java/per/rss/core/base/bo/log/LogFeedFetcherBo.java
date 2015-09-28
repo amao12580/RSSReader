@@ -5,6 +5,7 @@ import java.util.Date;
 import per.rss.core.base.constant.CommonConstant;
 
 public class LogFeedFetcherBo {
+	private String id = null;
 	private Date requestStartDate = null;// 开始获取网络rss信息的时间
 	private Date requestEndDate = null;// 完成获取网络rss信息的时间
 	private Long takeTime = null;// 网络请求花费的时间
@@ -26,6 +27,14 @@ public class LogFeedFetcherBo {
 		logFeedRequest.setRequestStatus(CommonConstant.status.failed.getCode());
 		logFeedRequest.setRequestErrorMessage(e.getMessage());
 		return logFeedRequest;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public Date getRequestStartDate() {

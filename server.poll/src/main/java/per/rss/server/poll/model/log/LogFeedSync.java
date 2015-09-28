@@ -10,14 +10,25 @@ import per.rss.core.base.bo.log.LogFeedFetcherBo;
  *         抓取是指：获取网络rss信息+解析xml
  *
  */
+
 public class LogFeedSync {
+	
 	private String id = null;
+	private String feedId = null;
 	private Date fetchStartDate = null;// 系统开始抓取的时间
 	private Date fetchEndDate = null;// 系统完成抓取的时间
 	private LogFeedFetcherBo logFeedFetcher;// 网络请求的详细信息
 	private Long takeTime = null;// 尝试解析花费总的时间
 	private LogFeedParser logFeedParser = null;// 解析详情
 	private String charsets = null;// 字符集
+
+	public String getFeedId() {
+		return feedId;
+	}
+
+	public void setFeedId(String feedId) {
+		this.feedId = feedId;
+	}
 
 	public String getId() {
 		return id;

@@ -1,6 +1,7 @@
 package per.rss.core.nosql.mongo.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -134,8 +135,12 @@ public class MongoBaseDaoImpl<T> implements MongoBaseDao<T>{
 		}
 	}
     @Override
-	public void insert(T obj) {
+    public void insert(T obj) {
     	this.mongoTemplate.insert(obj);
+    }
+    @Override
+	public void insertAll(Collection<T> objs) {
+    	this.mongoTemplate.insertAll(objs);
 	}
     @Override
 	public int remove(Query query, Class<T> c) {

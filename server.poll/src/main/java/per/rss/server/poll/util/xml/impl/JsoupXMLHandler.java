@@ -328,9 +328,9 @@ public class JsoupXMLHandler extends XMLHandler {
 			articles.add(article);
 		}
 		// logger.debug("articles size is:" + articles.size());
-		if (!CollectionUtils.isEmpty(articles)) {
-			feed.setItem(articles);
-		}
+		// if (!CollectionUtils.isEmpty(articles)) {
+		feed.setItem(articles);
+		// }
 		// logger.debug("finally feed is:" + feed.toString());
 		return feed;
 	}

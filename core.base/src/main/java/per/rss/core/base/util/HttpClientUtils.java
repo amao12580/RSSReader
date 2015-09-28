@@ -38,6 +38,7 @@ public class HttpClientUtils {
 	 * 还没有实现使用代理访问
 	 * 
 	 * @param urlStr
+	 * @param feedLink 
 	 * @param proxy_ip
 	 * @param proxy_port
 	 * @param proxy_username
@@ -46,8 +47,9 @@ public class HttpClientUtils {
 	 *            设定响应内容的字符集：gbk、utf-8，默认是gbk.
 	 * @return
 	 */
-	public static LogFeedFetcherBo doHttpGetRequest(String urlStr, ProxyBo proxy, String response_charsets) {
+	public static LogFeedFetcherBo doHttpGetRequest(String fetchID, String feedLink, ProxyBo proxy, String response_charsets) {
 		LogFeedFetcherBo logFeedRequest = new LogFeedFetcherBo();
+		logFeedRequest.setId(fetchID);
 		logFeedRequest.setRequestStartDate(new Date());
 		String html = null;
 		CloseableHttpClient httpclient = null;
@@ -56,7 +58,7 @@ public class HttpClientUtils {
 		try {
 			httpclient = HttpClients.createDefault();
 			// 创建httpget.
-			httpget = new HttpGet(urlStr);
+			httpget = new HttpGet(feedLink);
 			// 设置httpget超时信息
 			httpget.setConfig(requestConfig);
 			// 設置httpGet的头部參數信息

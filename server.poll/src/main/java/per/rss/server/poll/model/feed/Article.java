@@ -1,6 +1,10 @@
 package per.rss.server.poll.model.feed;
 
+import java.io.Serializable;
 import java.util.Date;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import per.rss.core.base.util.StringUtils;
 
@@ -10,7 +14,11 @@ import per.rss.core.base.util.StringUtils;
  * @author cifpay
  *
  */
-public class Article {
+@Document(collection = "article") 
+public class Article implements Serializable{
+	private static final long serialVersionUID = -2008046181032344880L;
+	
+	@Id
 	private String id = null;
 	private String feedId = null;
 
