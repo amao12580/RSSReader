@@ -1,5 +1,6 @@
 package per.rss.server.poll.util.xml.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.dom4j.Document;
@@ -9,7 +10,6 @@ import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import per.rss.core.base.util.FileUtils;
 import per.rss.server.poll.model.feed.Feed;
 import per.rss.server.poll.util.xml.XMLHandler;
 
@@ -33,7 +33,7 @@ public class Dom4jXMLHandler extends XMLHandler {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected Feed doParseXML(String xml) throws Exception {
+	protected Feed doParseXML(String feedId,Date lastedSyncDate, String xml) throws Exception {
 		Feed feed = null;
 		try {
 			Document document = DocumentHelper.parseText(xml);
@@ -82,9 +82,9 @@ public class Dom4jXMLHandler extends XMLHandler {
 	}
 
 	public static void main(String[] args) {
-		XMLHandler h = new Dom4jXMLHandler();
-		h.parse(FileUtils.readByChars("E:xml3.txt"));
-		h.parse(FileUtils.readByChars("E:xml2.txt"));
-		h.parse(FileUtils.readByChars("E:xml.txt"));
+		// XMLHandler h = new Dom4jXMLHandler();
+		// h.parse(FileUtils.readByChars("E:xml3.txt"));
+		// h.parse(FileUtils.readByChars("E:xml2.txt"));
+		// h.parse(FileUtils.readByChars("E:xml.txt"));
 	}
 }

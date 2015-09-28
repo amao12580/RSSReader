@@ -7,7 +7,8 @@
 	 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
      http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd
-     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd"
+	default-lazy-init="false">
 
 	<description>MongoDB的链接配置 </description>
 
@@ -52,7 +53,7 @@
 
 
 
-	<!-- 读写分离级别配置 开始  -->
+	<!-- 读写分离级别配置 开始 -->
 
 	<!-- http://blog.csdn.net/u010889990/article/details/42644963 -->
 
@@ -81,7 +82,7 @@
 
 	<!-- 读写分离级别配置 结束 -->
 
-
+	<context:component-scan base-package="per.rss.core.nosql"></context:component-scan>
 
 
 	<mongo:mongo host="${mongo.host}" port="${mongo.port}">
@@ -97,7 +98,7 @@
 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
 		<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
 	</bean>
-
-	<mongo:mapping-converter base-package="com.cifpay.star.dao.model" />
-
+	<mongo:repositories base-package="per.rss.core.nosql,per.rss.server.poll.dao" />
+	<mongo:mapping-converter
+		base-package="per.rss.core.nosql.model,per.rss.server.poll.model" />
 </beans> 

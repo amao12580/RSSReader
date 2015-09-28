@@ -38,7 +38,7 @@ public class JsoupXMLHandler extends XMLHandler {
 	}
 
 	@Override
-	protected Feed doParseXML(String xml) {
+	protected Feed doParseXML(String feedId, Date lastedSyncDate, String xml) {
 		Feed feed = null;
 		Document doc = Jsoup.parse(xml, "", Parser.xmlParser());// xml方式的解析
 		Elements rss = doc.select("rss");
@@ -55,7 +55,7 @@ public class JsoupXMLHandler extends XMLHandler {
 		}
 		// logger.debug("channel node size is:" + channel.size());
 		feed = new Feed();
-		feed.setId(UUIDUtils.randomUUID());
+		feed.setId(feedId);
 
 		Elements title = channel.select("title");// 非必需节点
 		if (CollectionUtils.isEmpty(title)) {
@@ -201,10 +201,42 @@ public class JsoupXMLHandler extends XMLHandler {
 			return null;
 		}
 		// logger.debug("item size is:" + item.size());
+		boolean needCheckPubDate = false;
+		long lastedSyncDateTime = 0l;
+		Date now = new Date();
+		if (lastedSyncDate != null) {// lastedSyncDate参数是有效值，并且小于当前时间。
+			lastedSyncDateTime = lastedSyncDate.getTime();
+			if (lastedSyncDateTime - now.getTime() < 0) {
+				needCheckPubDate = true;
+			}
+		}
 		Set<Article> articles = new HashSet<Article>(item.size());
 		for (Element ele : item) {
 			Article article = new Article();
-			Date now = new Date();
+
+			// 优先解析pubDate
+			Elements articlepubDate = ele.select("pubDate");// 非必需节点
+			if (CollectionUtils.isEmpty(articlepubDate)) {
+				// logger.warn("rss->channel->item->pubDate is empty.");
+				article.setPubDate(now);
+			} else {
+				// logger.debug("articlepubDate size is:" +
+				// articlepubDate.size());
+				String articlepubDateFirstString = articlepubDate.first().text();
+				// logger.debug("articlepubDate first is:" +
+				// articlepubDateFirst);
+				Date pubDate = super.parsePubDateString(articlepubDateFirstString);
+				if (pubDate == null) {
+					continue;
+				}
+				if (needCheckPubDate) {
+					if ((lastedSyncDateTime - pubDate.getTime()) > 0) {
+						continue;
+					}
+				}
+				article.setPubDate(pubDate);
+			}
+
 			article.setId(UUIDUtils.randomUUID());
 			article.setFetchDate(now);
 			Elements articletitle = ele.select("title");// 非必需节点
@@ -228,23 +260,6 @@ public class JsoupXMLHandler extends XMLHandler {
 				String articlelinkFirst = articlelink.first().text();
 				// logger.debug("articlelink first is:" + articlelinkFirst);
 				article.setLink(articlelinkFirst);
-			}
-
-			Elements articlepubDate = ele.select("pubDate");// 非必需节点
-			if (CollectionUtils.isEmpty(articlepubDate)) {
-				// logger.warn("rss->channel->item->pubDate is empty.");
-				article.setPubDate(now);
-			} else {
-				// logger.debug("articlepubDate size is:" +
-				// articlepubDate.size());
-				String articlepubDateFirstString = articlepubDate.first().text();
-				// logger.debug("articlepubDate first is:" +
-				// articlepubDateFirst);
-				Date pubDate = parsePubDateString(articlepubDateFirstString);
-				if (pubDate == null) {
-					continue;
-				}
-				article.setPubDate(pubDate);
 			}
 
 			Elements articlesource = ele.select("source");// 非必需节点
@@ -307,7 +322,7 @@ public class JsoupXMLHandler extends XMLHandler {
 				// articledescriptionFirst);
 				article.setDescription(articledescriptionFirst);
 			}
-			if (articles.size() >= CommonConstant.default_feed_new_max) {
+			if (articles.size() >= CommonConstant.default_feed_article_new_max) {
 				break;
 			}
 			articles.add(article);

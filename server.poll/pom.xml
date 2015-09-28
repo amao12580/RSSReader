@@ -27,6 +27,18 @@
 			<artifactId>core.base</artifactId>
 			<version>${rss.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>per.rss</groupId>
+			<artifactId>core.dao</artifactId>
+			<version>${rss.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>per.rss</groupId>
+			<artifactId>core.job.distributed</artifactId>
+			<version>${rss.version}</version>
+		</dependency>
 		<!-- 公共组件 end -->
 
 		<!-- spring begin -->
@@ -61,21 +73,6 @@
 		</dependency>
 		<!-- spring end -->
 
-		<!-- spring与mongodb集成 begin -->
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-jpa</artifactId>
-			<version>1.9.0.RELEASE</version>
-		</dependency>
-
-
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-mongodb</artifactId>
-			<version>1.8.0.RELEASE</version>
-		</dependency>
-		<!-- spring与mongodb集成 end -->
-
 		<!-- 集成rss专业解析组件：rome begin -->
 		<dependency>
 			<groupId>com.rometools</groupId>
@@ -91,12 +88,6 @@
 
 		<!-- 集成rss专业解析组件：rome end -->
 
-		<!-- <dependency> -->
-		<!-- <groupId>com.thoughtworks.xstream</groupId> -->
-		<!-- <artifactId>xstream</artifactId> -->
-		<!-- <version>1.4.8</version> -->
-		<!-- </dependency> -->
-
 		<!-- 该组件可以解析html、xml begin -->
 		<dependency>
 			<groupId>org.jsoup</groupId>
@@ -104,22 +95,6 @@
 			<version>1.8.3</version>
 		</dependency>
 		<!-- 该组件可以解析html、xml end -->
-
-		<!-- 引入elastic-job begin -->
-		<!-- 资料1：http://my.oschina.net/u/719192/blog/506062 -->
-		<!-- 资料2：http://my.oschina.net/u/719192/blog/506062 -->
-		<!-- 资料3：https://github.com/dangdangdotcom/elastic-job/blob/master/elastic-job-example/src/main/java/com/dangdang/example/elasticjob/core/main/JobMain.java -->
-		<!-- 资料4：http://static.oschina.net/uploads/space/2015/0915/181703_2fxp_719192.jpg -->
-		<!-- 资料5：https://github.com/dangdangdotcom/elastic-job -->
-
-		<!-- 引入elastic-job核心模块 -->
-		<dependency>
-			<groupId>com.dangdang</groupId>
-			<artifactId>elastic-job-core</artifactId>
-			<!-- <version>1.0.1</version> -->
-			<version>1.0.2-SNAPSHOT</version>
-		</dependency>
-		<!-- 引入elastic-job end -->
 
 		<!-- 日志组件 begin -->
 		<dependency>
@@ -156,6 +131,7 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
+			<scope>test</scope>
 		</dependency>
 
 

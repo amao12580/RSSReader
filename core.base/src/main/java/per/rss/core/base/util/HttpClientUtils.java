@@ -30,7 +30,7 @@ public class HttpClientUtils {
 	// 2，读取数据超时：soTimeout 指的是连接上一个url，获取response的返回等待时间
 	// 3，SocketTimeout ：定义了Socket读数据的超时时间，即从服务器获取响应数据需要等待的时间
 	static {
-		requestConfig = RequestConfig.custom().setSocketTimeout(2 * 1000).setConnectionRequestTimeout(2 * 1000)
+		requestConfig = RequestConfig.custom().setSocketTimeout(5 * 1000).setConnectionRequestTimeout(5 * 1000)
 				.setConnectTimeout(5 * 1000).build();// 设置请求和传输超时时间
 	}
 

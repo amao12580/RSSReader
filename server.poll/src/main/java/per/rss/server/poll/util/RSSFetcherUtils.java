@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import per.rss.core.base.bo.internet.ProxyBo;
 import per.rss.core.base.bo.log.LogFeedFetcherBo;
 import per.rss.core.base.util.HttpClientUtils;
-import per.rss.core.base.util.StringUtils;
 import per.rss.core.base.util.UUIDUtils;
 import per.rss.server.poll.model.log.LogFeedParser;
 import per.rss.server.poll.model.log.LogFeedSync;
@@ -25,22 +24,22 @@ public class RSSFetcherUtils {
 		// "http://news.baidu.com/n?cmd=1&class=civilnews&tn=rss&sub=0]http://news.baidu.com/n?cmd=1&class=civilnews&tn=rss&sub=0";
 		// String spec1 = "http://rss.sina.com.cn/ent/hot_roll.xml";
 		// String spec2 = "http://hanhanone.sinaapp.com/feed/dajia";
-		String spec3 = "http://feeds2.feedburner.com/cnbeta-full";
+		// String spec3 = "http://feeds2.feedburner.com/cnbeta-full";
 		// String spec4 = "http://sinacn.weibodangan.com/user/1850988623/rss/";
 		// doFetch(spec);
 		// doFetch(spec1);
 		// doFetch(spec2);
-		logger.debug("result:" + StringUtils.toJSONString(doFetch(spec3)));
+		// logger.debug("result:" + StringUtils.toJSONString(doFetch(spec3)));
 		// doFetch(spec4);
 	}
 
 	/**
-	 * @param urlStr
+	 * @param feedSyncBo
 	 *            rss网络地址
 	 * @throws IOException
 	 */
-	public final static LogFeedSync doFetch(String urlStr) {
-		return doFetch(urlStr, null, null);
+	public final static LogFeedSync doFetch(String feedId, String feedLink, Date lastedSyncDate) {
+		return doFetch(feedId,feedLink,lastedSyncDate, null, null);
 	}
 
 	/**
@@ -52,11 +51,12 @@ public class RSSFetcherUtils {
 	 *             当reader变量没有正确关闭时，抛出该异常
 	 */
 	@SuppressWarnings("static-access")
-	private static LogFeedSync doFetch(String urlStr, ProxyBo proxy, String response_charsets) {
+	private static LogFeedSync doFetch(String feedId, String feedLink, Date lastedSyncDate, ProxyBo proxy, String response_charsets) {
 		LogFeedSync logFeedSync = new LogFeedSync();
 		logFeedSync.setId(UUIDUtils.randomUUID());
 		logFeedSync.setFetchStartDate(new Date());
-		LogFeedFetcherBo logFeedFetcher = HttpClientUtils.doHttpGetRequest(urlStr, proxy, response_charsets);
+		LogFeedFetcherBo logFeedFetcher = HttpClientUtils.doHttpGetRequest(feedLink, proxy,
+				response_charsets);
 		if (logFeedFetcher != null) {
 			logFeedSync.setLogFeedFetcher(logFeedFetcher);
 			String responseXml = logFeedFetcher.getResponseHtml();
@@ -66,7 +66,7 @@ public class RSSFetcherUtils {
 				logger.error("responseXml verify is error.");
 				return null;
 			}
-			LogFeedParser logFeedParser = defaultHandler.parse(responseXml);
+			LogFeedParser logFeedParser = defaultHandler.parse(feedId,lastedSyncDate,responseXml);
 			if (logFeedParser != null) {
 				logFeedSync.setLogFeedParser(logFeedParser);
 			}

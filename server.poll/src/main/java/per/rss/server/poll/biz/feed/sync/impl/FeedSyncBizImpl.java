@@ -5,11 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import per.rss.core.base.util.StringUtils;
+import per.rss.core.job.distributed.elastic.BaseElasticJob;
 import per.rss.server.poll.biz.feed.sync.FeedSyncBiz;
 import per.rss.server.poll.bo.feed.FeedSyncBo;
 import per.rss.server.poll.model.log.LogFeedSync;
 import per.rss.server.poll.util.RSSFetcherUtils;
-import per.rss.server.poll.util.job.elastic.BaseElasticJob;
 
 @Service(value = "feedSyncBiz")
 public class FeedSyncBizImpl extends BaseElasticJob implements FeedSyncBiz {
@@ -17,7 +17,7 @@ public class FeedSyncBizImpl extends BaseElasticJob implements FeedSyncBiz {
 
 	@Override
 	public FeedSyncBo doFeedSync(FeedSyncBo feedSyncBo) {
-		LogFeedSync logFeedSync=RSSFetcherUtils.doFetch(feedSyncBo.getLink());
+		LogFeedSync logFeedSync=RSSFetcherUtils.doFetch(feedSyncBo.getId(),feedSyncBo.getLink(),feedSyncBo.getLastedSyncDate());
 		if(logFeedSync==null){
 			return null;
 		}

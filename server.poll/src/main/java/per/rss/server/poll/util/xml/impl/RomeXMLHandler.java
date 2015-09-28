@@ -1,6 +1,7 @@
 package per.rss.server.poll.util.xml.impl;
 
 import java.io.StringReader;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -14,7 +15,6 @@ import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.SyndFeedInput;
 
-import per.rss.core.base.util.FileUtils;
 import per.rss.core.base.util.StringUtils;
 import per.rss.server.poll.model.feed.Feed;
 import per.rss.server.poll.util.xml.XMLHandler;
@@ -45,7 +45,7 @@ public class RomeXMLHandler extends XMLHandler {
 	}
 
 	@Override
-	protected Feed doParseXML(String xml) throws Exception {
+	protected Feed doParseXML(String feedId,Date lastedSyncDate, String xml) throws Exception {
 		Feed feed = null;
 		StringReader sr = null;
 		InputSource is = null;
@@ -111,9 +111,9 @@ public class RomeXMLHandler extends XMLHandler {
 	}
 
 	public static void main(String[] args) {
-		XMLHandler h = new RomeXMLHandler();
+		// XMLHandler h = new RomeXMLHandler();
 		// h.parse(FileUtils.readByChars("E:xml3.txt"));
 		// h.parse(FileUtils.readByChars("E:xml2.txt"));
-		h.parse(FileUtils.readByChars("E:xml.txt"));
+		// h.parse(FileUtils.readByChars("E:xml.txt"));
 	}
 }

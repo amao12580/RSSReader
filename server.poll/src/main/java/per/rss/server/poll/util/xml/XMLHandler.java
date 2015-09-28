@@ -29,6 +29,10 @@ public abstract class XMLHandler {
 
 	public final static boolean validator(String xml) {
 		boolean result = false;
+		if(StringUtils.isEmpty(xml)){
+			logger.error("xml is empty.");
+			return false;
+		}
 		Document document = null;
 		try {
 			document = DocumentHelper.parseText(xml);
@@ -46,7 +50,7 @@ public abstract class XMLHandler {
 		return result;
 	}
 
-	public final LogFeedParser parse(String xml) {
+	public final LogFeedParser parse(String feedId,Date lastedSyncDate, String xml) {
 		LogFeedParser logFeedParser = new LogFeedParser();
 		logFeedParser.setParseStartDate(new Date());
 		// logFeedParser.setParseType(RSSParseConstant.xml_parse_type_jsoup);
@@ -56,7 +60,7 @@ public abstract class XMLHandler {
 				logger.error("xml is empty.");
 				feed = null;
 			} else {
-				feed = doParseXML(xml);
+				feed = doParseXML(feedId,lastedSyncDate,xml);
 			}
 			logFeedParser.setStatus(CommonConstant.status.success.getCode());
 		} catch (Exception e) {
@@ -75,11 +79,12 @@ public abstract class XMLHandler {
 
 	/**
 	 * 继承式多态
+	 * @param feedSyncBo 
 	 * 
 	 * @param xml
 	 * @return
 	 */
-	abstract protected Feed doParseXML(String xml) throws Exception;
+	abstract protected Feed doParseXML(String feedId,Date lastedSyncDate, String xml) throws Exception;
 
 	protected final static Date parsePubDateString(String pubDateString) {
 		String pubDateStr = pubDateString;
