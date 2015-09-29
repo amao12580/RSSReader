@@ -22,8 +22,6 @@ import per.rss.server.poll.model.feed.Image;
 import per.rss.server.poll.util.xml.XMLHandler;
 
 /**
- * @author cifpay
- * 
  *         新方案，极强的兼容性
  * 
  *         http://whmwg.iteye.com/blog/1750509

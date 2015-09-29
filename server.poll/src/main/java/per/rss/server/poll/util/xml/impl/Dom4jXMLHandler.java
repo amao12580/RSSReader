@@ -20,8 +20,6 @@ import per.rss.server.poll.util.xml.XMLHandler;
  * 
  * 正常的xml可以解析，节点中含有"content:encoded"时会报错
  * 
- * @author cifpay
- *
  */
 public class Dom4jXMLHandler extends XMLHandler {
 

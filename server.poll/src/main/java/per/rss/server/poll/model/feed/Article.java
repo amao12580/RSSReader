@@ -11,8 +11,6 @@ import per.rss.core.base.util.StringUtils;
 /**
  * 文章
  * 
- * @author cifpay
- *
  */
 @Document(collection = "feedArticle")
 public class Article implements Serializable {

@@ -22,8 +22,6 @@ import per.rss.core.nosql.page.Pagination;
  * mongodb  基础类
  * 
  * http://blog.csdn.net/laigood/article/details/7056093
- * 
- * @author cifpay
  *
  */
 @Repository(value="mongoBaseDao")

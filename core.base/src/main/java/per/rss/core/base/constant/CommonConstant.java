@@ -5,8 +5,6 @@ package per.rss.core.base.constant;
  * 
  * http://www.cnblogs.com/happyPawpaw/archive/2013/04/09/3009553.html
  * 
- * @author cifpay
- *
  */
 public class CommonConstant {
 

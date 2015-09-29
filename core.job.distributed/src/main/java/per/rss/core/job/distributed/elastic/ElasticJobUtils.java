@@ -11,8 +11,6 @@ import per.rss.core.base.util.StringUtils;
 
 /**
  * 分布式定时任务
- * 
- * @author cifpay
  *
  */
 @Component("elasticJobUtils")

@@ -17,8 +17,6 @@ import per.rss.core.nosql.page.Pagination;
  * 
  * http://blog.csdn.net/laigood/article/details/7056093
  * 
- * @author cifpay
- *
  */
 public interface MongoBaseDao<T> {
 

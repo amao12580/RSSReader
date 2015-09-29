@@ -10,8 +10,6 @@ import per.rss.server.poll.model.feed.Image;
 /**
  * 仅作为解析使用
  * 
- * @author cifpay
- *
  */
 public class FeedParseBo {
 	private String id = null;

@@ -8,8 +8,6 @@ import org.springframework.stereotype.Component;
 
 /**
  * 启动配置
- * 
- * @author cifpay
  *
  */
 @Component

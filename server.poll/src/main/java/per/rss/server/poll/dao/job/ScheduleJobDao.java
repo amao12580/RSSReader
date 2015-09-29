@@ -4,9 +4,6 @@ import java.util.List;
 
 import per.rss.server.poll.model.job.ScheduleJob;
 
-/**
- * @author cifpay
- */
 public interface ScheduleJobDao {
 	/**
 	 * 生成ID

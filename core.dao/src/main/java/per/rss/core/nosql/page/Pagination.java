@@ -7,8 +7,6 @@ import per.rss.core.base.util.StringUtils;
 
 /**
  * 分页基础类
- * @author cifpay
- *
  */
 public class Pagination<T> {
 	/** 每页显示条数 */

@@ -32,8 +32,6 @@ import per.rss.server.poll.util.xml.XMLHandler;
  * 可以解析到非常丰富的数据
  * 
  * 需要参数“xml”在传入前设置好字符集才能有好效果。
- * 
- * @author cifpay
  *
  */
 public class RomeXMLHandler extends XMLHandler {

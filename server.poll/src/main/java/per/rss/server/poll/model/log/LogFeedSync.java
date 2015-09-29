@@ -5,8 +5,6 @@ import java.util.Date;
 import per.rss.core.base.bo.log.LogFeedFetcherBo;
 
 /**
- * @author cifpay
- * 
  *         抓取是指：获取网络rss信息+解析xml
  *
  */
