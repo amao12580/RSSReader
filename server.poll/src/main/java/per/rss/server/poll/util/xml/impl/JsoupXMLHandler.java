@@ -22,9 +22,9 @@ import per.rss.server.poll.model.feed.Image;
 import per.rss.server.poll.util.xml.XMLHandler;
 
 /**
- *         新方案，极强的兼容性
+ * 新方案，极强的兼容性
  * 
- *         http://whmwg.iteye.com/blog/1750509
+ * http://whmwg.iteye.com/blog/1750509
  *
  */
 public class JsoupXMLHandler extends XMLHandler {
@@ -37,7 +37,7 @@ public class JsoupXMLHandler extends XMLHandler {
 
 	@Override
 	protected FeedParseBo doParseXML(String feedId, Date lastedSyncDate, String xml) {
-		// logger.debug("LastedSyncDate：" + lastedSyncDate.getTime());
+		logger.debug("LastedSyncDate：" + lastedSyncDate.getTime());
 		FeedParseBo feedParseBo = null;
 		Document doc = Jsoup.parse(xml, "", Parser.xmlParser());// xml方式的解析
 		Elements rss = doc.select("rss");
@@ -209,11 +209,12 @@ public class JsoupXMLHandler extends XMLHandler {
 				// logger.debug("articlepubDate size is:" +
 				// articlepubDate.size());
 				String articlepubDateFirstString = articlepubDate.first().text();
-				// logger.debug("articlepubDate first is:" +
-				// articlepubDateFirst);
+				logger.debug("articlepubDateFirstString is:" + articlepubDateFirstString);
 				Date pubDate = super.parsePubDateString(articlepubDateFirstString);
 				if (pubDate == null) {
 					continue;
+				}else{
+					logger.debug("articlepubDate first is:" + pubDate.getTime());
 				}
 				if (needCheckPubDate) {
 					if ((lastedSyncDateTime - pubDate.getTime()) > 0) {

@@ -23,7 +23,6 @@ public class ConfigContextUtils {
 			context = new ClassPathXmlApplicationContext("conf/init-server.poll.xml");
 			assert context == null;
 		} catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e.getMessage(), e);
 			System.exit(-1);
 		}

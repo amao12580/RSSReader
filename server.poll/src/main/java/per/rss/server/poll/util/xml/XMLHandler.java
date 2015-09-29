@@ -1,6 +1,11 @@
 package per.rss.server.poll.util.xml;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -10,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import per.rss.core.base.constant.CommonConstant;
 import per.rss.core.base.util.DateParseUtils;
+import per.rss.core.base.util.DateTimeUtils;
 import per.rss.core.base.util.StringUtils;
 import per.rss.server.poll.bo.feed.FeedParseBo;
 import per.rss.server.poll.model.log.LogFeedParser;
@@ -29,7 +35,7 @@ public abstract class XMLHandler {
 
 	public final static boolean validator(String xml) {
 		boolean result = false;
-		if(StringUtils.isEmpty(xml)){
+		if (StringUtils.isEmpty(xml)) {
 			logger.error("xml is empty.");
 			return false;
 		}
@@ -50,7 +56,7 @@ public abstract class XMLHandler {
 		return result;
 	}
 
-	public final LogFeedParser parse(String parseId,String feedId, Date lastedSyncDate, String xml) {
+	public final LogFeedParser parse(String parseId, String feedId, Date lastedSyncDate, String xml) {
 		LogFeedParser logFeedParser = new LogFeedParser();
 		logFeedParser.setId(parseId);
 		logFeedParser.setParseStartDate(new Date());
@@ -61,7 +67,7 @@ public abstract class XMLHandler {
 				logger.error("xml is empty.");
 				feedParseBo = null;
 			} else {
-				feedParseBo = doParseXML(feedId,lastedSyncDate,xml);
+				feedParseBo = doParseXML(feedId, lastedSyncDate, xml);
 			}
 			logFeedParser.setStatus(CommonConstant.status.success.getCode());
 		} catch (Exception e) {
@@ -80,16 +86,19 @@ public abstract class XMLHandler {
 
 	/**
 	 * 继承式多态
-	 * @param feedSyncBo 
+	 * 
+	 * @param feedSyncBo
 	 * 
 	 * @param xml
 	 * @return
 	 */
-	abstract protected FeedParseBo doParseXML(String feedId,Date lastedSyncDate, String xml) throws Exception;
+	abstract protected FeedParseBo doParseXML(String feedId, Date lastedSyncDate, String xml) throws Exception;
+
+	private final static String defaultTimezone1 = "GMT";
+	private final static String defaultTimezone2 = "+0800";
 
 	protected final static Date parsePubDateString(String pubDateString) {
 		String pubDateStr = pubDateString;
-		String defaultTimezone = "GMT";
 
 		if (StringUtils.isEmpty(pubDateStr)) {
 			return null;
@@ -98,17 +107,43 @@ public abstract class XMLHandler {
 			return null;
 		}
 		Date resultDate = null;
-		resultDate = DateParseUtils.parseDate(pubDateStr);
-		if (resultDate == null) {
-			pubDateStr += " " + defaultTimezone;
-			resultDate = DateParseUtils.parseDate(pubDateStr);
-		}
+		resultDate = DateParseUtils.parseDate(pubDateStr, Locale.US);
 		if (resultDate != null) {
-			if (pubDateStr.endsWith(defaultTimezone)) {
-			} else if (pubDateStr.endsWith("+0800")) {
-
-			}
+			return resultDate;
+		}
+		resultDate = parseDateByTimezone(pubDateStr, defaultTimezone1);
+		if (resultDate != null) {
+			return resultDate;
+		}
+		resultDate = parseDateByTimezone(pubDateStr, defaultTimezone2);
+		if (resultDate != null) {
+			return resultDate;
 		}
 		return resultDate;
+	}
+
+	private final static Date parseDateByTimezone(String pubDateStr, String timezone) {
+		// logger.debug("parseDateByTimezone,pubDateStr:" + pubDateStr +
+		// ",timezone:" + timezone);
+		Date resultDate = null;
+		if (!pubDateStr.endsWith(timezone)) {
+			pubDateStr += " " + timezone;
+			resultDate = DateParseUtils.parseDate(pubDateStr, Locale.US);
+			if (resultDate != null) {
+				// logger.debug("parseDateByTimezone:" + resultDate.getTime());
+				return resultDate;
+			} else {
+				return null;
+			}
+		} else {
+			return null;
+		}
+	}
+
+	public static void main(String[] args) throws ParseException {
+		String dateStr = "Tue, 29 Sep 2015 14:00:51";
+		Date date = parsePubDateString(dateStr);
+		System.out.println(date.getTime());
+		System.out.println(DateTimeUtils.formatDateTime(date));
 	}
 }
