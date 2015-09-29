@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import per.rss.core.base.constant.CommonConstant;
 import per.rss.core.base.util.DateParseUtils;
 import per.rss.core.base.util.StringUtils;
-import per.rss.server.poll.model.feed.Feed;
+import per.rss.server.poll.bo.feed.FeedParseBo;
 import per.rss.server.poll.model.log.LogFeedParser;
 import per.rss.server.poll.util.xml.impl.JsoupXMLHandler;
 
@@ -55,22 +55,22 @@ public abstract class XMLHandler {
 		logFeedParser.setId(parseId);
 		logFeedParser.setParseStartDate(new Date());
 		// logFeedParser.setParseType(RSSParseConstant.xml_parse_type_jsoup);
-		Feed feed = null;
+		FeedParseBo feedParseBo = null;
 		try {
 			if (StringUtils.isEmpty(xml)) {
 				logger.error("xml is empty.");
-				feed = null;
+				feedParseBo = null;
 			} else {
-				feed = doParseXML(feedId,lastedSyncDate,xml);
+				feedParseBo = doParseXML(feedId,lastedSyncDate,xml);
 			}
 			logFeedParser.setStatus(CommonConstant.status.success.getCode());
 		} catch (Exception e) {
 			logger.error("parse is error.", e);
-			feed = null;
+			feedParseBo = null;
 			logFeedParser.setStatus(CommonConstant.status.failed.getCode());
 			logFeedParser.setErrorMessage(e.getMessage());
 		}
-		logFeedParser.setFeed(feed);
+		logFeedParser.setFeedParseBo(feedParseBo);
 		logFeedParser.setParseEndDate(new Date());
 		long takeTime = logFeedParser.getParseEndDate().getTime() - logFeedParser.getParseStartDate().getTime();
 		logFeedParser.setTakeTime(takeTime);
@@ -85,7 +85,7 @@ public abstract class XMLHandler {
 	 * @param xml
 	 * @return
 	 */
-	abstract protected Feed doParseXML(String feedId,Date lastedSyncDate, String xml) throws Exception;
+	abstract protected FeedParseBo doParseXML(String feedId,Date lastedSyncDate, String xml) throws Exception;
 
 	protected final static Date parsePubDateString(String pubDateString) {
 		String pubDateStr = pubDateString;

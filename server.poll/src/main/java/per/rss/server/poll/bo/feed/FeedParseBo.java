@@ -1,18 +1,19 @@
-package per.rss.server.poll.model.feed;
+package per.rss.server.poll.bo.feed;
 
-import java.io.Serializable;
 import java.util.Date;
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import java.util.Set;
 
 import per.rss.core.base.util.StringUtils;
+import per.rss.server.poll.model.feed.Article;
+import per.rss.server.poll.model.feed.Image;
 
-@Document(collection = "feed")
-public class Feed implements Serializable {
-	private static final long serialVersionUID = -3244400551015983688L;
-
-	@Id
+/**
+ * 仅作为解析使用
+ * 
+ * @author cifpay
+ *
+ */
+public class FeedParseBo {
 	private String id = null;
 
 	// 固有属性 开始
@@ -27,11 +28,11 @@ public class Feed implements Serializable {
 	private String copyright = null;
 	private Date pubDate = null;
 	private String category = null;
+	private Set<Article> item = null;
+
 	// 固有属性 结束
 
-	private Integer lastedSyncArticleSum = null;// 最后一次同步的文章数量
 	private Date lastedSyncDate = null;// 最后一次同步日期
-	private FeedCreate feedCreate = null;// 收录时的信息
 
 	public String getId() {
 		return id;
@@ -129,30 +130,20 @@ public class Feed implements Serializable {
 		this.category = category;
 	}
 
-	public Integer getLastedSyncArticleSum() {
-		return lastedSyncArticleSum;
+	public Set<Article> getItem() {
+		return item;
 	}
 
-	public void setLastedSyncArticleSum(Integer lastedSyncArticleSum) {
-		this.lastedSyncArticleSum = lastedSyncArticleSum;
+	public void setItem(Set<Article> item) {
+		this.item = item;
 	}
 
-	// @JsonFormat(
-	// timezone=CommonConstant.DatetimeTimeZone_Default,pattern=CommonConstant.DatetimePattern_Full)
 	public Date getLastedSyncDate() {
 		return lastedSyncDate;
 	}
 
 	public void setLastedSyncDate(Date lastedSyncDate) {
 		this.lastedSyncDate = lastedSyncDate;
-	}
-
-	public FeedCreate getFeedCreate() {
-		return feedCreate;
-	}
-
-	public void setFeedCreate(FeedCreate feedCreate) {
-		this.feedCreate = feedCreate;
 	}
 
 	@Override

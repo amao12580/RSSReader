@@ -10,6 +10,11 @@ package per.rss.core.base.constant;
  */
 public class CommonConstant {
 
+	/** 系统内部通讯参数，时间日期格式定义 */
+	public final static String DatetimePattern_Full = "yyyy-MM-dd HH:mm:ss.SSS";
+	/** 系统内部通讯参数，时间日期中国时区定义 */
+	public final static String DatetimeTimeZone_Default = "GMT+8";
+
 	public static enum status {
 		// 利用构造函数传参
 		success(1), failed(0);
@@ -57,6 +62,4 @@ public class CommonConstant {
 			return this.desc;
 		}
 	};
-
-	public final static int default_feed_article_new_max = 20;// 每个订阅源默认最多解析20篇文章
 }

@@ -16,7 +16,7 @@ import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.SyndFeedInput;
 
 import per.rss.core.base.util.StringUtils;
-import per.rss.server.poll.model.feed.Feed;
+import per.rss.server.poll.bo.feed.FeedParseBo;
 import per.rss.server.poll.util.xml.XMLHandler;
 
 /**
@@ -45,8 +45,8 @@ public class RomeXMLHandler extends XMLHandler {
 	}
 
 	@Override
-	protected Feed doParseXML(String feedId,Date lastedSyncDate, String xml) throws Exception {
-		Feed feed = null;
+	protected FeedParseBo doParseXML(String feedId, Date lastedSyncDate, String xml) throws Exception {
+		FeedParseBo feedParseBo = null;
 		StringReader sr = null;
 		InputSource is = null;
 		try {
@@ -107,7 +107,7 @@ public class RomeXMLHandler extends XMLHandler {
 				sr.close();
 			}
 		}
-		return feed;
+		return feedParseBo;
 	}
 
 	public static void main(String[] args) {
@@ -115,5 +115,6 @@ public class RomeXMLHandler extends XMLHandler {
 		// h.parse(FileUtils.readByChars("E:xml3.txt"));
 		// h.parse(FileUtils.readByChars("E:xml2.txt"));
 		// h.parse(FileUtils.readByChars("E:xml.txt"));
+		// http://feed.cnblogs.com/blog/u/118754/rss
 	}
 }

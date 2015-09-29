@@ -2,7 +2,7 @@ package per.rss.server.poll.model.log;
 
 import java.util.Date;
 
-import per.rss.server.poll.model.feed.Feed;
+import per.rss.server.poll.bo.feed.FeedParseBo;
 
 public class LogFeedParser {
 	private String id = null;
@@ -13,7 +13,7 @@ public class LogFeedParser {
 	 * 1=成功 0=失败
 	 */
 	private Integer status = null;// 解析的结果,状态
-	private Feed feed = null;// 解析的结果,具体的数据
+	private FeedParseBo feedParseBo = null;// 解析的结果,具体的数据
 	private String errorMessage = null;// 解析出现错误，大致的问题
 
 	public String getId() {
@@ -56,12 +56,12 @@ public class LogFeedParser {
 		this.status = status;
 	}
 
-	public Feed getFeed() {
-		return feed;
+	public FeedParseBo getFeedParseBo() {
+		return feedParseBo;
 	}
 
-	public void setFeed(Feed feed) {
-		this.feed = feed;
+	public void setFeedParseBo(FeedParseBo feedParseBo) {
+		this.feedParseBo = feedParseBo;
 	}
 
 	public String getErrorMessage() {

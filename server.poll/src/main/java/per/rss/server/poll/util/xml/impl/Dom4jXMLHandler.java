@@ -10,7 +10,7 @@ import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import per.rss.server.poll.model.feed.Feed;
+import per.rss.server.poll.bo.feed.FeedParseBo;
 import per.rss.server.poll.util.xml.XMLHandler;
 
 /**
@@ -33,8 +33,8 @@ public class Dom4jXMLHandler extends XMLHandler {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected Feed doParseXML(String feedId,Date lastedSyncDate, String xml) throws Exception {
-		Feed feed = null;
+	protected FeedParseBo doParseXML(String feedId,Date lastedSyncDate, String xml) throws Exception {
+		FeedParseBo feedParseBo = null;
 		try {
 			Document document = DocumentHelper.parseText(xml);
 			if (document == null) {
@@ -78,7 +78,7 @@ public class Dom4jXMLHandler extends XMLHandler {
 			logger.error("RSSParser.doParseByDom4j is error. xml 格式不正确：" + xml, e);
 			return null;
 		}
-		return feed;
+		return feedParseBo;
 	}
 
 	public static void main(String[] args) {

@@ -38,7 +38,7 @@ public class HttpClientUtils {
 	 * 还没有实现使用代理访问
 	 * 
 	 * @param urlStr
-	 * @param feedLink 
+	 * @param feedLink
 	 * @param proxy_ip
 	 * @param proxy_port
 	 * @param proxy_username
@@ -47,7 +47,8 @@ public class HttpClientUtils {
 	 *            设定响应内容的字符集：gbk、utf-8，默认是gbk.
 	 * @return
 	 */
-	public static LogFeedFetcherBo doHttpGetRequest(String fetchID, String feedLink, ProxyBo proxy, String response_charsets) {
+	public static LogFeedFetcherBo doHttpGetRequest(String fetchID, String feedLink, ProxyBo proxy,
+			String response_charsets) {
 		LogFeedFetcherBo logFeedRequest = new LogFeedFetcherBo();
 		logFeedRequest.setId(fetchID);
 		logFeedRequest.setRequestStartDate(new Date());
@@ -68,13 +69,10 @@ public class HttpClientUtils {
 			httpget.setHeader("Accept-Language", "zh-cn,zh;q=0.5");
 			httpget.setHeader("Connection", "keep-alive");
 			httpget.setHeader("Cache-Control", "max-age=0");
-			// httpget.setHeader("Cookie", "123456");
 			httpget.setHeader("Content-Type", "text/html");
 			httpget.setHeader("refer", "https://www.baidu.com/");
 			httpget.setHeader("User-Agent",
 					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.85 Safari/537.36");
-			// httpget.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1;
-			// rv:6.0.2) Gecko/20100101 Firefox/6.0.2");
 			// 执行get请求.
 			response = httpclient.execute(httpget);
 			if (response == null) {

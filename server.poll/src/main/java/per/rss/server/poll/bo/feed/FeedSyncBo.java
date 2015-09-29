@@ -1,14 +1,12 @@
 package per.rss.server.poll.bo.feed;
 
-import java.util.Date;
-
 import per.rss.core.base.util.StringUtils;
 import per.rss.server.poll.model.log.LogFeedSync;
 
 public class FeedSyncBo {
-	private String id = null;
-	private String link = null;
-	private Date lastedSyncDate = null;// 最后一次同步日期
+	private String id = null;// feed的编号
+	private String link = null;// feed的链接
+	private Long lastedSyncDateTime = null;// 最后一次同步日期//必须用long
 
 	private LogFeedSync logFeedSync = null;// 抓取的结果
 
@@ -28,12 +26,12 @@ public class FeedSyncBo {
 		this.link = link;
 	}
 
-	public Date getLastedSyncDate() {
-		return lastedSyncDate;
+	public Long getLastedSyncDateTime() {
+		return lastedSyncDateTime;
 	}
 
-	public void setLastedSyncDate(Date lastedSyncDate) {
-		this.lastedSyncDate = lastedSyncDate;
+	public void setLastedSyncDateTime(Long lastedSyncDateTime) {
+		this.lastedSyncDateTime = lastedSyncDateTime;
 	}
 
 	public LogFeedSync getLogFeedSync() {

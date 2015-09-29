@@ -14,10 +14,10 @@ import per.rss.core.base.util.StringUtils;
  * @author cifpay
  *
  */
-@Document(collection = "article") 
-public class Article implements Serializable{
+@Document(collection = "feedArticle")
+public class Article implements Serializable {
 	private static final long serialVersionUID = -2008046181032344880L;
-	
+
 	@Id
 	private String id = null;
 	private String feedId = null;
@@ -31,14 +31,11 @@ public class Article implements Serializable{
 	private String description = null;
 	private String category = null;
 	private String comments = null;
-	
-	
+
 	// 固有属性 结束
 
 	private Date fetchDate = null;// 接受日期:文章被系统获取到的时间
 
-	
-	
 	public String getFeedId() {
 		return feedId;
 	}
@@ -126,6 +123,7 @@ public class Article implements Serializable{
 	public void setFetchDate(Date fetchDate) {
 		this.fetchDate = fetchDate;
 	}
+
 	@Override
 	public String toString() {
 		return StringUtils.toJSONString(this);

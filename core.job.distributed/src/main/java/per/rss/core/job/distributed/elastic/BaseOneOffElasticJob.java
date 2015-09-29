@@ -44,9 +44,7 @@ public abstract class BaseOneOffElasticJob<T> extends AbstractOneOffElasticJob {
 		}
 		T obj = excuteingJob(paramStr);
 		boolean result = excuteingResult(obj);
-		if (result) {
-			log.debug("任务执行成功：" + context.getJobName());
-		} else {
+		if (!result) {
 			log.error("任务执行失败：" + context.getJobName() + ",jobParam:" + context.getJobParameter());
 		}
 	}

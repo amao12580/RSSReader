@@ -15,7 +15,7 @@ import per.rss.core.base.util.StringUtils;
  * @author cifpay
  *
  */
-@Component
+@Component("elasticJobUtils")
 public final class ElasticJobUtils {
 	@Autowired
 	private CoordinatorRegistryCenter RSSReaderRegCenter;
