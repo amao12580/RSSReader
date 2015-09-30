@@ -1,9 +1,6 @@
 package per.rss.server.poll.util.xml;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
@@ -18,7 +15,7 @@ import per.rss.core.base.util.DateParseUtils;
 import per.rss.core.base.util.DateTimeUtils;
 import per.rss.core.base.util.StringUtils;
 import per.rss.server.poll.bo.feed.FeedParseBo;
-import per.rss.server.poll.model.log.LogFeedParser;
+import per.rss.server.poll.bo.feed.LogFeedParserBo;
 import per.rss.server.poll.util.xml.impl.JsoupXMLHandler;
 
 public abstract class XMLHandler {
@@ -56,20 +53,23 @@ public abstract class XMLHandler {
 		return result;
 	}
 
-	public final LogFeedParser parse(String parseId, String feedId, Date lastedSyncDate, String xml) {
-		LogFeedParser logFeedParser = new LogFeedParser();
+	public final LogFeedParserBo parse(String parseId, String feedId, Date lastedSyncDate, String xml) {
+		LogFeedParserBo logFeedParser = new LogFeedParserBo();
 		logFeedParser.setId(parseId);
 		logFeedParser.setParseStartDate(new Date());
-		// logFeedParser.setParseType(RSSParseConstant.xml_parse_type_jsoup);
+		logFeedParser.setContent(xml);
 		FeedParseBo feedParseBo = null;
 		try {
+			logFeedParser.setStatus(CommonConstant.status.failed.getCode());
 			if (StringUtils.isEmpty(xml)) {
 				logger.error("xml is empty.");
 				feedParseBo = null;
 			} else {
 				feedParseBo = doParseXML(feedId, lastedSyncDate, xml);
+				if (feedParseBo != null) {
+					logFeedParser.setStatus(CommonConstant.status.success.getCode());
+				}
 			}
-			logFeedParser.setStatus(CommonConstant.status.success.getCode());
 		} catch (Exception e) {
 			logger.error("parse is error.", e);
 			feedParseBo = null;

@@ -37,7 +37,7 @@ public class JsoupXMLHandler extends XMLHandler {
 
 	@Override
 	protected FeedParseBo doParseXML(String feedId, Date lastedSyncDate, String xml) {
-		logger.debug("LastedSyncDate：" + lastedSyncDate.getTime());
+		// logger.debug("LastedSyncDate：" + lastedSyncDate.getTime());
 		FeedParseBo feedParseBo = null;
 		Document doc = Jsoup.parse(xml, "", Parser.xmlParser());// xml方式的解析
 		Elements rss = doc.select("rss");
@@ -54,6 +54,7 @@ public class JsoupXMLHandler extends XMLHandler {
 		// logger.debug("channel node size is:" + channel.size());
 		feedParseBo = new FeedParseBo();
 		feedParseBo.setId(feedId);
+		Date now = new Date();
 		Elements title = channel.select("title");// 非必需节点
 		if (CollectionUtils.isEmpty(title)) {
 			// logger.warn("rss->channel->title is empty.");
@@ -188,7 +189,6 @@ public class JsoupXMLHandler extends XMLHandler {
 		// logger.debug("item size is:" + item.size());
 		boolean needCheckPubDate = false;
 		long lastedSyncDateTime = 0l;
-		Date now = new Date();
 		if (lastedSyncDate != null) {// lastedSyncDate参数是有效值，并且小于当前时间。
 			lastedSyncDateTime = lastedSyncDate.getTime();
 			if (lastedSyncDateTime - now.getTime() < 0) {
@@ -209,12 +209,11 @@ public class JsoupXMLHandler extends XMLHandler {
 				// logger.debug("articlepubDate size is:" +
 				// articlepubDate.size());
 				String articlepubDateFirstString = articlepubDate.first().text();
-				logger.debug("articlepubDateFirstString is:" + articlepubDateFirstString);
+				// logger.debug("articlepubDateFirstString is:" +
+				// articlepubDateFirstString);
 				Date pubDate = super.parsePubDateString(articlepubDateFirstString);
 				if (pubDate == null) {
 					continue;
-				}else{
-					logger.debug("articlepubDate first is:" + pubDate.getTime());
 				}
 				if (needCheckPubDate) {
 					if ((lastedSyncDateTime - pubDate.getTime()) > 0) {
@@ -313,6 +312,7 @@ public class JsoupXMLHandler extends XMLHandler {
 		// logger.debug("articles size is:" + articles.size());
 		// if (!CollectionUtils.isEmpty(articles)) {
 		feedParseBo.setItem(articles);
+		feedParseBo.setLastedSyncDate(now);
 		// }
 		// logger.debug("finally feed is:" + feed.toString());
 		doc = null;

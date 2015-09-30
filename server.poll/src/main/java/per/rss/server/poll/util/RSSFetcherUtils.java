@@ -11,8 +11,8 @@ import per.rss.core.base.bo.internet.ProxyBo;
 import per.rss.core.base.bo.log.LogFeedFetcherBo;
 import per.rss.core.base.util.HttpClientUtils;
 import per.rss.core.base.util.UUIDUtils;
-import per.rss.server.poll.model.log.LogFeedParser;
-import per.rss.server.poll.model.log.LogFeedSync;
+import per.rss.server.poll.bo.feed.LogFeedParserBo;
+import per.rss.server.poll.bo.feed.LogFeedSyncBo;
 import per.rss.server.poll.util.xml.XMLHandler;
 
 public class RSSFetcherUtils {
@@ -38,8 +38,8 @@ public class RSSFetcherUtils {
 	 *            rss网络地址
 	 * @throws IOException
 	 */
-	public final static LogFeedSync doFetch(String feedId, String feedLink, Date lastedSyncDate) {
-		return doFetch(feedId,feedLink,lastedSyncDate, null, null);
+	public final static LogFeedSyncBo doFetch(String feedId, String feedLink, Date lastedSyncDate) {
+		return doFetch(feedId, feedLink, lastedSyncDate, null, null);
 	}
 
 	/**
@@ -51,25 +51,27 @@ public class RSSFetcherUtils {
 	 *             当reader变量没有正确关闭时，抛出该异常
 	 */
 	@SuppressWarnings("static-access")
-	private static LogFeedSync doFetch(String feedId, String feedLink, Date lastedSyncDate, ProxyBo proxy, String response_charsets) {
-		LogFeedSync logFeedSync = new LogFeedSync();
+	private static LogFeedSyncBo doFetch(String feedId, String feedLink, Date lastedSyncDate, ProxyBo proxy,
+			String response_charsets) {
+		LogFeedSyncBo logFeedSync = new LogFeedSyncBo();
 		logFeedSync.setId(UUIDUtils.randomUUID());
 		logFeedSync.setFeedId(feedId);
 		logFeedSync.setFetchStartDate(new Date());
-		LogFeedFetcherBo logFeedFetcher = HttpClientUtils.doHttpGetRequest(logFeedSync.getId(),feedLink, proxy,
+		LogFeedFetcherBo logFeedFetcher = HttpClientUtils.doHttpGetRequest(logFeedSync.getId(), feedLink, proxy,
 				response_charsets);
 		if (logFeedFetcher != null) {
-			logFeedSync.setLogFeedFetcher(logFeedFetcher);
+			logFeedSync.setLogFeedFetcherBo(logFeedFetcher);
 			String responseXml = logFeedFetcher.getResponseHtml();
 			boolean verify = false;
+			LogFeedParserBo logFeedParser = null;
 			verify = defaultHandler.validator(responseXml);
 			if (!verify) {
 				logger.error("responseXml verify is error.");
-				return null;
+			} else {
+				logFeedParser = defaultHandler.parse(logFeedSync.getId(), feedId, lastedSyncDate, responseXml);
 			}
-			LogFeedParser logFeedParser = defaultHandler.parse(logFeedSync.getId(),feedId,lastedSyncDate,responseXml);
 			if (logFeedParser != null) {
-				logFeedSync.setLogFeedParser(logFeedParser);
+				logFeedSync.setLogFeedParserBo(logFeedParser);
 			}
 		}
 		logFeedSync.setFetchEndDate(new Date());

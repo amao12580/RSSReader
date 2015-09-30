@@ -4,9 +4,9 @@ import per.rss.core.base.util.StringUtils;
 
 public class Image {
 	// 固有属性 开始
-	private String title = null;
-	private String link = null;
-	private String url = null;
+	private String title = "";
+	private String link = "";
+	private String url = "";
 
 	// 固有属性 结束
 	public String getTitle() {

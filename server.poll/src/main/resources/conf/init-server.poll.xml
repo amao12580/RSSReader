@@ -26,6 +26,8 @@
 		</property>
 	</bean>
 
+	<import resource="/spring/threadPool.xml" />
+
 	<import resource="/spring/mongodb.xml" />
 
 	<!-- <import resource="/spring/quartz.xml" /> -->
@@ -33,5 +35,8 @@
 	<!-- <import resource="/spring/schedule.xml" /> -->
 
 	<import resource="/spring/elastic-job.xml" />
+
+	<bean id="jobInit" class="per.rss.server.poll.init.JobInit"
+		init-method="initFeedSyncJobs" destroy-method="destory" />
 
 </beans>

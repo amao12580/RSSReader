@@ -21,6 +21,9 @@ public class ConfigContextUtils {
 			logger.info("start service...");
 			// 初始化spring
 			context = new ClassPathXmlApplicationContext("conf/init-server.poll.xml");
+			if(context!=null){
+				SpringUtil.setApplicationContext(context);
+			}
 			assert context == null;
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
