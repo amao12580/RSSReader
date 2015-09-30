@@ -18,7 +18,7 @@ public class LogFeedSyncBo {
 	private Date fetchEndDate = CommonConstant.dateBegining;// 系统完成抓取的时间
 	private LogFeedFetcherBo logFeedFetcherBo;// 网络请求的详细信息
 	private Long takeTime = -1l;// 尝试解析花费总的时间
-	private LogFeedParserBo logFeedParserBo = new LogFeedParserBo();// 解析详情
+	private LogFeedParserBo logFeedParserBo = null;// 解析详情
 	private String charsets = "";// 字符集
 
 	public String getFeedId() {

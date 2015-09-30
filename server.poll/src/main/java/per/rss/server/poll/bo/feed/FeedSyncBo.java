@@ -4,10 +4,19 @@ import per.rss.core.base.util.StringUtils;
 
 public class FeedSyncBo {
 	private String id = "";// feed的编号
-	private String link = "";// feed的链接
+	private String link = "";// feed的rss xml文件链接地址
+	private Integer syncSpeed = -1;// feed的更新速度评级
 	private Long lastedSyncDateTime = -1l;// 最后一次同步日期//必须用long
 
-	private LogFeedSyncBo logFeedSync = new LogFeedSyncBo();// 抓取的结果
+	private LogFeedSyncBo logFeedSync = null;// 抓取的结果
+
+	public Integer getSyncSpeed() {
+		return syncSpeed;
+	}
+
+	public void setSyncSpeed(Integer syncSpeed) {
+		this.syncSpeed = syncSpeed;
+	}
 
 	public String getId() {
 		return id;

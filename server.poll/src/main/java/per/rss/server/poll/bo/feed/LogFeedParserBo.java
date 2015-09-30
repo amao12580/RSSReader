@@ -14,7 +14,7 @@ public class LogFeedParserBo {
 	 * 1=成功 0=失败
 	 */
 	private Integer status = -1;// 解析的结果,状态
-	private FeedParseBo feedParseBo = new FeedParseBo();// 解析的结果,状态
+	private FeedParseBo feedParseBo = null;// 解析的结果,状态
 
 	private String errorMessage = "";// 解析出现错误，大致的问题
 

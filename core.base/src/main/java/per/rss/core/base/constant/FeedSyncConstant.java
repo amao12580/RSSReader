@@ -1,5 +1,10 @@
 package per.rss.core.base.constant;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import per.rss.core.base.util.StringUtils;
+
 public class FeedSyncConstant {
 
 	public static enum speed {// 定义rss抓取的时间间隔
@@ -22,7 +27,7 @@ public class FeedSyncConstant {
 
 		@Override
 		public String toString() {
-			return String.valueOf(this.code);
+			return StringUtils.toJSONString(this);
 		}
 
 		public int getCode() {
@@ -40,7 +45,28 @@ public class FeedSyncConstant {
 		public String getDesc() {
 			return this.desc;
 		}
-	};
+
+	}
+
+	public static Map<Integer, speed> speedMap = null;
+
+	static {
+		if (speedMap == null) {
+			speedMap = new HashMap<Integer, speed>();
+			speed[] arr = speed.values();
+			for (int i = 0; i < arr.length; i++) {
+				speed s = arr[i];
+				int key = s.getCode();
+				if (!speedMap.containsKey(key)) {
+					speedMap.put(s.getCode(), s);
+				}
+			}
+		}
+	}
+
+	public static String getValueByCode(int code) {
+		return speedMap.get(code).getValue();
+	}
 
 	public final static int default_feed_article_new_max = 20;// 每个订阅源默认最多解析20篇文章
 }
