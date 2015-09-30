@@ -1,5 +1,7 @@
 package per.rss.core.base.constant;
 
+import java.util.Date;
+
 /**
  * 定义一般的常量，要考虑使用枚举来实现
  * 
@@ -12,6 +14,8 @@ public class CommonConstant {
 	public final static String DatetimePattern_Full = "yyyy-MM-dd HH:mm:ss.SSS";
 	/** 系统内部通讯参数，时间日期中国时区定义 */
 	public final static String DatetimeTimeZone_Default = "GMT+8";
+	
+	public final static Date dateBegining = new Date(0l);
 
 	public static enum status {
 		// 利用构造函数传参

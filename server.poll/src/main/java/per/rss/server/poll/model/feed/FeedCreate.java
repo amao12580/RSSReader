@@ -2,11 +2,13 @@ package per.rss.server.poll.model.feed;
 
 import java.util.Date;
 
+import per.rss.core.base.constant.CommonConstant;
+
 public class FeedCreate {
-	private String userId = null;// 系统收录时申请者id
-	private String ip = null;// 系统收录时申请者id
-	private String link = null;// 系统收录时使用的URL
-	private Date date = null;// 系统收录的日期
+	private String userId = "";// 系统收录时申请者id
+	private String ip = "";// 系统收录时申请者id
+	private String url = "";// 系统收录时使用的URL
+	private Date date = CommonConstant.dateBegining;// 系统收录的日期
 
 	public String getUserId() {
 		return userId;
@@ -24,12 +26,12 @@ public class FeedCreate {
 		this.ip = ip;
 	}
 
-	public String getLink() {
-		return link;
+	public String getUrl() {
+		return url;
 	}
 
-	public void setLink(String link) {
-		this.link = link;
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	public Date getDate() {

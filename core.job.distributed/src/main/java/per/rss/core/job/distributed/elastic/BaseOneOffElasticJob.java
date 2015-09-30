@@ -17,7 +17,7 @@ public abstract class BaseOneOffElasticJob<T> extends AbstractOneOffElasticJob {
 	 * @param jobParam
 	 * @return
 	 */
-	abstract public T excuteingJob(String jobParam);
+	abstract public T excuteingJob(final String jobParam);
 
 	/**
 	 * 处理任务执行的结果
@@ -25,7 +25,7 @@ public abstract class BaseOneOffElasticJob<T> extends AbstractOneOffElasticJob {
 	 * @param result
 	 * @return
 	 */
-	abstract public boolean excuteingResult(T result);
+	abstract public boolean excuteingResult(final T result);
 
 	/*
 	 * 任务处理的入口 (non-Javadoc)

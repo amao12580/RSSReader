@@ -1,6 +1,7 @@
 package per.rss.server.poll.bo.feed;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import per.rss.core.base.util.StringUtils;
@@ -12,25 +13,25 @@ import per.rss.server.poll.model.feed.Image;
  * 
  */
 public class FeedParseBo {
-	private String id = null;
+	private String id = "";
 
 	// 固有属性 开始
-	private String title = null;
-	private Image image = null;
-	private String link = null;
-	private String description = null;
-	private String language = null;
-	private String generator = null;
-	private String lastBuildDate = null;
-	private Long ttl = null;
-	private String copyright = null;
-	private Date pubDate = null;
-	private String category = null;
-	private Set<Article> item = null;
+	private String title = "";
+	private Image image = new Image();
+	private String link = "";
+	private String description = "";
+	private String language = "";
+	private String generator = "";
+	private String lastBuildDate = "";
+	private Long ttl = -1l;
+	private String copyright = "";
+	private Date pubDate = new Date(0l);
+	private String category = "";
+	private Set<Article> item = new HashSet<Article>(0);
 
 	// 固有属性 结束
 
-	private Date lastedSyncDate = null;// 最后一次同步日期
+	private Date lastedSyncDate = new Date(0l);// 最后一次同步日期
 
 	public String getId() {
 		return id;

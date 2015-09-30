@@ -1,23 +1,23 @@
-package per.rss.server.poll.model.log;
+package per.rss.server.poll.bo.feed;
 
 import java.util.Date;
 
 import per.rss.core.base.bo.log.LogFeedFetcherBo;
 
 /**
- *         抓取是指：获取网络rss信息+解析xml
+ * 抓取是指：获取网络rss信息+解析xml
  *
  */
 
-public class LogFeedSync {
-	
+public class LogFeedSyncBo {
+
 	private String id = null;
 	private String feedId = null;
 	private Date fetchStartDate = null;// 系统开始抓取的时间
 	private Date fetchEndDate = null;// 系统完成抓取的时间
-	private LogFeedFetcherBo logFeedFetcher;// 网络请求的详细信息
+	private LogFeedFetcherBo logFeedFetcherBo;// 网络请求的详细信息
 	private Long takeTime = null;// 尝试解析花费总的时间
-	private LogFeedParser logFeedParser = null;// 解析详情
+	private LogFeedParserBo logFeedParserBo = null;// 解析详情
 	private String charsets = null;// 字符集
 
 	public String getFeedId() {
@@ -52,13 +52,12 @@ public class LogFeedSync {
 		this.fetchEndDate = fetchEndDate;
 	}
 
-
-	public LogFeedFetcherBo getLogFeedFetcher() {
-		return logFeedFetcher;
+	public LogFeedFetcherBo getLogFeedFetcherBo() {
+		return logFeedFetcherBo;
 	}
 
-	public void setLogFeedFetcher(LogFeedFetcherBo logFeedFetcher) {
-		this.logFeedFetcher = logFeedFetcher;
+	public void setLogFeedFetcherBo(LogFeedFetcherBo logFeedFetcherBo) {
+		this.logFeedFetcherBo = logFeedFetcherBo;
 	}
 
 	public Long getTakeTime() {
@@ -69,12 +68,12 @@ public class LogFeedSync {
 		this.takeTime = takeTime;
 	}
 
-	public LogFeedParser getLogFeedParser() {
-		return logFeedParser;
+	public LogFeedParserBo getLogFeedParserBo() {
+		return logFeedParserBo;
 	}
 
-	public void setLogFeedParser(LogFeedParser logFeedParser) {
-		this.logFeedParser = logFeedParser;
+	public void setLogFeedParserBo(LogFeedParserBo logFeedParserBo) {
+		this.logFeedParserBo = logFeedParserBo;
 	}
 
 	public String getCharsets() {

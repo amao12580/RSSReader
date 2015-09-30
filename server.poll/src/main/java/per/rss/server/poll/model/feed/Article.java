@@ -6,6 +6,7 @@ import java.util.Date;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import per.rss.core.base.constant.CommonConstant;
 import per.rss.core.base.util.StringUtils;
 
 /**
@@ -17,22 +18,22 @@ public class Article implements Serializable {
 	private static final long serialVersionUID = -2008046181032344880L;
 
 	@Id
-	private String id = null;
-	private String feedId = null;
+	private String id = "";
+	private String feedId = "";
 
 	// 固有属性 开始
-	private String title = null;
-	private String link = null;
-	private Date pubDate = null;
-	private String source = null;
-	private String author = null;
-	private String description = null;
-	private String category = null;
-	private String comments = null;
+	private String title = "";
+	private String link = "";
+	private Date pubDate = CommonConstant.dateBegining;
+	private String source = "";
+	private String author = "";
+	private String description = "";
+	private String category = "";
+	private String comments = "";
 
 	// 固有属性 结束
 
-	private Date fetchDate = null;// 接受日期:文章被系统获取到的时间
+	private Date fetchDate = CommonConstant.dateBegining;// 接受日期:文章被系统获取到的时间
 
 	public String getFeedId() {
 		return feedId;

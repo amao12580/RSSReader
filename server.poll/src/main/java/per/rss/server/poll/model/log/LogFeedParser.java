@@ -1,20 +1,44 @@
 package per.rss.server.poll.model.log;
 
+import java.io.Serializable;
 import java.util.Date;
 
-import per.rss.server.poll.bo.feed.FeedParseBo;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-public class LogFeedParser {
-	private String id = null;
-	private Date parseStartDate = null;// 系统开始解析的时间
-	private Date parseEndDate = null;// 系统完成解析的时间
-	private Long takeTime = null;// 解析花费的时间
+import per.rss.core.base.constant.CommonConstant;
+
+@Document(collection = "logFeedParser")
+public class LogFeedParser implements Serializable {
+	private static final long serialVersionUID = -2787303135330536824L;
+	@Id
+	private String id = "";
+	private String feedId = "";
+	private String content = null;// 解析的内容
+	private Date parseStartDate = CommonConstant.dateBegining;// 系统开始解析的时间
+	private Date parseEndDate = CommonConstant.dateBegining;// 系统完成解析的时间
+	private Long takeTime = -1l;// 解析花费的时间
 	/**
 	 * 1=成功 0=失败
 	 */
-	private Integer status = null;// 解析的结果,状态
-	private FeedParseBo feedParseBo = null;// 解析的结果,具体的数据
-	private String errorMessage = null;// 解析出现错误，大致的问题
+	private Integer status = -1;// 解析的结果,状态
+	private String errorMessage = "";// 解析出现错误，大致的问题
+
+	public String getFeedId() {
+		return feedId;
+	}
+
+	public void setFeedId(String feedId) {
+		this.feedId = feedId;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
 
 	public String getId() {
 		return id;
@@ -54,14 +78,6 @@ public class LogFeedParser {
 
 	public void setStatus(Integer status) {
 		this.status = status;
-	}
-
-	public FeedParseBo getFeedParseBo() {
-		return feedParseBo;
-	}
-
-	public void setFeedParseBo(FeedParseBo feedParseBo) {
-		this.feedParseBo = feedParseBo;
 	}
 
 	public String getErrorMessage() {

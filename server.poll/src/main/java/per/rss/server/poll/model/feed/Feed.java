@@ -6,6 +6,7 @@ import java.util.Date;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import per.rss.core.base.constant.CommonConstant;
 import per.rss.core.base.util.StringUtils;
 
 @Document(collection = "feed")
@@ -13,25 +14,25 @@ public class Feed implements Serializable {
 	private static final long serialVersionUID = -3244400551015983688L;
 
 	@Id
-	private String id = null;
+	private String id = "";
 
 	// 固有属性 开始
-	private String title = null;
-	private Image image = null;
-	private String link = null;
-	private String description = null;
-	private String language = null;
-	private String generator = null;
-	private String lastBuildDate = null;
-	private Long ttl = null;
-	private String copyright = null;
-	private Date pubDate = null;
-	private String category = null;
+	private String title = "";
+	private Image image = new Image();
+	private String link = "";
+	private String description = "";
+	private String language = "";
+	private String generator = "";
+	private String lastBuildDate = "";
+	private Long ttl = -1l;
+	private String copyright = "";
+	private Date pubDate = CommonConstant.dateBegining;
+	private String category = "";
 	// 固有属性 结束
 
-	private Integer lastedSyncArticleSum = null;// 最后一次同步的文章数量
-	private Date lastedSyncDate = null;// 最后一次同步日期
-	private FeedCreate feedCreate = null;// 收录时的信息
+	private Integer lastedSyncArticleSum = -1;// 最后一次同步的文章数量
+	private Date lastedSyncDate = CommonConstant.dateBegining;// 最后一次同步日期
+	private FeedCreate feedCreate = new FeedCreate();// 收录时的信息
 
 	public String getId() {
 		return id;
