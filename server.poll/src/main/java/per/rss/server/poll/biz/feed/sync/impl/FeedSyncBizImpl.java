@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import com.dangdang.ddframe.job.api.JobExecutionMultipleShardingContext;
+
 import per.rss.core.base.bo.log.LogFeedFetcherBo;
 import per.rss.core.base.constant.CommonConstant;
 import per.rss.core.base.util.CollectionUtils;
@@ -92,12 +94,16 @@ public class FeedSyncBizImpl extends BaseOneOffElasticJob<FeedSyncBo>implements 
 	}
 
 	@Override
-	public boolean excuteingResult(final FeedSyncBo feedSyncBo) {
+	public boolean excuteingResult(JobExecutionMultipleShardingContext context, final FeedSyncBo feedSyncBo) {
 		if (feedSyncBo == null) {
 			return false;
 		}
-		// 1.同步：同时在本任务中更新任务参数：lastedSyncDate
-
+		// 1.同步：同时在本任务中更新任务参数：lastedSyncDate，ok
+		FeedSyncBo newFeedSyncBo = feedSyncBo;
+		newFeedSyncBo.setLastedSyncDateTime(new Date().getTime());
+		newFeedSyncBo.setLogFeedSync(new LogFeedSyncBo());
+		String newJobParams = StringUtils.toJSONString(newFeedSyncBo);
+		context.setJobParameter(newJobParams);
 		// 2.同步：记录所有文章 ok
 		Set<Article> articles = this.getArticleNews(feedSyncBo);
 		if (articles == null) {
@@ -134,13 +140,11 @@ public class FeedSyncBizImpl extends BaseOneOffElasticJob<FeedSyncBo>implements 
 				if (logFeedFetcher != null) {
 					logFeedFetcherDao.insertOne(logFeedFetcher);
 				}
-
 				LogFeedParser logFeedParser = getErrorLogFeedParser(feedSyncBo);
 				if (logFeedParser != null) {
 					logFeedParserDao.insertOne(logFeedParser);
 				}
 			}
-
 		});
 
 		// 5.异步：MQ请求为用户更新订阅，考虑用户自定义过滤规则、用户自定义更新事件处理

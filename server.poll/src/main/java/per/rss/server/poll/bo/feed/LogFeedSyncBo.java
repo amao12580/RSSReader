@@ -3,6 +3,7 @@ package per.rss.server.poll.bo.feed;
 import java.util.Date;
 
 import per.rss.core.base.bo.log.LogFeedFetcherBo;
+import per.rss.core.base.constant.CommonConstant;
 
 /**
  * 抓取是指：获取网络rss信息+解析xml
@@ -11,14 +12,14 @@ import per.rss.core.base.bo.log.LogFeedFetcherBo;
 
 public class LogFeedSyncBo {
 
-	private String id = null;
-	private String feedId = null;
-	private Date fetchStartDate = null;// 系统开始抓取的时间
-	private Date fetchEndDate = null;// 系统完成抓取的时间
+	private String id = "";
+	private String feedId = "";
+	private Date fetchStartDate = CommonConstant.dateBegining;// 系统开始抓取的时间
+	private Date fetchEndDate = CommonConstant.dateBegining;// 系统完成抓取的时间
 	private LogFeedFetcherBo logFeedFetcherBo;// 网络请求的详细信息
-	private Long takeTime = null;// 尝试解析花费总的时间
-	private LogFeedParserBo logFeedParserBo = null;// 解析详情
-	private String charsets = null;// 字符集
+	private Long takeTime = -1l;// 尝试解析花费总的时间
+	private LogFeedParserBo logFeedParserBo = new LogFeedParserBo();// 解析详情
+	private String charsets = "";// 字符集
 
 	public String getFeedId() {
 		return feedId;

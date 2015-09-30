@@ -2,19 +2,21 @@ package per.rss.server.poll.bo.feed;
 
 import java.util.Date;
 
+import per.rss.core.base.constant.CommonConstant;
+
 public class LogFeedParserBo {
-	private String id = null;
-	private String content = null;//解析的内容
-	private Date parseStartDate = null;// 系统开始解析的时间
-	private Date parseEndDate = null;// 系统完成解析的时间
-	private Long takeTime = null;// 解析花费的时间
+	private String id = "";
+	private String content = "";// 解析的内容
+	private Date parseStartDate = CommonConstant.dateBegining;// 系统开始解析的时间
+	private Date parseEndDate = CommonConstant.dateBegining;// 系统完成解析的时间
+	private Long takeTime = -1l;// 解析花费的时间
 	/**
 	 * 1=成功 0=失败
 	 */
-	private Integer status = null;// 解析的结果,状态
-	private FeedParseBo feedParseBo = null;// 解析的结果,状态
+	private Integer status = -1;// 解析的结果,状态
+	private FeedParseBo feedParseBo = new FeedParseBo();// 解析的结果,状态
 
-	private String errorMessage = null;// 解析出现错误，大致的问题
+	private String errorMessage = "";// 解析出现错误，大致的问题
 
 	public String getContent() {
 		return content;

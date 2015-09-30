@@ -21,11 +21,12 @@ public abstract class BaseOneOffElasticJob<T> extends AbstractOneOffElasticJob {
 
 	/**
 	 * 处理任务执行的结果
+	 * @param context 
 	 * 
 	 * @param result
 	 * @return
 	 */
-	abstract public boolean excuteingResult(final T result);
+	abstract public boolean excuteingResult(JobExecutionMultipleShardingContext context, final T result);
 
 	/*
 	 * 任务处理的入口 (non-Javadoc)
@@ -43,9 +44,13 @@ public abstract class BaseOneOffElasticJob<T> extends AbstractOneOffElasticJob {
 			return;
 		}
 		T obj = excuteingJob(paramStr);
-		boolean result = excuteingResult(obj);
+		boolean result = excuteingResult(context,obj);
 		if (!result) {
 			log.error("任务执行失败：" + context.getJobName() + ",jobParam:" + context.getJobParameter());
 		}
 	}
+	
+	public final void updateParam(final String jobParam){
+		
+	} 
 }

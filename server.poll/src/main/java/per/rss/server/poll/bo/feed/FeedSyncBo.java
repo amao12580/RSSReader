@@ -3,11 +3,11 @@ package per.rss.server.poll.bo.feed;
 import per.rss.core.base.util.StringUtils;
 
 public class FeedSyncBo {
-	private String id = null;// feed的编号
-	private String link = null;// feed的链接
-	private Long lastedSyncDateTime = null;// 最后一次同步日期//必须用long
+	private String id = "";// feed的编号
+	private String link = "";// feed的链接
+	private Long lastedSyncDateTime = -1l;// 最后一次同步日期//必须用long
 
-	private LogFeedSyncBo logFeedSync = null;// 抓取的结果
+	private LogFeedSyncBo logFeedSync = new LogFeedSyncBo();// 抓取的结果
 
 	public String getId() {
 		return id;

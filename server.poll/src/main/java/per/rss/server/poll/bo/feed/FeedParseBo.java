@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import per.rss.core.base.constant.CommonConstant;
 import per.rss.core.base.util.StringUtils;
 import per.rss.server.poll.model.feed.Article;
 import per.rss.server.poll.model.feed.Image;
@@ -25,13 +26,13 @@ public class FeedParseBo {
 	private String lastBuildDate = "";
 	private Long ttl = -1l;
 	private String copyright = "";
-	private Date pubDate = new Date(0l);
+	private Date pubDate = CommonConstant.dateBegining;
 	private String category = "";
 	private Set<Article> item = new HashSet<Article>(0);
 
 	// 固有属性 结束
 
-	private Date lastedSyncDate = new Date(0l);// 最后一次同步日期
+	private Date lastedSyncDate = CommonConstant.dateBegining;// 最后一次同步日期
 
 	public String getId() {
 		return id;
