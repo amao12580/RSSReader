@@ -8,31 +8,37 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import per.rss.core.base.constant.CommonConstant;
 import per.rss.core.base.util.StringUtils;
+import per.rss.server.poll.model.feed.piece.Create;
+import per.rss.server.poll.model.feed.piece.Image;
 
 @Document(collection = "feed")
 public class Feed implements Serializable {
 	private static final long serialVersionUID = -3244400551015983688L;
 
 	@Id
-	private String id = "";
+	private String id = CommonConstant.stringBegining;
+	private String url = CommonConstant.stringBegining;// 系统收录时使用的URL、更新rss源的网址。区别于link字段
 
 	// 固有属性 开始
-	private String title = "";
+	private String title = CommonConstant.stringBegining;
 	private Image image = new Image();
-	private String link = "";
-	private String description = "";
-	private String language = "";
-	private String generator = "";
-	private String lastBuildDate = "";
+	private String link = CommonConstant.stringBegining;//
+	private String description = CommonConstant.stringBegining;
+	private String language = CommonConstant.stringBegining;
+	private String generator = CommonConstant.stringBegining;
+	private String lastBuildDate = CommonConstant.stringBegining;
 	private Long ttl = -1l;
-	private String copyright = "";
+	private String copyright = CommonConstant.stringBegining;
 	private Date pubDate = CommonConstant.dateBegining;
-	private String category = "";
+	private String category = CommonConstant.stringBegining;
 	// 固有属性 结束
 
-	private Integer lastedSyncArticleSum = -1;// 最后一次同步的文章数量
+	private Integer lastedSyncArticleSum = CommonConstant.intBegining;// 最后一次同步的文章数量
+	private Integer lastedSyncStatus = CommonConstant.intBegining;// 最后一次同步的状态，成功/失败
 	private Date lastedSyncDate = CommonConstant.dateBegining;// 最后一次同步日期
-	private FeedCreate feedCreate = new FeedCreate();// 收录时的信息
+
+	private Integer syncSpeed = CommonConstant.intBegining;// feed的更新速度设置
+	private Create create = new Create();// 收录时的信息
 
 	public String getId() {
 		return id;
@@ -148,12 +154,36 @@ public class Feed implements Serializable {
 		this.lastedSyncDate = lastedSyncDate;
 	}
 
-	public FeedCreate getFeedCreate() {
-		return feedCreate;
+	public Create getCreate() {
+		return create;
 	}
 
-	public void setFeedCreate(FeedCreate feedCreate) {
-		this.feedCreate = feedCreate;
+	public void setCreate(Create create) {
+		this.create = create;
+	}
+
+	public Integer getSyncSpeed() {
+		return syncSpeed;
+	}
+
+	public void setSyncSpeed(Integer syncSpeed) {
+		this.syncSpeed = syncSpeed;
+	}
+
+	public Integer getLastedSyncStatus() {
+		return lastedSyncStatus;
+	}
+
+	public void setLastedSyncStatus(Integer lastedSyncStatus) {
+		this.lastedSyncStatus = lastedSyncStatus;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	@Override

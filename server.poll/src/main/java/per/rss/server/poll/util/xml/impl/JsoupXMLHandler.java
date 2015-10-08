@@ -17,8 +17,8 @@ import per.rss.core.base.util.CollectionUtils;
 import per.rss.core.base.util.StringUtils;
 import per.rss.core.base.util.UUIDUtils;
 import per.rss.server.poll.bo.feed.FeedParseBo;
-import per.rss.server.poll.model.feed.Article;
-import per.rss.server.poll.model.feed.Image;
+import per.rss.server.poll.model.feed.piece.Article;
+import per.rss.server.poll.model.feed.piece.Image;
 import per.rss.server.poll.util.xml.XMLHandler;
 
 /**

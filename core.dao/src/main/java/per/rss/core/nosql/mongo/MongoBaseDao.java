@@ -49,6 +49,7 @@ public interface MongoBaseDao<T> {
 	 * 
 	 */
 	public void insert(T obj);
+
 	/**
 	 * this.mongoTemplate.insertAll
 	 * 
@@ -68,6 +69,8 @@ public interface MongoBaseDao<T> {
 	 */
 
 	public List<T> find(Query query, Class<T> c);
+	
+	public List<T> find(Set<String> queryFiled,Query query, Class<T> c);
 
 	/**
 	 * this.mongoTemplate.findAll
@@ -168,6 +171,6 @@ public interface MongoBaseDao<T> {
 	 * @param c
 	 * @return
 	 */
-	T findOne(Set<String> queryFiled, Query query, Class<T> c);
+	public T findOne(Set<String> queryFiled, Query query, Class<T> c);
 
 }

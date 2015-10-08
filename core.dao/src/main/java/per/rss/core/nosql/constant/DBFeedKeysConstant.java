@@ -5,6 +5,7 @@ package per.rss.core.nosql.constant;
  */
 public class DBFeedKeysConstant {
 	public final static String id = "id";
+	public final static String url = "url";
 	public final static String title = "title";
 	public final static String image = "image";
 	public final static String link = "link";
@@ -17,7 +18,9 @@ public class DBFeedKeysConstant {
 	public final static String pubDate = "pubDate";
 	public final static String category = "category";
 	public final static String lastedSyncArticleSum = "lastedSyncArticleSum";
+	public final static String lastedSyncStatus = "lastedSyncStatus";
 	public final static String lastedSyncDate = "lastedSyncDate";
-	public final static String feedCreate = "feedCreate";
+	public final static String syncSpeed = "syncSpeed";
+	public final static String create = "create";
 
 }

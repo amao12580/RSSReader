@@ -12,24 +12,25 @@ import per.rss.core.base.constant.CommonConstant;
 public class LogFeedFetcher implements Serializable {
 	private static final long serialVersionUID = -7996518274509708501L;
 	@Id
-	private String id = "";
-	private String feedId = "";
+	private String id = CommonConstant.stringBegining;
+	private String feedId = CommonConstant.stringBegining;
 	private Date requestStartDate = CommonConstant.dateBegining;// 开始获取网络rss信息的时间
 	private Date requestEndDate = CommonConstant.dateBegining;// 完成获取网络rss信息的时间
-	private Long takeTime = -1l;// 网络请求花费的时间
+	private Long takeTime = CommonConstant.longBegining;// 网络请求花费的时间
 	/**
 	 * 1=成功 0=失败
 	 */
-	private Integer requestStatus = -1;// 网络请求发起的结果
-	private String requestErrorMessage = "";// 网络请求发起出现错误，记录简要信息
+	private Integer requestStatus = CommonConstant.intBegining;// 网络请求发起的结果
+	private String requestErrorMessage = CommonConstant.stringBegining;// 网络请求发起出现错误，记录简要信息
 	/**
 	 * 1=成功 0=失败
 	 */
-	private Integer responseStatus = -1;// 网络响应的结果
-	private Integer responseCode = -1;// 网络响应的结果 状态码：200、500、304、404等等
+	private Integer responseStatus = CommonConstant.intBegining;// 网络响应的结果
+	private Integer responseCode = CommonConstant.intBegining;// 网络响应的结果
+																// 状态码：200、500、304、404等等
 
-	private String responseHtml = "";// 网络响应的结果，html
-	private Integer htmlLength = -1;// 网络响应的结果，数据长度
+	private String responseHtml = CommonConstant.stringBegining;// 网络响应的结果，html
+	private Integer htmlLength = CommonConstant.intBegining;// 网络响应的结果，数据长度
 
 	public LogFeedFetcher doException(LogFeedFetcher logFeedRequest, Exception e) {
 		logFeedRequest.setRequestStatus(CommonConstant.status.failed.getCode());

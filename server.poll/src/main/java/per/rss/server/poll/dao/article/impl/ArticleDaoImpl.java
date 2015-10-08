@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import per.rss.core.nosql.mongo.MongoBaseDao;
 import per.rss.server.poll.dao.article.ArticleDao;
-import per.rss.server.poll.model.feed.Article;
+import per.rss.server.poll.model.feed.piece.Article;
 
 @Repository(value = "articleDao")
 public class ArticleDaoImpl implements ArticleDao {

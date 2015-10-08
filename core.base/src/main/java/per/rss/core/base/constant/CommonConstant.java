@@ -14,8 +14,11 @@ public class CommonConstant {
 	public final static String DatetimePattern_Full = "yyyy-MM-dd HH:mm:ss.SSS";
 	/** 系统内部通讯参数，时间日期中国时区定义 */
 	public final static String DatetimeTimeZone_Default = "GMT+8";
-	
+
 	public final static Date dateBegining = new Date(0l);
+	public final static long longBegining = -1l;
+	public final static int intBegining = -1;
+	public final static String stringBegining = "";
 
 	public static enum status {
 		// 利用构造函数传参

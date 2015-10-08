@@ -12,17 +12,17 @@ import per.rss.core.base.constant.CommonConstant;
 public class LogFeedParser implements Serializable {
 	private static final long serialVersionUID = -2787303135330536824L;
 	@Id
-	private String id = "";
-	private String feedId = "";
-	private String content = null;// 解析的内容
+	private String id = CommonConstant.stringBegining;
+	private String feedId = CommonConstant.stringBegining;
+	private String content = CommonConstant.stringBegining;// 解析的内容
 	private Date parseStartDate = CommonConstant.dateBegining;// 系统开始解析的时间
 	private Date parseEndDate = CommonConstant.dateBegining;// 系统完成解析的时间
-	private Long takeTime = -1l;// 解析花费的时间
+	private Long takeTime = CommonConstant.longBegining;// 解析花费的时间
 	/**
 	 * 1=成功 0=失败
 	 */
-	private Integer status = -1;// 解析的结果,状态
-	private String errorMessage = "";// 解析出现错误，大致的问题
+	private Integer status = CommonConstant.intBegining;// 解析的结果,状态
+	private String errorMessage = CommonConstant.stringBegining;// 解析出现错误，大致的问题
 
 	public String getFeedId() {
 		return feedId;

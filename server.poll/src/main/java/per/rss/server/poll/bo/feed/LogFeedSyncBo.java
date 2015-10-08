@@ -12,14 +12,13 @@ import per.rss.core.base.constant.CommonConstant;
 
 public class LogFeedSyncBo {
 
-	private String id = "";
-	private String feedId = "";
+	private String id = CommonConstant.stringBegining;
+	private String feedId = CommonConstant.stringBegining;
 	private Date fetchStartDate = CommonConstant.dateBegining;// 系统开始抓取的时间
 	private Date fetchEndDate = CommonConstant.dateBegining;// 系统完成抓取的时间
 	private LogFeedFetcherBo logFeedFetcherBo;// 网络请求的详细信息
-	private Long takeTime = -1l;// 尝试解析花费总的时间
+	private Long takeTime = CommonConstant.longBegining;// 尝试解析花费总的时间
 	private LogFeedParserBo logFeedParserBo = null;// 解析详情
-	private String charsets = "";// 字符集
 
 	public String getFeedId() {
 		return feedId;
@@ -75,14 +74,6 @@ public class LogFeedSyncBo {
 
 	public void setLogFeedParserBo(LogFeedParserBo logFeedParserBo) {
 		this.logFeedParserBo = logFeedParserBo;
-	}
-
-	public String getCharsets() {
-		return charsets;
-	}
-
-	public void setCharsets(String charsets) {
-		this.charsets = charsets;
 	}
 
 }

@@ -1,4 +1,4 @@
-package per.rss.server.poll.model.feed;
+package per.rss.server.poll.model.feed.piece;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -18,18 +18,18 @@ public class Article implements Serializable {
 	private static final long serialVersionUID = -2008046181032344880L;
 
 	@Id
-	private String id = "";
-	private String feedId = "";
+	private String id = CommonConstant.stringBegining;
+	private String feedId = CommonConstant.stringBegining;
 
 	// 固有属性 开始
-	private String title = "";
-	private String link = "";
+	private String title = CommonConstant.stringBegining;
+	private String link = CommonConstant.stringBegining;
 	private Date pubDate = CommonConstant.dateBegining;
-	private String source = "";
-	private String author = "";
-	private String description = "";
-	private String category = "";
-	private String comments = "";
+	private String source = CommonConstant.stringBegining;
+	private String author = CommonConstant.stringBegining;
+	private String description = CommonConstant.stringBegining;
+	private String category = CommonConstant.stringBegining;
+	private String comments = CommonConstant.stringBegining;
 
 	// 固有属性 结束
 

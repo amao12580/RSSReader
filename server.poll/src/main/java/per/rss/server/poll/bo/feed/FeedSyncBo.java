@@ -1,22 +1,13 @@
 package per.rss.server.poll.bo.feed;
 
+import per.rss.core.base.constant.CommonConstant;
 import per.rss.core.base.util.StringUtils;
 
 public class FeedSyncBo {
-	private String id = "";// feed的编号
-	private String link = "";// feed的rss xml文件链接地址
-	private Integer syncSpeed = -1;// feed的更新速度评级
-	private Long lastedSyncDateTime = -1l;// 最后一次同步日期//必须用long
+	private String id = CommonConstant.stringBegining;// feed的编号
+	private String url = CommonConstant.stringBegining;// feed的rss xml文件链接地址
 
 	private LogFeedSyncBo logFeedSync = null;// 抓取的结果
-
-	public Integer getSyncSpeed() {
-		return syncSpeed;
-	}
-
-	public void setSyncSpeed(Integer syncSpeed) {
-		this.syncSpeed = syncSpeed;
-	}
 
 	public String getId() {
 		return id;
@@ -26,20 +17,12 @@ public class FeedSyncBo {
 		this.id = id;
 	}
 
-	public String getLink() {
-		return link;
+	public String getUrl() {
+		return url;
 	}
 
-	public void setLink(String link) {
-		this.link = link;
-	}
-
-	public Long getLastedSyncDateTime() {
-		return lastedSyncDateTime;
-	}
-
-	public void setLastedSyncDateTime(Long lastedSyncDateTime) {
-		this.lastedSyncDateTime = lastedSyncDateTime;
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	public LogFeedSyncBo getLogFeedSync() {

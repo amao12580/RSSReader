@@ -6,28 +6,28 @@ import java.util.Set;
 
 import per.rss.core.base.constant.CommonConstant;
 import per.rss.core.base.util.StringUtils;
-import per.rss.server.poll.model.feed.Article;
-import per.rss.server.poll.model.feed.Image;
+import per.rss.server.poll.model.feed.piece.Article;
+import per.rss.server.poll.model.feed.piece.Image;
 
 /**
  * 仅作为解析使用
  * 
  */
 public class FeedParseBo {
-	private String id = "";
+	private String id = CommonConstant.stringBegining;
 
 	// 固有属性 开始
-	private String title = "";
+	private String title = CommonConstant.stringBegining;
 	private Image image = new Image();
-	private String link = "";
-	private String description = "";
-	private String language = "";
-	private String generator = "";
-	private String lastBuildDate = "";
-	private Long ttl = -1l;
-	private String copyright = "";
+	private String link = CommonConstant.stringBegining;
+	private String description = CommonConstant.stringBegining;
+	private String language = CommonConstant.stringBegining;
+	private String generator = CommonConstant.stringBegining;
+	private String lastBuildDate = CommonConstant.stringBegining;
+	private Long ttl = CommonConstant.longBegining;
+	private String copyright = CommonConstant.stringBegining;
 	private Date pubDate = CommonConstant.dateBegining;
-	private String category = "";
+	private String category = CommonConstant.stringBegining;
 	private Set<Article> item = new HashSet<Article>(0);
 
 	// 固有属性 结束

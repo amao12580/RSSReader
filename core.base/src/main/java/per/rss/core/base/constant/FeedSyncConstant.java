@@ -68,5 +68,5 @@ public class FeedSyncConstant {
 		return speedMap.get(code).getValue();
 	}
 
-	public final static int default_feed_article_new_max = 20;// 每个订阅源默认最多解析20篇文章
+	public final static int default_feed_article_new_max = 50;// 每个订阅源默认最多解析50篇文章
 }
