@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+     http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd"
+	default-lazy-init="false">
+
+	<description>MongoDB的链接配置 </description>
+
+
+	<!-- mongodb 打开DB操作日志：操作数据库语句日志 开发时打开注释，发布时加上注释 开始 -->
+
+
+	<!-- https://github.com/ewcmsfree/ewcms/wiki/Help-mongo-logging -->
+
+	<!-- <bean id="sysProps" -->
+	<!-- class="org.springframework.beans.factory.config.MethodInvokingFactoryBean"> -->
+	<!-- <property name="targetClass" value="java.lang.System" /> -->
+	<!-- <property name="targetMethod" value="getProperties" /> -->
+	<!-- </bean> -->
+
+	<!-- <bean id="sysMongo" -->
+	<!-- class="org.springframework.beans.factory.config.MethodInvokingFactoryBean"> -->
+	<!-- <property name="targetObject" ref="sysProps" /> -->
+	<!-- <property name="targetMethod" value="setProperty" /> -->
+	<!-- <property name="arguments"> -->
+	<!-- <list> -->
+	<!-- <value>DEBUG.MONGO</value> -->
+	<!-- <value>true</value> -->
+	<!-- </list> -->
+	<!-- </property> -->
+	<!-- </bean> -->
+
+	<!-- <bean id="sysDbTrace" -->
+	<!-- class="org.springframework.beans.factory.config.MethodInvokingFactoryBean"> -->
+	<!-- <property name="targetObject" ref="sysProps" /> -->
+	<!-- <property name="targetMethod" value="setProperty" /> -->
+	<!-- <property name="arguments"> -->
+	<!-- <list> -->
+	<!-- <value>DB.TRACE</value> -->
+	<!-- <value>true</value> -->
+	<!-- </list> -->
+	<!-- </property> -->
+	<!-- </bean> -->
+
+	<!-- mongodb 打开DB操作日志：操作数据库语句日志 开发时打开注释，发布时加上注释 结束 -->
+
+
+
+
+	<!-- 读写分离级别配置 开始 -->
+
+	<!-- http://blog.csdn.net/u010889990/article/details/42644963 -->
+
+	<!-- 首选主节点，大多情况下读操作在主节点，如果主节点不可用，如故障转移，读操作在从节点。 -->
+	<!-- <bean id="primaryPreferredReadPreference" class="com.mongodb.TaggableReadPreference.PrimaryPreferredReadPreference"></bean> -->
+
+
+	<!-- 最邻近节点，读操作在最邻近的成员，可能是主节点或者从节点。 -->
+	<!-- <bean id="nearestReadPreference" class="com.mongodb.TaggableReadPreference.NearestReadPreference"></bean> -->
+
+
+	<!-- 从节点，读操作只在从节点， 如果从节点不可用，报错或者抛出异常。存在的问题是secondary节点的数据会比primary节点数据旧。 -->
+	<!-- <bean id="secondaryReadPreference" class="com.mongodb.TaggableReadPreference.SecondaryReadPreference"></bean> -->
+
+
+	<!-- 优先从secondary节点进行读取操作，secondary节点不可用时从主节点读取数据 -->
+	<!-- <bean id="secondaryPreferredReadPreference" class="com.mongodb.TaggableReadPreference.SecondaryPreferredReadPreference"></bean> -->
+
+	<!-- mongodb的主要操作对象，所有对mongodb的增删改查的操作都是通过它完成 -->
+	<!-- <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate"> -->
+	<!-- <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/> -->
+	<!-- <constructor-arg name="mongoConverter" ref="mappingConverter" /> -->
+	<!-- 配置读写分离的模式：默认主节点模式，读操作只在主节点，如果主节点不可用，报错或者抛出异常。 -->
+	<!-- <property name="readPreference" ref="secondaryPreferredReadPreference"></property> -->
+	<!-- </bean> -->
+
+	<!-- 读写分离级别配置 结束 -->
+
+	<context:component-scan base-package="per.rss.core.nosql"></context:component-scan>
+
+
+	<mongo:mongo host="${mongo.host}" port="${mongo.port}">
+		<mongo:options connections-per-host="500"
+			threads-allowed-to-block-for-connection-multiplier="1000"
+			connect-timeout="30000" max-wait-time="5000" auto-connect-retry="true"
+			socket-keep-alive="true" socket-timeout="5000" slave-ok="true"
+			write-number="1" write-timeout="0" write-fsync="true" />
+	</mongo:mongo>
+
+	<mongo:db-factory dbname="${mongo.dbname}" mongo-ref="mongo" />
+	<!-- <mongo:db-factory dbname="mongoTest" mongo-ref="mongo" username="root" 
+		password="87980879nihao" /> 使用密码链接-->
+
+	<mongo:repositories base-package="per.rss.core.nosql,per.rss.server.api.dao" />
+	<!-- 自动扫描以下包的类 -->
+	<mongo:mapping-converter
+		base-package="per.rss.core.nosql.model,per.rss.server.api.model" />
+
+	<bean id="mappingContext"
+		class="org.springframework.data.mongodb.core.mapping.MongoMappingContext" />
+	<!-- 配置mongodb映射类型 -->
+	<bean id="mappingMongoConverter"
+		class="org.springframework.data.mongodb.core.convert.MappingMongoConverter">
+		<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
+		<constructor-arg name="mappingContext" ref="mappingContext" />
+		<property name="typeMapper" ref="defaultMongoTypeMapper" />
+	</bean>
+
+	<!-- 默认Mongodb类型映射 -->
+	<bean id="defaultMongoTypeMapper"
+		class="org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper">
+		<constructor-arg name="typeKey">
+			<null /><!-- 这里设置为空,可以把 spring data mongodb 多余保存的_class字段去掉 -->
+		</constructor-arg>
+	</bean>
+	<!-- 操作mongodb -->
+	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
+		<constructor-arg name="mongoConverter" ref="mappingMongoConverter" />
+	</bean>
+</beans> 
