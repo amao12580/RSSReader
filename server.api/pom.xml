@@ -24,6 +24,12 @@
 			<artifactId>core.base</artifactId>
 			<version>${rss.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>per.rss</groupId>
+			<artifactId>core.dao</artifactId>
+			<version>${rss.version}</version>
+		</dependency>
 		<!-- 公共组件 end -->
 
 		<!-- spring begin -->

@@ -13,5 +13,15 @@
 	<description>server.api工程的配置入口 </description>
 
 	<context:component-scan base-package="per.rss.server.api"></context:component-scan>
+	
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:/conf/mongodb.properties</value>
+			</list>
+		</property>
+	</bean>
 
+	<import resource="classpath:/conf/spring/mongodb.xml" />
 </beans> 

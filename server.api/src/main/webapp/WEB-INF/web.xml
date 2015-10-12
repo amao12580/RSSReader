@@ -24,7 +24,7 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-			classpath:/conf/spring/init-server.api.xml
+			classpath:/conf/init-server.api.xml
 		</param-value>
 	</context-param>
 
