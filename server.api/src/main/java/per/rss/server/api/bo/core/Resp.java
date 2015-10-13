@@ -91,7 +91,8 @@ public class Resp {
 
 	@Override
 	public String toString() {
-		return "Resp [code=" + code + ", desc=" + desc + ", result=" + StringUtils.toJSONString(result) + "]";
+//		return "Resp [code=" + code + ", desc=" + desc + ", result=" + StringUtils.toJSONString(result) + "]";
+		return StringUtils.toJSONString(this);
 	}
 
 }

@@ -5,4 +5,6 @@ import per.rss.server.api.bo.user.login.LoginBo;
 
 public interface LoginBiz {
 	Resp doUserLogin(LoginBo loginBo);
+
+	Resp getRSAKey();
 }

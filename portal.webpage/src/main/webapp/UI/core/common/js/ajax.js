@@ -28,20 +28,26 @@ function doAjaxPostRequest(url, data, async, successCallback) {
 };
 
 /**
- * 跨域请求
+ * 跨域请求 http://www.iteye.com/topic/1130452
+ * 
  * @param url
  * @param data
  * @param async
- * @param successCallbackName  回调函数名称，string类型
- * @param successCallbackFunc  回调函数对象，object类型
+ * @param successCallbackName
+ *            回调函数名称，string类型
+ * @param successCallbackFunc
+ *            回调函数对象，object类型
  */
 function doAjaxGetRequestWithCrossDomain(url, data, async, successCallbackName,
 		successCallbackFunc) {
+	if (isEmptyStr(data)) {
+		url = url + '?' + data;
+	}
 	var options = {
 		type : "GET",
 		async : async,
 		cache : false,
-		url : url + '?' + data,
+		url : url,
 		dataType : "jsonp",// 数据类型为jsonp
 		jsonp : successCallbackName,// 服务端用于接收callback调用的function名的参数
 		success : function(data) {

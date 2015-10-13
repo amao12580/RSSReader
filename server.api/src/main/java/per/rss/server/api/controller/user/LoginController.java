@@ -13,30 +13,47 @@ import per.rss.server.api.biz.user.login.LoginBiz;
 import per.rss.server.api.bo.core.Error;
 import per.rss.server.api.bo.core.Resp;
 import per.rss.server.api.bo.user.login.LoginBo;
+import per.rss.server.api.controller.base.BaseController;
 
 @Controller
 @RequestMapping(value = "/user/")
-public class LoginController {
+public class LoginController extends BaseController {
 	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
-	// private static final String callBackFunction =
-	// "doUserLoginSuccessCallBack";
 
 	@Autowired(required = true)
 	private LoginBiz loginBiz;
 
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	// 解决乱码资料：
+	// 1.http://tchen8.iteye.com/blog/993504
+	// 2.http://my.oschina.net/u/140421/blog/176625
+
+	@RequestMapping(value = "/login", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
 	@ResponseBody
-	public String login(LoginBo loginBo, String doUserLoginSuccessCallBack) {
+	public String login(LoginBo loginBo, String doUserLoginCallBack) {
 		logger.debug("login is start.");
-		logger.debug("doUserLoginSuccessCallBack:" + doUserLoginSuccessCallBack);
+		logger.debug("doUserLoginSuccessCallBack:" + doUserLoginCallBack);
 		Resp result = null;
-		if (StringUtils.isEmpty(doUserLoginSuccessCallBack)) {
+		if (StringUtils.isEmpty(doUserLoginCallBack)) {
 			result = new Resp(Error.message.system_error);
 		} else {
 			result = loginBiz.doUserLogin(loginBo);
 		}
-		String finalResult = doUserLoginSuccessCallBack + "(" + StringUtils.toJSONString(result) + ")";
-		logger.debug("finalResult:" + finalResult);
-		return finalResult;
+		return toCallBackResponse(doUserLoginCallBack, result);
+	}
+
+	
+	//前后台使用rsa加解密：http://www.blogjava.net/wangxinsh55/archive/2015/05/19/425175.html
+	@RequestMapping(value = "/toLogin/getRSAKey", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@ResponseBody
+	public String getRSAKey(String initRSASecurityLoginCallBack) {
+		logger.debug("getRSAKey is start.");
+		logger.debug("initRSASecurityLoginCallBack:" + initRSASecurityLoginCallBack);
+		Resp result = null;
+		if (StringUtils.isEmpty(initRSASecurityLoginCallBack)) {
+			result = new Resp(Error.message.system_error);
+		} else {
+			result = loginBiz.getRSAKey();
+		}
+		return toCallBackResponse(initRSASecurityLoginCallBack, result);
 	}
 }
