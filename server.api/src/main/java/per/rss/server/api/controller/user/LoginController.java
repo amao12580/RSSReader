@@ -1,5 +1,8 @@
 package per.rss.server.api.controller.user;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,31 +32,35 @@ public class LoginController extends BaseController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
 	@ResponseBody
-	public String login(LoginBo loginBo, String doUserLoginCallBack) {
+	public String login(HttpSession session, HttpServletRequest request, LoginBo loginBo, String doUserLoginCallBack) {
 		logger.debug("login is start.");
 		logger.debug("doUserLoginSuccessCallBack:" + doUserLoginCallBack);
 		Resp result = null;
-		if (StringUtils.isEmpty(doUserLoginCallBack)) {
-			result = new Resp(Error.message.system_error);
+		boolean validSubmit = isValidCsrfHeaderToken(session, request);
+		if (!validSubmit) {
+			result = new Resp(Error.message.submit_error);
 		} else {
-			result = loginBiz.doUserLogin(loginBo);
+			if (StringUtils.isEmpty(doUserLoginCallBack)) {
+				result = new Resp(Error.message.system_error);
+			} else {
+				result = loginBiz.doUserLogin(loginBo);
+			}
 		}
 		return toCallBackResponse(doUserLoginCallBack, result);
 	}
 
-	
-	//前后台使用rsa加解密：http://www.blogjava.net/wangxinsh55/archive/2015/05/19/425175.html
-	@RequestMapping(value = "/toLogin/getRSAKey", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	// 前后台使用rsa加解密：http://www.blogjava.net/wangxinsh55/archive/2015/05/19/425175.html
+	@RequestMapping(value = "/toLogin", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
 	@ResponseBody
-	public String getRSAKey(String initRSASecurityLoginCallBack) {
+	public String getRSAKey(HttpSession session, String toSecurityLoginCallBack) {
 		logger.debug("getRSAKey is start.");
-		logger.debug("initRSASecurityLoginCallBack:" + initRSASecurityLoginCallBack);
+		logger.debug("toSecurityLoginCallBack:" + toSecurityLoginCallBack);
 		Resp result = null;
-		if (StringUtils.isEmpty(initRSASecurityLoginCallBack)) {
+		if (StringUtils.isEmpty(toSecurityLoginCallBack)) {
 			result = new Resp(Error.message.system_error);
 		} else {
-			result = loginBiz.getRSAKey();
+			result = loginBiz.getRSAKey(session);
 		}
-		return toCallBackResponse(initRSASecurityLoginCallBack, result);
+		return toCallBackResponse(toSecurityLoginCallBack, result);
 	}
 }

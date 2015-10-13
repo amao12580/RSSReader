@@ -3,7 +3,7 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-  <display-name>server.api</display-name>
+	<display-name>server.api</display-name>
 
 	<context-param>
 		<param-name>logbackConfigLocation</param-name>
@@ -17,8 +17,8 @@
 	<context-param>
 		<param-name>webAppRootKey</param-name>
 		<param-value>
-				server.api
-			</param-value>
+			server.api
+		</param-value>
 	</context-param>
 
 	<context-param>
@@ -49,6 +49,19 @@
 	<filter-mapping>
 		<filter-name>characterEncodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- 预防XSS攻击 -->
+	<!-- 预防SQL注入攻击 -->
+	<filter>
+		<filter-name>XssSqlFilter</filter-name>
+		<filter-class>per.rss.server.api.filter.xss.XssFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>XssSqlFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
 	</filter-mapping>
 
 	<servlet>

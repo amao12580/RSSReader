@@ -56,6 +56,13 @@ function doAjaxGetRequestWithCrossDomain(url, data, async, successCallbackName,
 		error : function() {
 			alert('fail');
 		}
+//		,
+//		beforeSend : function(XMLHttpRequest) {
+			// 不能修改的 :http://segmentfault.com/a/1190000002497440
+			// 跨域时无法提交自定义的header信息 :http://itwap.net/ArticleContent.aspx?id=31
+			// XMLHttpRequest.setRequestHeader('content-type',
+			// 'text/html;charset=UTF-8;'+CSRFTOKENNAME+'='+$("#CSRFToken").val());
+//		}
 	};
 	$.ajax(options);
 };

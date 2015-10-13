@@ -2,6 +2,8 @@ package per.rss.server.api.biz.user.login.impl;
 
 import java.security.interfaces.RSAPublicKey;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,9 @@ import per.rss.server.api.bo.core.Error;
 import per.rss.server.api.bo.core.RSA;
 import per.rss.server.api.bo.core.Resp;
 import per.rss.server.api.bo.user.login.LoginBo;
+import per.rss.server.api.bo.user.login.ToLoginBo;
 import per.rss.server.api.dao.user.login.AccountDao;
+import per.rss.server.api.filter.csrf.CSRFTokenManager;
 import per.rss.server.api.util.PasswordUtils;
 import per.rss.server.api.util.rsa.RSAUtil;
 
@@ -77,14 +81,43 @@ public class LoginBizImpl implements LoginBiz {
 	}
 
 	@Override
-	public Resp getRSAKey() {
+	public Resp getRSAKey(HttpSession session) {
 		Resp resp = null;
 		try {
 			RSAPublicKey rsap = (RSAPublicKey) RSAUtil.getKeyPair().getPublic();
+			if (rsap == null) {
+				logger.error("rsap is empty.");
+				resp = new Resp(Error.message.system_exception);
+				return resp;
+			}
 			String module = rsap.getModulus().toString(16);
+			if (StringUtils.isEmpty(module)) {
+				logger.error("module is empty.");
+				resp = new Resp(Error.message.system_exception);
+				return resp;
+			}
 			String empoent = rsap.getPublicExponent().toString(16);
-			resp = new Resp(new RSA(module, empoent));
-			logger.debug("resp is :" + StringUtils.toJSONString(resp));
+			if (StringUtils.isEmpty(empoent)) {
+				logger.error("empoent is empty.");
+				resp = new Resp(Error.message.system_exception);
+				return resp;
+			}
+			if (session == null) {
+				logger.error("session is empty.");
+				resp = new Resp(Error.message.system_exception);
+				return resp;
+			}
+			ToLoginBo bo = new ToLoginBo();
+			bo.setRsa(new RSA(module, empoent));
+			String csrfToken = CSRFTokenManager.getTokenForSession(session);
+			if (StringUtils.isEmpty(csrfToken)) {
+				logger.error("csrfToken is empty.");
+				resp = new Resp(Error.message.system_exception);
+				return resp;
+			}
+			bo.setCsrfToken(csrfToken);
+			resp = new Resp(bo);
+			// logger.debug("resp is :" + StringUtils.toJSONString(resp));
 		} catch (Throwable e) {
 			logger.error("The server appeared abnormal.", e);
 			resp = new Resp(Error.message.system_exception);

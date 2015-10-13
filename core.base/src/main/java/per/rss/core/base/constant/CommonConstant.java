@@ -10,6 +10,7 @@ import java.util.Date;
  */
 public class CommonConstant {
 
+	public final static String CSRFTOKENNAME = "__RSSAPIRequestVerificationToken";
 	/** 系统内部通讯参数，时间日期格式定义 */
 	public final static String DatetimePattern_Full = "yyyy-MM-dd HH:mm:ss.SSS";
 	/** 系统内部通讯参数，时间日期中国时区定义 */

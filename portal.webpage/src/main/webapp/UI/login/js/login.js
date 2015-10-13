@@ -43,7 +43,7 @@ $(function() {
 });
 
 function toLoginGetRSAKey() {
-	return rssServerApiAddress + 'user//toLogin/getRSAKey';
+	return rssServerApiAddress + 'user//toLogin';
 };
 
 function getUserLoginAddress() {
@@ -52,14 +52,15 @@ function getUserLoginAddress() {
 
 function initRSASecurityLogin() {
 	doAjaxGetRequestWithCrossDomain(toLoginGetRSAKey(), '', false,
-			"initRSASecurityLoginCallBack", initRSASecurityLoginCallBack);
+			"toSecurityLoginCallBack", toSecurityLoginCallBack);
 };
 
 function doUserLogin() {
 	var encryptedUsername = encryptedString(RSA_key_info, usernameObj.val());
 	var encryptedPassword = encryptedString(RSA_key_info, passwordObj.val());
+	var CSRFToken = $("#CSRFToken").val();
 	var data = 'username=' + encryptedUsername + '&' + 'password='
-			+ encryptedPassword;
+			+ encryptedPassword + '&' + CSRFTOKENNAME + '=' + CSRFToken;
 	// doAjaxPostRequest(getUserLoginAddress(),$('#userLoginForm').serialize(),false,doUserLoginSuccess);
 	doAjaxGetRequestWithCrossDomain(getUserLoginAddress(), data, false,
 			"doUserLoginCallBack", doUserLoginCallBack);
@@ -75,13 +76,20 @@ function doUserLoginCallBack(data) {
 	}
 };
 
-function initRSASecurityLoginCallBack(data) {
+function toSecurityLoginCallBack(data) {
 	var code = data.code;
 	if (code == successProcess) {
-		RSA_key_module = data.result.module;
-		RSA_key_empoent = data.result.empoent;
 		try {
+			RSA_key_module = data.result.rsa.module;
+			RSA_key_empoent = data.result.rsa.empoent;
+			var csrfToken = data.result.csrfToken;
 			var message = '系统错误：通讯失败 .';
+			if (!isEmptyStr(csrfToken)) {
+				showMessageWarn(message);
+				return false;
+			} else {
+				$('#CSRFToken').val(csrfToken);
+			}
 			if (!isEmptyStr(RSA_key_module)) {
 				showMessageWarn(message);
 				return false;
@@ -151,6 +159,12 @@ function checkUserLogin() {
 
 	if (password.length < password_minLength) {
 		showMessageWarn('密码长度不能低于' + password_minLength + '.');
+		return false;
+	}
+
+	var csrfToken = $('#CSRFToken').val();
+	if (!isEmptyStr(csrfToken)) {
+		showMessageWarn('不能提交，请刷新！');
 		return false;
 	}
 	return true;

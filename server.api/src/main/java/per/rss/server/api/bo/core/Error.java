@@ -6,7 +6,7 @@ public class Error {
 	public static enum message {// 定义rss抓取的时间间隔
 		// 利用构造函数传参
 		common_success(0, "操作成功"), common_failed(1, "操作失败"), system_error(3, "系统错误"), system_exception(4,
-				"系统异常"), input_error(5, "输入错误"),
+				"系统异常"), input_error(5, "输入错误"), submit_error(6, "非法请求，不允许提交"),
 
 		user_login_username_isEmpty(1000, "用户名不允许为空"), user_login_password_isEmpty(1001,
 				"密码不允许为空"), user_login_usernameOrPassword_notMatch(1002, "用户名或密码错误");

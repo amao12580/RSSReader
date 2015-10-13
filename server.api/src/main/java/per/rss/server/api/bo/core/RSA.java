@@ -1,8 +1,13 @@
 package per.rss.server.api.bo.core;
 
+import per.rss.core.base.constant.CommonConstant;
+
 public class RSA {
-	private String module;
-	private String empoent;
+	private String module = CommonConstant.stringBegining;
+	private String empoent = CommonConstant.stringBegining;
+
+	public RSA() {
+	}
 
 	public RSA(String module, String empoent) {
 		this.module = module;
