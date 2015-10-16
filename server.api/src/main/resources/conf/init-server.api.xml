@@ -13,15 +13,24 @@
 	<description>server.api工程的配置入口 </description>
 
 	<context:component-scan base-package="per.rss.server.api"></context:component-scan>
-	
+
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
 				<value>classpath:/conf/mongodb.properties</value>
+				<value>classpath:/conf/common.properties</value>
 			</list>
 		</property>
 	</bean>
 
+	<!-- 这个config，专门用来：启动时加载配置文件中的参数 -->
+	<bean id="config" class="per.rss.server.api.init.Config">
+		<property name="portal_webpage_domain" value="${portal.webpage.domain}" />
+	</bean>
+
+
+	<import resource="classpath:/conf/spring/redis.xml" />
+	
 	<import resource="classpath:/conf/spring/mongodb.xml" />
 </beans> 

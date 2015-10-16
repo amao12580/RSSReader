@@ -1,6 +1,7 @@
 package per.rss.server.api.util.rsa;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -22,6 +23,11 @@ import java.security.spec.RSAPublicKeySpec;
 import javax.crypto.Cipher;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import per.rss.core.base.util.StringUtils;
+import per.rss.server.api.bo.core.RSA;
 
 /**
  * RSA 工具类。提供加密，解密，生成密钥对等方法。
@@ -29,13 +35,43 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
  * 
  */
 public class RSAUtil {
+	private static final Logger logger = LoggerFactory.getLogger(RSAUtil.class);
+
+	private static String KeyPair_FilePath = "D:/RSAKey.txt";
+	private static KeyPair KeyPair = null;
+	public static RSA rsa = null;
+
+	static {
+		if (KeyPair == null) {
+			try {
+				KeyPair = getKeyPairByFile();
+				if (KeyPair == null) {
+					KeyPair = generateKeyPair();
+				}
+			} catch (Exception e) {
+				logger.error("getKeyPairByFile is error.", e);
+				KeyPair = null;
+			}
+		}
+		if (KeyPair != null) {
+			RSAPublicKey rsap = (RSAPublicKey) KeyPair.getPublic();
+			if (rsap != null) {
+				String module = rsap.getModulus().toString(16);
+				String empoent = rsap.getPublicExponent().toString(16);
+				if (!StringUtils.isEmpty(module) && !StringUtils.isEmpty(empoent)) {
+					rsa = new RSA(module, empoent);
+				}
+			}
+		}
+	}
+
 	/**
 	 * * 生成密钥对 *
 	 * 
 	 * @return KeyPair *
 	 * @throws EncryptException
 	 */
-	public static KeyPair generateKeyPair() throws Exception {
+	private static KeyPair generateKeyPair() throws Exception {
 		try {
 			KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA", new BouncyCastleProvider());
 			final int KEY_SIZE = 1024;// 没什么好说的了，这个值关系到块加密的大小，可以更改，但是不要太大，否则效率会低
@@ -48,8 +84,25 @@ public class RSAUtil {
 		}
 	}
 
-	public static KeyPair getKeyPair() throws Exception {
-		FileInputStream fis = new FileInputStream("D:/RSAKey.txt");
+	private static KeyPair getKeyPairByFile() throws Exception {
+		File file = new File(KeyPair_FilePath);
+		if (!file.exists()) {
+			logger.error("getKeyPairByFile file not exists.KeyPair_FilePath=" + KeyPair_FilePath);
+			return null;
+		}
+		if (file.isDirectory()) {
+			logger.error("getKeyPairByFile file isDirectory.KeyPair_FilePath=" + KeyPair_FilePath);
+			return null;
+		}
+		if (!file.isFile()) {
+			logger.error("getKeyPairByFile file is not a file.KeyPair_FilePath=" + KeyPair_FilePath);
+			return null;
+		}
+		if (!file.canRead()) {
+			logger.error("getKeyPairByFile file is not can read.KeyPair_FilePath=" + KeyPair_FilePath);
+			return null;
+		}
+		FileInputStream fis = new FileInputStream(KeyPair_FilePath);
 		ObjectInputStream oos = new ObjectInputStream(fis);
 		KeyPair kp = (KeyPair) oos.readObject();
 		oos.close();
@@ -57,14 +110,22 @@ public class RSAUtil {
 		return kp;
 	}
 
-	public static void saveKeyPair(KeyPair kp) throws Exception {
+	public static KeyPair getKeyPair() {
+		return KeyPair;
+	}
 
-		FileOutputStream fos = new FileOutputStream("D:/RSAKey.txt");
+	private static void saveKeyPair(KeyPair kp) throws Exception {
+		File file = new File(KeyPair_FilePath);
+		if (file.exists() && !file.isDirectory() && file.isFile()) {
+			file.delete();
+		}
+		FileOutputStream fos = new FileOutputStream(KeyPair_FilePath);
 		ObjectOutputStream oos = new ObjectOutputStream(fos);
 		// 生成密钥
 		oos.writeObject(kp);
 		oos.close();
 		fos.close();
+		KeyPair = null;
 	}
 
 	/**
@@ -77,7 +138,7 @@ public class RSAUtil {
 	 * @return RSAPublicKey *
 	 * @throws Exception
 	 */
-	public static RSAPublicKey generateRSAPublicKey(byte[] modulus, byte[] publicExponent) throws Exception {
+	private static RSAPublicKey generateRSAPublicKey(byte[] modulus, byte[] publicExponent) throws Exception {
 		KeyFactory keyFac = null;
 		try {
 			keyFac = KeyFactory.getInstance("RSA", new BouncyCastleProvider());
@@ -103,7 +164,7 @@ public class RSAUtil {
 	 * @return RSAPrivateKey *
 	 * @throws Exception
 	 */
-	public static RSAPrivateKey generateRSAPrivateKey(byte[] modulus, byte[] privateExponent) throws Exception {
+	private static RSAPrivateKey generateRSAPrivateKey(byte[] modulus, byte[] privateExponent) throws Exception {
 		KeyFactory keyFac = null;
 		try {
 			keyFac = KeyFactory.getInstance("RSA", new BouncyCastleProvider());
@@ -187,13 +248,13 @@ public class RSAUtil {
 	 */
 	@SuppressWarnings("static-access")
 	public static byte[] decrypt(PrivateKey pk, byte[] raw) throws Exception {
+		ByteArrayOutputStream bout=null;
 		try {
 			Cipher cipher = Cipher.getInstance("RSA", new BouncyCastleProvider());
 			cipher.init(cipher.DECRYPT_MODE, pk);
 			int blockSize = cipher.getBlockSize();
-			ByteArrayOutputStream bout = new ByteArrayOutputStream(64);
+			bout = new ByteArrayOutputStream(64);
 			int j = 0;
-
 			while (raw.length - j * blockSize > 0) {
 				bout.write(cipher.doFinal(raw, j * blockSize, blockSize));
 				j++;
@@ -201,6 +262,11 @@ public class RSAUtil {
 			return bout.toByteArray();
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
+		}finally{
+			if(bout!=null){
+				bout.flush();
+				bout.close();
+			}
 		}
 	}
 
@@ -211,11 +277,15 @@ public class RSAUtil {
 	 *            *
 	 * @throws Exception
 	 */
-	// public static void main(String[] args) throws Exception {
-	// RSAPublicKey rsap = (RSAPublicKey) RSAUtil.generateKeyPair().getPublic();
-	// String test = "hello world";
-	// byte[] en_test = encrypt(getKeyPair().getPublic(), test.getBytes());
-	// byte[] de_test = decrypt(getKeyPair().getPrivate(), en_test);
-	// System.out.println(new String(de_test));
-	// }
+	public static void main(String[] args) throws Exception {
+		RSAPublicKey rsap = (RSAPublicKey) RSAUtil.generateKeyPair().getPublic();
+		String test = "hello world";
+		byte[] en_test = encrypt(getKeyPair().getPublic(), test.getBytes());
+		StringBuffer sb = new StringBuffer();
+		sb.append(new String(en_test));
+		System.out.println(sb.reverse().toString());
+
+		byte[] de_test = decrypt(getKeyPair().getPrivate(), en_test);
+		System.out.println(new String(de_test));
+	}
 }

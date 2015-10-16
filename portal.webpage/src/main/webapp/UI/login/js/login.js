@@ -9,6 +9,7 @@ var RSA_key_module = '';
 var RSA_key_empoent = '';
 var usernameObj = null;
 var passwordObj = null;
+var CSRFToken = null;
 
 $(function() {
 	$('#username').val("");
@@ -17,53 +18,46 @@ $(function() {
 	$('#userLoginBtn').dblclick(function() {
 		return false;
 	});
-	// alert('-2');
 	initRSASecurityLogin();
-	// var checkInit = false;
-	// alert('-1');
-	// checkInit = checkInitLoginGetRSAKey();
-	// alert('0');
-	// if (!checkInit) {
-	// return false;
-	// }
-	// alert('1');
 	$('#userLoginBtn').click(function() {
-		// alert('2');
 		clearMessageWarn();
 		var check = false;
 		check = checkUserLogin();
-		// alert('3');
 		if (!check) {
 			return false;
 		}
-		// alert('4');
 		doUserLogin();
-		// alert('5');
 	});
 });
 
-function toLoginGetRSAKey() {
-	return rssServerApiAddress + 'user//toLogin';
+function getToLoginAddress() {
+	return rssServerApiAddress + 'login/to';
 };
 
-function getUserLoginAddress() {
-	return rssServerApiAddress + 'user/login';
+function getDoLoginAddress() {
+	return rssServerApiAddress + 'login/do';
+};
+
+function getToHomepageAddress() {
+	return rssServerApiAddress + 'homepage/to';
 };
 
 function initRSASecurityLogin() {
-	doAjaxGetRequestWithCrossDomain(toLoginGetRSAKey(), '', false,
-			"toSecurityLoginCallBack", toSecurityLoginCallBack);
+	CrossDomainByCORS(getToLoginAddress(), true, '', toSecurityLoginCallBack);
 };
 
 function doUserLogin() {
+	if (!CSRFToken) {
+		showMessageWarn('系统错误:需要刷新！');
+		return false;
+	}
 	var encryptedUsername = encryptedString(RSA_key_info, usernameObj.val());
 	var encryptedPassword = encryptedString(RSA_key_info, passwordObj.val());
-	var CSRFToken = $("#CSRFToken").val();
 	var data = 'username=' + encryptedUsername + '&' + 'password='
 			+ encryptedPassword + '&' + CSRFTOKENNAME + '=' + CSRFToken;
+	CSRFToken = null;
 	// doAjaxPostRequest(getUserLoginAddress(),$('#userLoginForm').serialize(),false,doUserLoginSuccess);
-	doAjaxGetRequestWithCrossDomain(getUserLoginAddress(), data, false,
-			"doUserLoginCallBack", doUserLoginCallBack);
+	CrossDomainByCORS(getDoLoginAddress(), false, data, doUserLoginCallBack);
 };
 
 function doUserLoginCallBack(data) {
@@ -88,7 +82,7 @@ function toSecurityLoginCallBack(data) {
 				showMessageWarn(message);
 				return false;
 			} else {
-				$('#CSRFToken').val(csrfToken);
+				CSRFToken = csrfToken;
 			}
 			if (!isEmptyStr(RSA_key_module)) {
 				showMessageWarn(message);
@@ -109,9 +103,18 @@ function toSecurityLoginCallBack(data) {
 		return false;
 	}
 };
+function toUserHomePageCallBack(data) {
+	var code = data.code;
+	if (code == successProcess) {
+		alert('ok');
+	} else {
+		showMessageWarn('系统错误:登录失败！');
+		return false;
+	}
+};
 
 function toUserHomePage() {
-	alert('go.');
+	CrossDomainByCORS(getToHomepageAddress(), true, '', toUserHomePageCallBack);
 };
 
 function checkInitLoginGetRSAKey() {
@@ -162,7 +165,7 @@ function checkUserLogin() {
 		return false;
 	}
 
-	var csrfToken = $('#CSRFToken').val();
+	var csrfToken = CSRFToken;
 	if (!isEmptyStr(csrfToken)) {
 		showMessageWarn('不能提交，请刷新！');
 		return false;

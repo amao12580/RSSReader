@@ -15,6 +15,28 @@
 	<!-- 默认的注解映射的支持 -->
 	<mvc:annotation-driven />
 
+
+	<!-- CORS安全 拦截器 -->
+	<mvc:interceptors>
+		<mvc:interceptor> <!-- 可以增加多个拦截器 责任链模式传递 -->
+			<!-- 需要拦截的 开始 -->
+			<mvc:mapping path="/**" />
+			<bean class="per.rss.server.api.interceptor.CORSSafetyInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+	<!-- 强制验证当前用户Token拦截器 -->
+	<mvc:interceptors>
+		<mvc:interceptor> <!-- 可以增加多个拦截器 责任链模式传递 -->
+			<!-- 需要拦截的 开始 -->
+			<mvc:mapping path="/**" />
+			<!--不需要拦截的 开始 -->
+			<mvc:exclude-mapping path="/login/**" />
+			<!--不需要拦截的 结束 -->
+			<bean class="per.rss.server.api.interceptor.UserLoginTokenInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+
 	<bean id="jsonHttpMessageConverter"
 		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
 		<property name="supportedMediaTypes">

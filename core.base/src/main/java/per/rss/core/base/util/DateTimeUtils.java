@@ -18,12 +18,32 @@ public class DateTimeUtils {
 		return dateTime.toString(DEFAULT_MASK);
 	}
 
+	/**
+	 * 当前时间加减天数后的时间
+	 * 
+	 * @param day
+	 * @return
+	 */
+	public static Date plusDays(int day) {
+		if (day == 0) {
+			return new Date();
+		}
+		return new DateTime().plusDays(day).toDate();
+	}
+
 	public static boolean isValid(Date date) {
 		if (date == null || date.equals(CommonConstant.dateBegining)) {
 			return false;
-		}else{
+		} else {
 			return true;
 		}
+	}
+	public static void main(String[] args) {
+		System.out.println(formatDateTime(new Date(1445066163*1000)));
+		System.out.println(formatDateTime(plusDays(3)));
+		System.out.println(plusDays(3).getTime());
+		System.out.println(plusDays(3).getTime()/1000);
+		System.out.println((DateTimeUtils.plusDays(3).getTime()-(new Date().getTime())) / 1000);
 	}
 
 }

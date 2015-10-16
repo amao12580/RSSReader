@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd"
+	default-lazy-init="true">
+
+	<bean id="redis-7000" class="redis.clients.jedis.JedisShardInfo">
+		<constructor-arg index="0" name="host" value="120.26.215.237"
+			type="java.lang.String" />
+		<constructor-arg index="1" name="port" value="7000"
+			type="int" />
+		<constructor-arg index="2" name="name" value="redis-7000"
+			type="java.lang.String" />
+	</bean>
+	<bean id="redis-7001" class="redis.clients.jedis.JedisShardInfo">
+		<constructor-arg index="0" name="host" value="120.26.215.237"
+			type="java.lang.String" />
+		<constructor-arg index="1" name="port" value="7001"
+			type="int" />
+		<constructor-arg index="2" name="name" value="redis-7001"
+			type="java.lang.String" />
+	</bean>
+	<bean id="redis-7002" class="redis.clients.jedis.JedisShardInfo">
+		<constructor-arg index="0" name="host" value="120.26.215.237"
+			type="java.lang.String" />
+		<constructor-arg index="1" name="port" value="7002"
+			type="int" />
+		<constructor-arg index="2" name="name" value="redis-7002"
+			type="java.lang.String" />
+	</bean>
+	<bean id="redis-7003" class="redis.clients.jedis.JedisShardInfo">
+		<constructor-arg index="0" name="host" value="120.26.215.237"
+			type="java.lang.String" />
+		<constructor-arg index="1" name="port" value="7003"
+			type="int" />
+		<constructor-arg index="2" name="name" value="redis-7003"
+			type="java.lang.String" />
+	</bean>
+	<bean id="redis-7004" class="redis.clients.jedis.JedisShardInfo">
+		<constructor-arg index="0" name="host" value="120.26.215.237"
+			type="java.lang.String" />
+		<constructor-arg index="1" name="port" value="7004"
+			type="int" />
+		<constructor-arg index="2" name="name" value="redis-7004"
+			type="java.lang.String" />
+	</bean>
+	<bean id="redis-7005" class="redis.clients.jedis.JedisShardInfo">
+		<constructor-arg index="0" name="host" value="120.26.215.237"
+			type="java.lang.String" />
+		<constructor-arg index="1" name="port" value="7005"
+			type="int" />
+		<constructor-arg index="2" name="name" value="redis-7005"
+			type="java.lang.String" />
+	</bean>
+
+	<bean id="redisConfig" class="redis.clients.jedis.JedisPoolConfig"></bean>
+	<bean id="sharedRedisPool" class="redis.clients.jedis.ShardedJedisPool">
+		<constructor-arg index="0" ref="redisConfig" />
+		<constructor-arg index="1">
+			<list>
+				<ref bean="redis-7000"></ref>
+				<ref bean="redis-7001"></ref>
+				<ref bean="redis-7002"></ref>
+				<ref bean="redis-7003"></ref>
+				<ref bean="redis-7004"></ref>
+				<ref bean="redis-7005"></ref>
+			</list>
+		</constructor-arg>
+	</bean>
+	<bean id="shareRedis"
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="sharedRedisPool" />
+		<property name="targetMethod" value="getResource" />
+
+	</bean>
+
+
+
+</beans>

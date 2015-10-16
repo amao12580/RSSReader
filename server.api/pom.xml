@@ -30,6 +30,12 @@
 			<artifactId>core.dao</artifactId>
 			<version>${rss.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>per.rss</groupId>
+			<artifactId>core.cache</artifactId>
+			<version>${rss.version}</version>
+		</dependency>
 		<!-- 公共组件 end -->
 
 		<!-- spring begin -->
@@ -94,9 +100,11 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
-			<version>3.0.1</version>
+			<!-- 最好选择3.0以上版本 -->
+			<version>3.1.0</version>
 			<scope>provided</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>javax.servlet.jsp</groupId>
 			<artifactId>jsp-api</artifactId>

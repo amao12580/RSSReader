@@ -34,5 +34,12 @@
 			}, 1500, 'easeInOutExpo');
 			event.preventDefault();
 		});
+		// $('#btn-toUserLogin').bind('click', function(event) {
+		// $("#openUserLoginDialogModal").load('view/login.html',function(){
+		// $("#followStep1").modal("show");
+		// })
+		// event.preventDefault();
+		// });
+
 	});
 })(jQuery);

@@ -16,6 +16,16 @@ public class StringUtils {
 	}
 
 	/**
+	 * 如果这个字符串是数字类型，则返回true
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public static boolean isNumeric(String str) {
+		 return org.apache.commons.lang3.StringUtils.isNumeric(str);
+	}
+
+	/**
 	 * 将obj参数使用json格式进行转换
 	 * 
 	 * @param obj
@@ -32,23 +42,8 @@ public class StringUtils {
 	 * @param classOfT
 	 * @return
 	 */
-	public static <T> T  formatJson(String json, Class<T> classOfT) {
+	public static <T> T formatJson(String json, Class<T> classOfT) {
 		return gson.fromJson(json, classOfT);
-	}
-	
-	/**
-	 * 验证字符串是否为数字格式
-	 * 
-	 * @param str
-	 * @return
-	 */
-	public static boolean isNumeric(String str) {
-		try {
-			Double.parseDouble(str);
-		} catch (NumberFormatException nfe) {
-			return false;
-		}
-		return true;
 	}
 
 }

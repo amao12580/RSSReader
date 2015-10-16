@@ -9,7 +9,7 @@ public class Error {
 				"系统异常"), input_error(5, "输入错误"), submit_error(6, "非法请求，不允许提交"),
 
 		user_login_username_isEmpty(1000, "用户名不允许为空"), user_login_password_isEmpty(1001,
-				"密码不允许为空"), user_login_usernameOrPassword_notMatch(1002, "用户名或密码错误");
+				"密码不允许为空"), user_login_usernameOrPassword_notMatch(1002, "用户名或密码错误"),user_login_token_error(1003, "用户当前token失效");
 
 		private int code;
 		private String desc;
