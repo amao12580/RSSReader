@@ -11,25 +11,39 @@ import org.springframework.web.servlet.ModelAndView;
 
 import per.rss.core.base.util.StringUtils;
 import per.rss.server.api.init.Config;
+import per.rss.server.api.util.BrowserUtils;
 import per.rss.server.api.util.IPUtils;
 
 /**
  * 
- * cors安全
+ * 安全方面的拦截
  * 
  * preHandle调用controller具体方法之前调用， postHandle完成具体方法之后调用，
  * afterCompletion完成对页面的render以后调用
  *
  */
 @Controller
-public class CORSSafetyInterceptor implements HandlerInterceptor {
-	private static final Logger logger = LoggerFactory.getLogger(CORSSafetyInterceptor.class);
+public class SafetyInterceptor implements HandlerInterceptor {
+	private static final Logger logger = LoggerFactory.getLogger(SafetyInterceptor.class);
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		logger.debug("preHandle.");
+		// 判断浏览器类型和版本   开始
+		logger.debug("BorwerUtils.getUserAgent：" + StringUtils.toJSONString(BrowserUtils.getUserAgent(request)));
+		if (!BrowserUtils.checkSupport(BrowserUtils.getUserAgent(request))) {
+			logger.error("Unable to support the browser.");
+			return false;
+		}
+		// 判断浏览器类型和版本   结束
+		
+		
+		// 判断IP是否需要锁定   开始
 		logger.debug("ip:" + IPUtils.getRemoteIp(request));
+		// 判断IP是否需要锁定   结束
+
+		// 判断CORS安全  开始
 		String sourceOrigin = request.getHeader("Origin");
 		String sourceReferer = request.getHeader("referer");
 		;
@@ -51,6 +65,8 @@ public class CORSSafetyInterceptor implements HandlerInterceptor {
 			return false;
 		}
 		setAllowCORS(response, configDomain);
+		// 判断CORS安全  结束
+		
 		return true;// 放行
 	}
 
