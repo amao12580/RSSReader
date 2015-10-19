@@ -47,3 +47,24 @@ function randomWord(randomFlag, min, max) {
 	}
 	return str;
 }
+
+
+
+/**
+ * http://lyjilu.iteye.com/blog/1996118
+ * 
+ * 获取浏览器类型及 版本
+ * 
+ * @returns 返回对象，两属性，type:表示浏览器类型，version：表示版本 {___anonymous25556_25557}
+ */
+function getUserAgent(){
+	var Sys={};
+	var ua=navigator.userAgent.toLowerCase();
+	var s;
+	(s=ua.match(/msie ([\d.]+)/))?(Sys['type']='ie',Sys['version']=s[1]):
+	(s=ua.match(/firefox\/([\d.]+)/))?(Sys['type']='firefox',Sys['version']=s[1]):
+	(s=ua.match(/chrome\/([\d.]+)/))?(Sys['type']='chrome',Sys['version']=s[1]):
+	(s=ua.match(/opera.([\d.]+)/))?(Sys['type']='opera',Sys['version']=s[1]):
+	(s=ua.match(/version\/([\d.]+).*safari/))?(Sys['type']='safari',Sys['version']=s[1]):0;
+	return Sys;
+}

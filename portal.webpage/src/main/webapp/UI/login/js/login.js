@@ -12,6 +12,14 @@ var passwordObj = null;
 var CSRFToken = null;
 
 $(function() {
+	// 获取32位随机字符串
+	// var nacl = nacl_factory.instantiate();
+	// alert(nacl.to_hex(nacl.random_bytes(16)));
+
+	// 获取浏览器版本及类型
+	// var Browser = getUserAgent();
+	// alert('' + Browser.type + ',' + Browser.version);
+
 	$('#username').val("");
 	$('#password').val("");
 	userLoginMessageWarn.hide();

@@ -16,12 +16,12 @@
 	<mvc:annotation-driven />
 
 
-	<!-- CORS安全 拦截器 -->
+	<!-- 安全方面的 拦截器 -->
 	<mvc:interceptors>
 		<mvc:interceptor> <!-- 可以增加多个拦截器 责任链模式传递 -->
 			<!-- 需要拦截的 开始 -->
 			<mvc:mapping path="/**" />
-			<bean class="per.rss.server.api.interceptor.CORSSafetyInterceptor" />
+			<bean class="per.rss.server.api.interceptor.SafetyInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>
 

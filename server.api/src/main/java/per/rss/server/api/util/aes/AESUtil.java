@@ -225,7 +225,7 @@ public class AESUtil {
 
 		Key k = toKey(key);
 
-		String data1 = "AES数据";
+		// String data1 = "AES数据";
 
 		LoginSuccessCookieBo bo = new LoginSuccessCookieBo();
 		bo.setUid("10000");
