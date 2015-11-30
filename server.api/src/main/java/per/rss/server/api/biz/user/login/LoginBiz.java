@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import per.rss.server.api.bo.core.Resp;
+import per.rss.server.api.bo.core.resp.Resp;
 import per.rss.server.api.bo.user.login.LoginBo;
 
 public interface LoginBiz {

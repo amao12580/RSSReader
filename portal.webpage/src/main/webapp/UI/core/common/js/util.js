@@ -62,9 +62,28 @@ function getUserAgent(){
 	var ua=navigator.userAgent.toLowerCase();
 	var s;
 	(s=ua.match(/msie ([\d.]+)/))?(Sys['type']='ie',Sys['version']=s[1]):
-	(s=ua.match(/firefox\/([\d.]+)/))?(Sys['type']='firefox',Sys['version']=s[1]):
-	(s=ua.match(/chrome\/([\d.]+)/))?(Sys['type']='chrome',Sys['version']=s[1]):
-	(s=ua.match(/opera.([\d.]+)/))?(Sys['type']='opera',Sys['version']=s[1]):
-	(s=ua.match(/version\/([\d.]+).*safari/))?(Sys['type']='safari',Sys['version']=s[1]):0;
-	return Sys;
+		(s=ua.match(/firefox\/([\d.]+)/))?(Sys['type']='firefox',Sys['version']=s[1]):
+			(s=ua.match(/chrome\/([\d.]+)/))?(Sys['type']='chrome',Sys['version']=s[1]):
+				(s=ua.match(/opera.([\d.]+)/))?(Sys['type']='opera',Sys['version']=s[1]):
+					(s=ua.match(/version\/([\d.]+).*safari/))?(Sys['type']='safari',Sys['version']=s[1]):0;
+					return Sys;
+}
+
+/**
+ * http://dreamoftch.iteye.com/blog/1872108
+ * 
+ * 获取当前session Id
+ * 
+ */
+function getSessionId(){
+	var c_name = 'JSESSIONID';
+	if(document.cookie.length>0){
+	   c_start=document.cookie.indexOf(c_name + "=")
+	   if(c_start!=-1){ 
+	     c_start=c_start + c_name.length+1 
+	     c_end=document.cookie.indexOf(";",c_start)
+	     if(c_end==-1) c_end=document.cookie.length
+	     return unescape(document.cookie.substring(c_start,c_end));
+	   }
+	}
 }

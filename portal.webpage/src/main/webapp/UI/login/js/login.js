@@ -15,14 +15,37 @@ $(function() {
 	// 获取32位随机字符串
 	// var nacl = nacl_factory.instantiate();
 	// alert(nacl.to_hex(nacl.random_bytes(16)));
+	// return false;
 
 	// 获取浏览器版本及类型
 	// var Browser = getUserAgent();
 	// alert('' + Browser.type + ',' + Browser.version);
 
+	// 获取当前会话id
+	// alert('before:' + getSessionId());
+
+	// 测试新的通讯模式
+	// testNewReq();
+	// return false;
+
+	// 测试base64算法
+	// var data='erfasdfs234234!@#!23WERWE我是在问发松岛枫少夫人ADAS!!!aaaaa';
+	// var encode64Data=encode64('');
+	// alert('data-->encode64:'+encode64Data);
+	// alert('encode64-->data:'+decode64(encode64Data));
+
+	// 测试md5算法
+	// alert(md5("123582adsf234但是对方水电费胜多负少ASDERsdf!@#@sdfsd"));
+
+	// 测试md5算法
+	// 测试SHA-256算法
+	// var hash = CryptoJS.SHA256('');
+	// alert('hash:' + hash);
+	// return false;
+
+	userLoginMessageWarn.hide();
 	$('#username').val("");
 	$('#password').val("");
-	userLoginMessageWarn.hide();
 	$('#userLoginBtn').dblclick(function() {
 		return false;
 	});
@@ -39,7 +62,7 @@ $(function() {
 });
 
 function getToLoginAddress() {
-	return rssServerApiAddress + 'login/to';
+	return rssServerApiAddress + '02001/03';
 };
 
 function getDoLoginAddress() {
@@ -51,7 +74,7 @@ function getToHomepageAddress() {
 };
 
 function initRSASecurityLogin() {
-	CrossDomainByCORS(getToLoginAddress(), true, '', toSecurityLoginCallBack);
+	CrossDomainByCORS('0200103', '', toSecurityLoginCallBack, '1');
 };
 
 function doUserLogin() {
@@ -59,13 +82,10 @@ function doUserLogin() {
 		showMessageWarn('系统错误:需要刷新！');
 		return false;
 	}
-	var encryptedUsername = encryptedString(RSA_key_info, usernameObj.val());
-	var encryptedPassword = encryptedString(RSA_key_info, passwordObj.val());
-	var data = 'username=' + encryptedUsername + '&' + 'password='
-			+ encryptedPassword + '&' + CSRFTOKENNAME + '=' + CSRFToken;
+	var user = new User(encryptedString(RSA_key_info, usernameObj.val()),
+			encryptedString(RSA_key_info, passwordObj.val()));
 	CSRFToken = null;
-	// doAjaxPostRequest(getUserLoginAddress(),$('#userLoginForm').serialize(),false,doUserLoginSuccess);
-	CrossDomainByCORS(getDoLoginAddress(), false, data, doUserLoginCallBack);
+	CrossDomainByCORS(getDoLoginAddress(), user, doUserLoginCallBack, '1');
 };
 
 function doUserLoginCallBack(data) {
@@ -111,6 +131,7 @@ function toSecurityLoginCallBack(data) {
 		return false;
 	}
 };
+
 function toUserHomePageCallBack(data) {
 	var code = data.code;
 	if (code == successProcess) {
@@ -122,13 +143,13 @@ function toUserHomePageCallBack(data) {
 };
 
 function toUserHomePage() {
-	CrossDomainByCORS(getToHomepageAddress(), true, '', toUserHomePageCallBack);
+	CrossDomainByCORS(getToHomepageAddress(), '', toUserHomePageCallBack,
+			'1');
 };
 
 function checkInitLoginGetRSAKey() {
 	// 判断Object对象是否存在：http://www.ruanyifeng.com/blog/2011/05/how_to_judge_the_existence_of_a_global_object_in_javascript.html
 	var message = '系统错误：通讯失败 .';
-	alert('' + RSA_key_module);
 	if (!isEmptyStr(RSA_key_module)) {
 		showMessageWarn(message);
 		return false;

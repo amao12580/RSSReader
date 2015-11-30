@@ -108,65 +108,105 @@ var contentTypeValue_Default = 'application/json;charset=UTF-8';
  *            是否为GET请求 true/false
  * @param data
  *            请求的数据
- * @param withCredentials
- *            是否发送认证信息，如cookie true/false
  * @param successCallbackFunc
  *            响应成功后回调函数对象 object
  */
-function CrossDomainByCORS(url, isGet, data, successCallbackFunc) {
+var activeId = '';
+var activeId = '';
+var sessionId = '';
+var sessionSign = '';
+
+var nacl = '';
+
+function Head(command) {
+	this.command = command;
+	if (nacl === '') {
+		nacl = nacl_factory.instantiate();
+	}
+	this.messageId = nacl.to_hex(nacl.random_bytes(16)) + '';
+	this.activeId = activeId + '';
+	this.sessionId = sessionId + '';
+	this.sessionSign = sessionSign + '';
+};
+
+function Req(command, encryptType, encryptData, digest) {
+	this.head = new Head(command);
+	this.dataMode = encryptType + '';
+	this.body = encryptData + '';
+	this.digest = digest + '';
+	this.time = new Date().getTime();
+};
+
+var encryptTypeLevel1 = '1';
+
+function CrossDomainByCORS(command, data, successCallbackFunc, encryptType) {
+	var url = rssServerApiAddress + command;
 	var XHR = createXMLHttpRequest();
 	if (XHR) {
-		doAsyncAjaxGetRequestWithCrossDomain(XHR, isGet, url, data,
+		// 为数据加密
+		var digest = null;
+		var encryptData = null;
+		if (encryptType === encryptTypeLevel1) {
+			if (data === '') {
+				encryptData = '';
+			} else {
+				encryptData = encode64(data);
+			}
+			digest = CryptoJS.SHA256(data);
+		}
+		// 组装请求对象Req
+		Req
+		req = new Req(command, encryptType, encryptData, digest);
+		var finalData = JSON.stringify(req);
+		doAsyncAjaxGetRequestWithCrossDomain(XHR, url, finalData,
 				successCallbackFunc);
 		XHR = null;
 	} else {
 		// XMLHttpRequest 获取失败
 	}
 };
-var timeout = 5000;
+var timeout = 5 * 1000;
+var parameterKey = 'params';
 
-function doAsyncAjaxGetRequestWithCrossDomain(MyXHR, isGet, Myurl, MyData,
+function doAsyncAjaxGetRequestWithCrossDomain(MyXHR, Myurl, MyData,
 		MySuccessCallbackFunc) {
-	var type = 'GET';
-	var reqTime = new Date().getTime();
-	var MyParams = null;
-	if (isEmptyStr(MyData)) {
-		MyParams = MyData + '&reqTime=' + reqTime;
-	} else {
-		MyParams = 'reqTime=' + reqTime;
-	}
-
-	if (!isGet) {
-		type = 'POST';
-		Myurl = Myurl + '?' + 'reqTime=' + reqTime;
-		MyParams = MyData;
-	} else {
-
-		Myurl = Myurl + '?' + MyParams;
-	}
-	MyXHR.open(type, Myurl, true);
+	MyData = parameterKey + '=' + MyData;
+	MyXHR.open('POST', Myurl, true);
 	MyXHR.timeout = timeout;
+	var timeoutFunction = setTimeout(function() {
+		MyXHR.abort();
+	}, timeout);
 	MyXHR.withCredentials = true;
 	// GET跨域请求时：setRequestHeader会导致浏览器拒绝提交:http://itwap.net/ArticleContent.aspx?id=31
 	// 不能修改的 :http://segmentfault.com/a/1190000002497440
-	if (!isGet) {
-		MyXHR.setRequestHeader('X-ITBILU', 'itbilu.com');
-		// MyXHR.setRequestHeader(contentTypeKey, contentTypeValue_Default);
-		MyXHR.setRequestHeader("Content-type",
-				"application/x-www-form-urlencoded");
-		MyXHR.setRequestHeader("Content-length", MyParams.length);
-		MyXHR.setRequestHeader("Connection", "close");
-	}
+	// MyXHR.setRequestHeader('X2-ITBILU', 'itbilu2.com');
+	// MyXHR.setRequestHeader(contentTypeKey, contentTypeValue_Default);
+	MyXHR.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	// MyXHR.setRequestHeader("Content-length", MyData.length);
+	// MyXHR.setRequestHeader("Connection", "close");
 	MyXHR.onreadystatechange = function() {
 		if (MyXHR.readyState == 4) {
+			clearTimeout(timeoutFunction);
 			if (MyXHR.status == 200) {
 				if (MyXHR.getResponseHeader(contentTypeKey) === contentTypeValue_Default) {
-					var result = JSON.parse(MyXHR.responseText);
-					MySuccessCallbackFunc(result);
+					var result = '';
+					try {
+						result = JSON.parse(MyXHR.responseText);
+					} catch (e) {
+						alert('响应的数据格式有问题，无法使用json进行解析.');
+						result = '';
+						return false;
+					}
+					if (!(result === '')) {
+						MySuccessCallbackFunc(result);
+					}
 				} else {
 					// 响应的contentType值有误
+					alert('响应的content-type有问题:'
+							+ MyXHR.getResponseHeader(contentTypeKey));
 				}
 			} else {
+				alert('请求被拒绝:' + MyXHR.status);
 				// 响应的http状态码不是200，出现了异常
 			}
 		} else {
@@ -174,9 +214,5 @@ function doAsyncAjaxGetRequestWithCrossDomain(MyXHR, isGet, Myurl, MyData,
 			// XMLHttpRequest().readyState的五种状态详解:http://www.blogjava.net/hulizhong/archive/2009/05/04/268846.html
 		}
 	};
-	if (!isGet) {
-		MyXHR.send(MyParams);
-	} else {
-		MyXHR.send(null);
-	}
+	MyXHR.send(MyData);
 };

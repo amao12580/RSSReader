@@ -12,6 +12,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import per.rss.core.base.util.StringUtils;
+
 public class CookieFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
@@ -21,12 +23,23 @@ public class CookieFilter implements Filter {
 		if (cookies != null && cookies.length > 0) {
 			for (int i = 0; i < cookies.length; i++) {
 				Cookie cookie = cookies[i];
-				if(!cookie.getSecure()){
+				if (cookie == null) {
+					continue;
+				}
+				String cookieName = cookie.getName();
+				if (StringUtils.isEmpty(cookieName)) {
+					continue;
+				}
+				// if
+				// (!CommonConstant.DEFAULTCOOIKENAME.equalsIgnoreCase(cookieName))
+				// {
+				if (!cookie.getSecure()) {
 					cookie.setMaxAge(0);
 				}
 				cookie.setHttpOnly(true);
-//				cookie.setSecure(true);
+				// cookie.setSecure(true);
 				resp.addCookie(cookie);
+				// }
 			}
 		}
 		chain.doFilter(req, resp);

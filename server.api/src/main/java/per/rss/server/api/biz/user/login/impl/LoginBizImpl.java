@@ -17,18 +17,17 @@ import per.rss.core.base.constant.CommonConstant;
 import per.rss.core.base.util.StringUtils;
 import per.rss.server.api.biz.user.login.LoginBiz;
 import per.rss.server.api.bo.core.Error;
-import per.rss.server.api.bo.core.RSA;
-import per.rss.server.api.bo.core.Resp;
+import per.rss.server.api.bo.core.resp.Resp;
 import per.rss.server.api.bo.user.login.LoginBo;
 import per.rss.server.api.bo.user.login.LoginSuccessCookieBo;
 import per.rss.server.api.bo.user.login.ToLoginBo;
 import per.rss.server.api.cache.user.cookie.CookieCache;
 import per.rss.server.api.dao.user.login.AccountDao;
 import per.rss.server.api.filter.csrf.CSRFTokenManager;
+import per.rss.server.api.init.Config;
 import per.rss.server.api.util.IPUtils;
 import per.rss.server.api.util.PasswordUtils;
 import per.rss.server.api.util.aes.AESUtil;
-import per.rss.server.api.util.rsa.RSAUtil;
 
 /**
  *
@@ -52,7 +51,7 @@ public class LoginBizImpl implements LoginBiz {
 				resp = new Resp(Error.message.user_login_username_isEmpty);
 				return resp;
 			}
-			username = RSAUtil.decrypt(username);// 传输解密
+//			username = RSAUtil.decrypt(username);// 传输解密
 			if (StringUtils.isEmpty(username)) {
 				logger.error("username is decryption error.");
 				resp = new Resp(Error.message.system_exception);
@@ -64,7 +63,7 @@ public class LoginBizImpl implements LoginBiz {
 				resp = new Resp(Error.message.user_login_username_isEmpty);
 				return resp;
 			}
-			password = RSAUtil.decrypt(password);// 传输解密
+//			password = RSAUtil.decrypt(password);// 传输解密
 			if (StringUtils.isEmpty(password)) {
 				logger.error("password is decryption error.");
 				resp = new Resp(Error.message.system_exception);
@@ -93,7 +92,7 @@ public class LoginBizImpl implements LoginBiz {
 				resp = new Resp(Error.message.system_error);
 			}
 		}
-		if (resp.getCode() != Error.message.common_success.getCode()) {
+		if (resp.code() != Error.message.common_success.getCode()) {
 			// 刷新csrfToken
 			CSRFTokenManager.getTokenForSession(session);
 		}
@@ -111,7 +110,6 @@ public class LoginBizImpl implements LoginBiz {
 			return false;
 		}
 		logger.debug("clientIP:" + clientIP);
-
 		String cookieValue = null;
 		byte[] key = AESUtil.initSecretKey();
 		if (StringUtils.isEmpty(AESUtil.showByteArray(key))) {
@@ -123,7 +121,7 @@ public class LoginBizImpl implements LoginBiz {
 			logger.error("AES key is empty.");
 			return false;
 		}
-		logger.debug("create encode key is:" + StringUtils.toJSONString(k));
+		// logger.debug("create encode key is:" + StringUtils.toJSONString(k));
 		LoginSuccessCookieBo bo = new LoginSuccessCookieBo();
 		bo.setUid(uid);
 		bo.seteTime(CommonConstant.LOGINSUCCESSCLIENTCOOIKEEXPIRE + System.currentTimeMillis());
@@ -154,6 +152,11 @@ public class LoginBizImpl implements LoginBiz {
 		cookie2.setMaxAge(CommonConstant.LOGINSUCCESSCLIENTCOOIKEEXPIRE);// 3天后过期，单位：秒
 		cookie2.setHttpOnly(true);
 		cookie2.setPath(path);
+		String configDomain = Config.portal_webpage_domain;
+		if (StringUtils.isEmpty(configDomain)) {
+			return false;
+		}
+		cookie2.setDomain(configDomain);
 		// setSecure(true); 的情况下，只有https才传递到服务器端。http是不会传递的。
 		// cookie2.setSecure(true);
 		response.addCookie(cookie2);
@@ -175,14 +178,7 @@ public class LoginBizImpl implements LoginBiz {
 	public Resp toLogin(HttpSession session) {
 		Resp resp = null;
 		try {
-			RSA rsa = RSAUtil.rsa;
-			if (rsa == null) {
-				logger.error("rsa is empty.");
-				resp = new Resp(Error.message.system_exception);
-				return resp;
-			}
 			ToLoginBo bo = new ToLoginBo();
-			bo.setRsa(rsa);
 			String csrfToken = CSRFTokenManager.getTokenForSession(session);
 			if (StringUtils.isEmpty(csrfToken)) {
 				logger.error("csrfToken is empty.");

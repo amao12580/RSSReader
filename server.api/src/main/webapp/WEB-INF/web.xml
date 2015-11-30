@@ -53,27 +53,27 @@
 
 	<!-- 预防XSS攻击 -->
 	<!-- 预防SQL注入攻击 -->
-	<filter>
-		<filter-name>XssSqlFilter</filter-name>
-		<filter-class>per.rss.server.api.filter.xss.XssFilter</filter-class>
-	</filter>
+	<!-- <filter> -->
+	<!-- <filter-name>XssSqlFilter</filter-name> -->
+	<!-- <filter-class>per.rss.server.api.filter.xss.XssFilter</filter-class> -->
+	<!-- </filter> -->
 
-	<filter-mapping>
-		<filter-name>XssSqlFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-		<dispatcher>REQUEST</dispatcher>
-	</filter-mapping>
+	<!-- <filter-mapping> -->
+	<!-- <filter-name>XssSqlFilter</filter-name> -->
+	<!-- <url-pattern>/*</url-pattern> -->
+	<!-- <dispatcher>REQUEST</dispatcher> -->
+	<!-- </filter-mapping> -->
 
 	<!-- cookie安全 -->
-	<filter>
-		<filter-name>cookieFilter</filter-name>
-		<filter-class>per.rss.server.api.filter.cookie.CookieFilter</filter-class>
-	</filter>
+	<!-- <filter> -->
+	<!-- <filter-name>cookieFilter</filter-name> -->
+	<!-- <filter-class>per.rss.server.api.filter.cookie.CookieFilter</filter-class> -->
+	<!-- </filter> -->
 
-	<filter-mapping>
-		<filter-name>cookieFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+	<!-- <filter-mapping> -->
+	<!-- <filter-name>cookieFilter</filter-name> -->
+	<!-- <url-pattern>/*</url-pattern> -->
+	<!-- </filter-mapping> -->
 
 	<servlet>
 		<servlet-name>dispatcherServlet</servlet-name>

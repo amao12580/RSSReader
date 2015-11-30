@@ -1,9 +1,9 @@
 package per.rss.server.api.util.rsa;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.math.BigInteger;
@@ -26,9 +26,6 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import per.rss.core.base.util.StringUtils;
-import per.rss.server.api.bo.core.RSA;
-
 /**
  * RSA 工具类。提供加密，解密，生成密钥对等方法。
  * 需要到http://www.bouncycastle.org下载bcprov-jdk14-123.jar。
@@ -37,33 +34,123 @@ import per.rss.server.api.bo.core.RSA;
 public class RSAUtil {
 	private static final Logger logger = LoggerFactory.getLogger(RSAUtil.class);
 
-	private static String KeyPair_FilePath = "D:/RSAKey.txt";
-	private static KeyPair KeyPair = null;
-	public static RSA rsa = null;
-
-	static {
-		if (KeyPair == null) {
-			try {
-				KeyPair = getKeyPairByFile();
-				if (KeyPair == null) {
-					KeyPair = generateKeyPair();
+	public static KeyPair Bin2KeyPair(String data) {
+		ByteArrayInputStream b = null;
+		ObjectInputStream o = null;
+		try {
+			b = new ByteArrayInputStream(data.getBytes("ISO-8859-1"));
+			o = new ObjectInputStream(new BufferedInputStream(b));
+			Object obj = o.readObject();
+			return ((KeyPair) obj);
+		} catch (Exception e) {
+			logger.error("Bin2KeyPair is error.", e);
+			return null;
+		} finally {
+			if (b != null) {
+				try {
+					b.close();
+				} catch (IOException e) {
+					b = null;
+					e.printStackTrace();
 				}
-			} catch (Exception e) {
-				logger.error("getKeyPairByFile is error.", e);
-				KeyPair = null;
 			}
-		}
-		if (KeyPair != null) {
-			RSAPublicKey rsap = (RSAPublicKey) KeyPair.getPublic();
-			if (rsap != null) {
-				String module = rsap.getModulus().toString(16);
-				String empoent = rsap.getPublicExponent().toString(16);
-				if (!StringUtils.isEmpty(module) && !StringUtils.isEmpty(empoent)) {
-					rsa = new RSA(module, empoent);
+			if (o != null) {
+				try {
+					o.close();
+				} catch (IOException e) {
+					o = null;
+					e.printStackTrace();
 				}
 			}
 		}
 	}
+
+	public static String KeyPair2Bin(KeyPair kp) {
+		ByteArrayOutputStream b = null;
+		ObjectOutputStream o = null;
+		try {
+			b = new ByteArrayOutputStream();
+			o = new ObjectOutputStream(b);
+			o.writeObject(kp);
+			return b.toString("ISO-8859-1");
+		} catch (IOException e) {
+			logger.error("KeyPair2Bin is error.", e);
+			return null;
+		} finally {
+			if (b != null) {
+				try {
+					b.flush();
+				} catch (IOException e1) {
+					b = null;
+					e1.printStackTrace();
+				}
+				try {
+					b.close();
+				} catch (IOException e) {
+					b = null;
+					e.printStackTrace();
+				}
+			}
+			if (o != null) {
+				try {
+					o.flush();
+				} catch (IOException e1) {
+					o = null;
+					e1.printStackTrace();
+				}
+				try {
+					o.close();
+				} catch (IOException e) {
+					o = null;
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	// private static KeyPair getKeyPairByFile() throws Exception {
+	// File file = new File(KeyPair_FilePath);
+	// if (!file.exists()) {
+	// logger.error("getKeyPairByFile file not exists.KeyPair_FilePath=" +
+	// KeyPair_FilePath);
+	// return null;
+	// }
+	// if (file.isDirectory()) {
+	// logger.error("getKeyPairByFile file isDirectory.KeyPair_FilePath=" +
+	// KeyPair_FilePath);
+	// return null;
+	// }
+	// if (!file.isFile()) {
+	// logger.error("getKeyPairByFile file is not a file.KeyPair_FilePath=" +
+	// KeyPair_FilePath);
+	// return null;
+	// }
+	// if (!file.canRead()) {
+	// logger.error("getKeyPairByFile file is not can read.KeyPair_FilePath=" +
+	// KeyPair_FilePath);
+	// return null;
+	// }
+	// FileInputStream fis = new FileInputStream(KeyPair_FilePath);
+	// ObjectInputStream oos = new ObjectInputStream(fis);
+	// KeyPair kp = (KeyPair) oos.readObject();
+	// oos.close();
+	// fis.close();
+	// return kp;
+	// }
+	//
+	// private static void saveKeyPair(KeyPair kp) throws Exception {
+	// File file = new File(KeyPair_FilePath);
+	// if (file.exists() && !file.isDirectory() && file.isFile()) {
+	// file.delete();
+	// }
+	// FileOutputStream fos = new FileOutputStream(KeyPair_FilePath);
+	// ObjectOutputStream oos = new ObjectOutputStream(fos);
+	// // 生成密钥
+	// oos.writeObject(kp);
+	// oos.close();
+	// fos.close();
+	// KeyPair = null;
+	// }
 
 	/**
 	 * * 生成密钥对 *
@@ -71,61 +158,18 @@ public class RSAUtil {
 	 * @return KeyPair *
 	 * @throws EncryptException
 	 */
-	private static KeyPair generateKeyPair() throws Exception {
+	public static KeyPair generateKeyPair() {
 		try {
 			KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA", new BouncyCastleProvider());
-			final int KEY_SIZE = 1024;// 没什么好说的了，这个值关系到块加密的大小，可以更改，但是不要太大，否则效率会低
+			final int KEY_SIZE = 2048;// 没什么好说的了，这个值关系到块加密的大小，可以更改，但是不要太大，否则效率会低
 			keyPairGen.initialize(KEY_SIZE, new SecureRandom());
 			KeyPair keyPair = keyPairGen.generateKeyPair();
-			saveKeyPair(keyPair);
+			// saveKeyPair(keyPair);
 			return keyPair;
 		} catch (Exception e) {
-			throw new Exception(e.getMessage());
-		}
-	}
-
-	private static KeyPair getKeyPairByFile() throws Exception {
-		File file = new File(KeyPair_FilePath);
-		if (!file.exists()) {
-			logger.error("getKeyPairByFile file not exists.KeyPair_FilePath=" + KeyPair_FilePath);
+			logger.error("generateKeyPair is error.", e);
 			return null;
 		}
-		if (file.isDirectory()) {
-			logger.error("getKeyPairByFile file isDirectory.KeyPair_FilePath=" + KeyPair_FilePath);
-			return null;
-		}
-		if (!file.isFile()) {
-			logger.error("getKeyPairByFile file is not a file.KeyPair_FilePath=" + KeyPair_FilePath);
-			return null;
-		}
-		if (!file.canRead()) {
-			logger.error("getKeyPairByFile file is not can read.KeyPair_FilePath=" + KeyPair_FilePath);
-			return null;
-		}
-		FileInputStream fis = new FileInputStream(KeyPair_FilePath);
-		ObjectInputStream oos = new ObjectInputStream(fis);
-		KeyPair kp = (KeyPair) oos.readObject();
-		oos.close();
-		fis.close();
-		return kp;
-	}
-
-	public static KeyPair getKeyPair() {
-		return KeyPair;
-	}
-
-	private static void saveKeyPair(KeyPair kp) throws Exception {
-		File file = new File(KeyPair_FilePath);
-		if (file.exists() && !file.isDirectory() && file.isFile()) {
-			file.delete();
-		}
-		FileOutputStream fos = new FileOutputStream(KeyPair_FilePath);
-		ObjectOutputStream oos = new ObjectOutputStream(fos);
-		// 生成密钥
-		oos.writeObject(kp);
-		oos.close();
-		fos.close();
-		KeyPair = null;
 	}
 
 	/**
@@ -211,7 +255,6 @@ public class RSAUtil {
 				// 这里面doUpdate方法不可用，查看源代码后发现每次doUpdate后并没有什么实际动作除了把byte[]放到
 				// ByteArrayOutputStream中，而最后doFinal的时候才将所有的byte[]进行加密，可是到了此时加密块大小很可能已经超出了
 				// OutputSize所以只好用dofinal方法。
-
 				i++;
 			}
 			return raw;
@@ -228,9 +271,9 @@ public class RSAUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String decrypt(String ciphertext) throws Exception {
+	public static String decrypt(String ciphertext, RSAPrivateKey pk) throws Exception {
 		byte[] en_result = new BigInteger(ciphertext, 16).toByteArray();
-		byte[] de_result = RSAUtil.decrypt(RSAUtil.getKeyPair().getPrivate(), en_result);
+		byte[] de_result = RSAUtil.decrypt(pk, en_result);
 		StringBuffer sb = new StringBuffer();
 		sb.append(new String(de_result));
 		return sb.reverse().toString();
@@ -248,7 +291,7 @@ public class RSAUtil {
 	 */
 	@SuppressWarnings("static-access")
 	public static byte[] decrypt(PrivateKey pk, byte[] raw) throws Exception {
-		ByteArrayOutputStream bout=null;
+		ByteArrayOutputStream bout = null;
 		try {
 			Cipher cipher = Cipher.getInstance("RSA", new BouncyCastleProvider());
 			cipher.init(cipher.DECRYPT_MODE, pk);
@@ -262,8 +305,8 @@ public class RSAUtil {
 			return bout.toByteArray();
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
-		}finally{
-			if(bout!=null){
+		} finally {
+			if (bout != null) {
 				bout.flush();
 				bout.close();
 			}
@@ -278,14 +321,26 @@ public class RSAUtil {
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
-		RSAPublicKey rsap = (RSAPublicKey) RSAUtil.generateKeyPair().getPublic();
-		String test = "hello world";
-		byte[] en_test = encrypt(getKeyPair().getPublic(), test.getBytes());
-		StringBuffer sb = new StringBuffer();
-		sb.append(new String(en_test));
-		System.out.println(sb.reverse().toString());
+		KeyPair keyPair = RSAUtil.generateKeyPair();
+		RSAPublicKey rsapk = (RSAPublicKey) keyPair.getPublic();
+		System.out.println("getModulus:" + rsapk.getModulus());
+		System.out.println("getPublicExponent:" + rsapk.getPublicExponent());
 
-		byte[] de_test = decrypt(getKeyPair().getPrivate(), en_test);
-		System.out.println(new String(de_test));
+		String keyPairStr = KeyPair2Bin(keyPair);
+		System.out.println("keyPairStr:" + keyPairStr);
+
+		KeyPair myKeyPair = Bin2KeyPair(keyPairStr);
+		RSAPublicKey myrsapk = (RSAPublicKey) myKeyPair.getPublic();
+		System.out.println("getModulus:" + myrsapk.getModulus());
+		System.out.println("getPublicExponent:" + myrsapk.getPublicExponent());
+
+		// String test = "hello world";
+		// byte[] en_test = encrypt(keyPair.getPublic(), test.getBytes());
+		// StringBuffer sb = new StringBuffer();
+		// sb.append(new String(en_test));
+		// System.out.println(sb.reverse().toString());
+		//
+		// byte[] de_test = decrypt(keyPair.getPrivate(), en_test);
+		// System.out.println(new String(de_test));
 	}
 }

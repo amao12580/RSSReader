@@ -16,7 +16,11 @@ public class JedisUtil {
 		if (result == null || "".equals(result)) {
 			return false;
 		}
-		return true;
+		if ("OK".equals(result)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public String get(final String key) {
@@ -25,5 +29,13 @@ public class JedisUtil {
 
 	public boolean exists(final String key) {
 		return jedisCluster.exists(key);
+	}
+
+	public boolean delete(final String key) {
+		long counts = jedisCluster.del(key);
+		if (counts > 0) {
+			return true;
+		}
+		return false;
 	}
 }

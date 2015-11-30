@@ -8,19 +8,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
-@Controller
-@RequestMapping(value="/test/")
+//@Controller
+//@RequestMapping(value="/test/")
 public class TestController {
 	private static final Logger logger = LoggerFactory.getLogger(TestController.class);
 	
-	@RequestMapping(value="/case1", method = RequestMethod.GET)
-	@ResponseBody
+//	@RequestMapping(value="/case1", method = RequestMethod.GET)
+//	@ResponseBody
 	public String case1(){
 		logger.debug("case1");
 		return "case1 is ok.";
 	}
 	
-	@RequestMapping(value="/case2",method = RequestMethod.GET)
+//	@RequestMapping(value="/case2",method = RequestMethod.GET)
 	public String service(){
 		logger.debug("case2");
 		return "/test/case2";

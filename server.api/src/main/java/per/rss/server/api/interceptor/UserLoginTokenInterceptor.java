@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import per.rss.core.base.constant.CommonConstant;
 import per.rss.core.base.util.StringUtils;
 import per.rss.server.api.bo.core.Error;
-import per.rss.server.api.bo.core.Resp;
+import per.rss.server.api.bo.core.resp.Resp;
 import per.rss.server.api.cache.user.cookie.CookieCache;
 
 /**
@@ -45,10 +45,21 @@ public class UserLoginTokenInterceptor implements HandlerInterceptor {
 		if (cookies == null)
 			return false;
 		for (Cookie cookie : cookies) {
-			logger.debug("cookie name=" + cookie.getName());
-			logger.debug("cookie value=" + cookie.getValue());
-			if (CommonConstant.LOGINSUCCESSCLIENTCOOIKENAME.equals(cookie.getName())) {
-				token = cookie.getValue();
+			if (cookie == null) {
+				continue;
+			}
+			String cookieName = cookie.getName();
+			logger.debug("cookie name=" + cookieName);
+			if (StringUtils.isEmpty(cookieName)) {
+				continue;
+			}
+			String cookieValue = cookie.getValue();
+			logger.debug("cookie value=" + cookieValue);
+			if (StringUtils.isEmpty(cookieValue)) {
+				continue;
+			}
+			if (CommonConstant.LOGINSUCCESSCLIENTCOOIKENAME.equals(cookieName)) {
+				token = cookieValue;
 				logger.debug("token=" + token);
 				break;
 			}
@@ -67,9 +78,10 @@ public class UserLoginTokenInterceptor implements HandlerInterceptor {
 			resp = new Resp(Error.message.user_login_token_error);
 			this.responseError(request, resp, response);
 			return false;// 拒绝处理
-		} else {
-			logger.debug("cookie decode key is :" + cookieCache.getKey(token));
 		}
+		// else {
+		// logger.debug("cookie decode key is :" + cookieCache.getKey(token));
+		// }
 		return true;// 放行
 	}
 
@@ -95,7 +107,7 @@ public class UserLoginTokenInterceptor implements HandlerInterceptor {
 		PrintWriter out = null;
 		try {
 			response.setContentType(CommonConstant.ContentType_JSON);
-			response.setCharacterEncoding(CommonConstant.CharacterEncoding_Default);
+			response.setCharacterEncoding(CommonConstant.CharacterEncoding_default);
 			out = response.getWriter();
 			if (out == null) {
 				logger.error("error is output failed,out==null.");

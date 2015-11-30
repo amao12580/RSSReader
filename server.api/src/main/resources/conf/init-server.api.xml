@@ -26,6 +26,7 @@
 
 	<!-- 这个config，专门用来：启动时加载配置文件中的参数 -->
 	<bean id="config" class="per.rss.server.api.init.Config">
+		<property name="portal_webpage_origin" value="${portal.webpage.origin}" />
 		<property name="portal_webpage_domain" value="${portal.webpage.domain}" />
 	</bean>
 

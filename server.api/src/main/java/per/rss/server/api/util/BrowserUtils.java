@@ -22,15 +22,16 @@ public class BrowserUtils {
 		if (CollectionUtils.isEmpty(browsers)) {
 			browsers = new HashMap<String, Set<String>>(2);
 			String type1 = "chrome";
-			Set<String> version11 = new HashSet<>(1);
-			version11.add("45.0.2454.93");
+			Set<String> version11 = new HashSet<>(2);
 			version11.add("46.0.2490.71");
+			version11.add("46.0.2490.80");
 
 			browsers.put(type1, version11);
 
 			String type2 = "firefox";
-			Set<String> version21 = new HashSet<>(1);
+			Set<String> version21 = new HashSet<>(2);
 			version21.add("41.0");
+			version21.add("42.0");
 
 			browsers.put(type2, version21);
 		}

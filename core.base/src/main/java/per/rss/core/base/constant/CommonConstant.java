@@ -11,15 +11,17 @@ import java.util.Date;
 public class CommonConstant {
 	public final static int LOGINSUCCESSCLIENTCOOIKEEXPIRE = 3 * 24 * 60 * 60;
 	/** 系统内部通讯参数，默认字符编码定义 */
-	public final static String CharacterEncoding_Default = "UTF-8";
+	public final static String CharacterEncoding_default = "UTF-8";
 	/** 系统内部通讯参数，默认MIME定义 */
-	public final static String ContentType_Default = "text/html;charset=" + CharacterEncoding_Default;
+	public final static String ContentType_default = "text/html;charset=" + CharacterEncoding_default;
 	/** 系统内部通讯参数，json MIME定义 */
-	public final static String ContentType_JSON = "application/json;charset=" + CharacterEncoding_Default;
+	public final static String ContentType_JSON = "application/json;charset=" + CharacterEncoding_default;
 
-	public final static String CSRFTOKENNAME = "__RSSAPIRequestVerificationToken";
+	public final static String CSRFTOKENNAME = "verifToken";
 	/** 系统内部通讯参数，登陆成功，客户端cookie名称 */
 	public final static String LOGINSUCCESSCLIENTCOOIKENAME = "__RSSAPISAFETYSSOLOGINCOOIKE";
+	/** 系统内部通讯参数，运行时容器默认cookie名称 */
+	public final static String DEFAULTCOOIKENAME = "JSESSIONID";
 	/** 系统内部通讯参数，时间日期格式定义 */
 	public final static String DatetimePattern_Full = "yyyy-MM-dd HH:mm:ss.SSS";
 	/** 系统内部通讯参数，时间日期中国时区定义 */

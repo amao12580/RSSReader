@@ -76,19 +76,6 @@
 		</dependency>
 		<!-- spring end -->
 
-		<!-- jackson begin -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-			<version>2.5.3</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>2.5.3</version>
-		</dependency>
-		<!-- jackson begin -->
-
 		<!-- rsa begin -->
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
